@@ -1,0 +1,99 @@
+
+ (text by r. hoerner)
+
+ this is taken from b_wazoo.c, ZedZapZip():
+
+  ---------------------------------------------------------------------------
+ BT2.60 code:
+        iFstat = respond_to_file_requests (0, WaZOO_callback, WaZOO_time);
+        if (iFstat)
+        (void) Send_Zmodem (NULL, NULL, ((iFstat) ? END_BATCH : NOTHING_TO_DO), DO_WAZOO);
+
+  note: in that version respond_to_file_requests returned the first argument
+        as the result. Here it always returned zero. Send_Zmodem therefore
+        was always deinitialized with NOTHING_TO_DO (this is the same as
+        ZMODEM_END)
+  ---------------------------------------------------------------------------
+ I changed respond_to_file_requests() to return the files in fact sent as the
+ result.
+
+ I coded:
+        fsent += respond_to_file_requests (WaZOO_callback, WaZOO_time);
+
+ Thomas coded:
+        fsent = respond_to_file_requests (WaZOO_callback, WaZOO_time);
+
+ code continues in both cases:
+
+        zmodem = fsent ? ZMODEM_ENDBATCH : ZMODEM_END;
+        Send_Zmodem (NULL, NULL, zmodem, DO_WAZOO);
+        zmodem_state = 0;
+
+  note: END_BATCH     is identical to ZMODEM_ENDBATCH and
+        NOTHING_TO_DO is identical to ZMODEM_END.
+  ---------------------------------------------------------------------------
+
+   If fsent has been >0 before, and if respond_to_file_requests() is unable
+   to send at least 1 file, fsent will stay zero. This will result in zmodem
+   not been deinitialized with ZMODEM_END instead of with ZMODEM_ENDBATCH.
+
+   Here is an explanation of the variables in question:
+
+   fsent counts the files in fact sent. Every routine that successfully sends
+   a file increments fsent. fsent is not incremented in case of "file skipped",
+   "file not found", or loss of carrier. It in fact counts the files sent.
+
+   zmodem_state counts the state zmodem is in. It starts with 0 (ZMODEM_INIT)
+   and simply increments each time send_zmodem is called.
+
+   In BT2.60 up to XG2 "fsent" was used for both functions and "zmodem_state"
+   did not exist.
+
+   These versions did not distinguish between these both functions and had
+   trouble if something went not as foreseen. Let's say: you couldn't send
+   your mail or files in "originator" state. You could not send at least 1
+   file. When calling send_Zmodem() they incremented fsent anyway to let
+   zmodem continue in its state from "ZMODEM_INIT" to transmission.
+
+   respond_to_file_requests() did not touch fsent at all. The code then
+   deinitialized zmodem with "END_BATCH", because the first argument was the
+   result and that was fsent (this always happend in b_wzsend.c) and
+   with "NOTHING_TO_DO", cause fsent was not used (this always happend in
+   b_wazoo.c).
+
+   In fact there was absolutely *no* chance to deinitialize zmodem with
+   anything other then NOTHING_TO_DO in b_wzsend.c, "END_BATCH" was a
+   unreachable state.
+   fsent *always* has been at least 1 from the first send_Zmodem() call.
+   In case of loss of carrier the code even jumped out and did NOT
+   deinitialize zmodem at all (close the files, for example).
+
+   It took me some time to get the functions clear.
+
+   send_Zmodem needs to be called first with a "batch" variable of 0, then
+   with != 0. I therefore named the value of 0 "ZMODEM_INIT".
+
+   Any other value > 0 (but not < 0) meant "continue", a value < 0 meant
+   "end", with -1 as "normal end" and -2 as "batch end".
+
+   But note again: it was impossible to send a "normal end" to send_Zmodem()
+   from b_wzsend.c, 'cause this needs a value of 0 for fsent, and that value
+   never was 0 (ok, after 65535 files it was zero again).
+
+   The difference between "ZMODEM_ENDBATCH" and "ZMODEM_END" is simply that
+   send_Zmodem(ZMODEM_END) will try to get the remote zModems init parameters,
+   and stops itself if there is no remote zmodem anymore (this might be a
+   wrong behavior), while send_Zmodem(ZMODEM_END_BATCH) will not care about
+   a remote zmodem running or not but will do the same as ZMODEM_END will do
+   if the receiver *is* still running: attempt to force the remote zmodem to
+   finish.
+
+   The abovementioned possibly wrong behavior in case ZMODEM_END is that
+   send_Zmodem may leave the current file open if the receiver is dead.
+   I will change the code so that in case ZMODEM_END the code jumps to
+   "done" even in that case. The difference in ZMODEM_END and ZMODEM_ENDBATCH
+   will be that ZMODEM_END checks the existence of the remote zmodem, while
+   ZMODEM_ENDBATCH doesn't.
+
+
+

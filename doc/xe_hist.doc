@@ -1,0 +1,2496 @@
+
+            (very detailed) History of BinkleyTerm 2.60XE/Gamma-7
+           =======================================================
+
+
+
+Beta XH2:
+---------
+
+MR:
+
+- added sample config to source tree (doc\sampcfg)
+- updated some docs
+- added diff.exe and patch.exe for OS/2 and Win32 to the source tree (os\utils).
+  Both are released under the GPL, see also diff.txt and patch.txt.
+- added makediff.cmd and dopatch.cmd to os2\utils (OS/2)
+
+
+
+Beta XH3:
+---------
+
+xgz_jh1a:  (checked in by mr)
+
+Description:
+- new keyword RejectIgnoreSize
+
+
+xh1_aw1:  (checked in by mr)
+
+Description:
+- CapiCID bug in Watcom version fixed (also broken in XR6 release!)
+  VAC++ users, please check if CapiCID is still working for VAC++ before
+  applying this diff. It may now be broken vor VAC++. In this case, the
+  Watcom changes must be conditionally applied via #defines.
+
+
+xh1_aw2:  (checked in by mr)
+
+Description:
+- fixed the double line feed in the terminal mode
+
+
+xh1_aw2:  (checked in by mr)
+
+Description:
+- made the outbound rescanning/rereading a lot faster. Rescanning needs
+  less nodelist access, and rereading from btrescan.dmp needs no nodelist
+  access at all. Listed/unlisted state, ModemType, ModemFlags and Dial cost
+  of the nodes is written out to btrescan.dmp, so no nodelist access on
+  reading of btrescan.dmp is necessary any more.
+- fixed the double rescanning/rereading of the outbound (now occurres only
+  on startup)
+- fixed timestamp problems on btrescan.flg, if the time of a network server
+  with the \flags\ directory and the time of the workstation with BinkleyTerm
+  were not synchronized (eternal rescan).
+
+
+xh1_ce1:  (checked in by mr at 19990211 18:44:35)
+
+Changed Files:
+ - btxe/include/externs.h (1.3 -> 1.4)
+ - btxe/src/b_initva.c (1.1.1.1 -> 1.2)
+ - btxe/src/data.c (1.3 -> 1.4)
+ - btxe/src/emsi.c (1.1.1.1 -> 1.2)
+
+Description:
+ - fix a bug in NodeInboundDir. If it was used one time it was never reset
+   to default values for the next caller until binkley is restarted.
+
+
+xh1_eh1:  (checked in by mr at 19990222 01:10:14)
+
+Description:
+- some changes to prepare binkley to be ported to linux (most of them
+  are #ifdefed, so they won't affect other OSs.
+  Binkley compiles fine under linux/gcc. But it is not usable, as none
+  of the protcols works by now for sending files (at least files can
+  be received with hydra).
+- added three new files com_linux.h, async_lx.c, vfos_lnx.c. They
+  are almost copied from bt3.0, a Unix/Atari port of Bt 2.50 by Ben
+  Stuyts and Louis Lagendijk.
+- bink.h: I disabled most FA_*, as they are not used by neither
+  binkley nor linux. Binkley only uses FA_SUBDIR for
+  identifying dfind()ed directories.
+- Renamed BS0..6 to BSND0..6 everywhere in the source, because they
+  already exist in some linux header files, only serving a
+  different purpose.
+- includes.h: added linux-specific include-files, defines and
+  others.
+  Most important is the define DIRECTORYSEPARATOR[STR], this is
+  now used for all OSs. If possible, please use these instead of
+  '\' and "\" (and '/' and "/" of course)
+  removed FILE_DIRECTORY, this was the same as FA_SUBDIR
+- b_sbinit.c: removed some \0s at the end of strings in printf()s,
+  gcc warned about them, it also saves some memory ;)
+- common.c: disabled fancy_str() for filenames when compiling for
+  linux
+- some changed to bbs-system (mostly fixes of warnings gcc gave but
+  watcom did not.
+
+New Directories:
+ - btxe/linux
+
+New Files:
+ - btxe/include/com_lnx.h (1.1)
+ - btxe/linux/LXDIFFS (1.1)
+ - btxe/linux/TODO (1.1)
+ - btxe/linux/credits (1.1)
+ - btxe/src/async_lx.c (1.1)
+ - btxe/src/vfos_lnx.c (1.1)
+
+Changed Files:
+ - btxe/include/aglcrc.h (1.1.1.1 -> 1.2)
+ - btxe/include/bink.h (1.2 -> 1.3)
+ - btxe/include/com.h (1.1.1.1 -> 1.2)
+ - btxe/include/defines.h (1.1.1.1 -> 1.2)
+ - btxe/include/externs.h (1.4 -> 1.5)
+ - btxe/include/hydra.h (1.1.1.1 -> 1.2)
+ - btxe/include/includes.h (1.1.1.1 -> 1.2)
+ - btxe/include/prototyp.h (1.3 -> 1.4)
+ - btxe/include/sbuf.h (1.1.1.1 -> 1.2)
+ - btxe/include/vfossil.h (1.1.1.1 -> 1.2)
+ - btxe/src/b_bbs.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_flofil.c (1.2 -> 1.3)
+ - btxe/src/b_frproc.c (1.2 -> 1.3)
+ - btxe/src/b_initva.c (1.2 -> 1.3)
+ - btxe/src/b_proto.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_sbinit.c (1.2 -> 1.3)
+ - btxe/src/b_sessio.c (1.3 -> 1.4)
+ - btxe/src/bbs_ctra.c (1.1.1.1 -> 1.2)
+ - btxe/src/bbs_io.c (1.1.1.1 -> 1.2)
+ - btxe/src/bsend.c (1.1.1.1 -> 1.2)
+ - btxe/src/bt.c (1.1.1.1 -> 1.2)
+ - btxe/src/btconfig.c (1.3 -> 1.4)
+ - btxe/src/btutil.c (1.2 -> 1.3)
+ - btxe/src/common.c (1.2 -> 1.3)
+ - btxe/src/data.c (1.4 -> 1.5)
+ - btxe/src/dosfuncs.c (1.1.1.1 -> 1.2)
+ - btxe/src/file_dos.c (1.1.1.1 -> 1.2)
+ - btxe/src/fossil.c (1.1.1.1 -> 1.2)
+ - btxe/src/freepoll.c (1.2 -> 1.3)
+ - btxe/src/janus.c (1.1.1.1 -> 1.2)
+ - btxe/src/langload.c (1.1.1.1 -> 1.2)
+ - btxe/src/mailovly.c (1.2 -> 1.3)
+ - btxe/src/mailroot.c (1.2 -> 1.3)
+ - btxe/src/misc.c (1.2 -> 1.3)
+ - btxe/src/outbound.c (1.2 -> 1.3)
+ - btxe/src/pktmsgs.c (1.1.1.1 -> 1.2)
+ - btxe/src/sched.c (1.1.1.1 -> 1.2)
+ - btxe/src/script2.c (1.1.1.1 -> 1.2)
+ - btxe/src/xmrec.c (1.1.1.1 -> 1.2)
+ - btxe/src/zmodem.c (1.1.1.1 -> 1.2)
+ - btxe/xprmntl/bbs/ansi2bs.c (1.1.1.1 -> 1.2)
+ - btxe/xprmntl/bbs/compile.c (1.1.1.1 -> 1.2)
+
+
+xh1_eh2:  (checked in by mr at 19990222 02:02:13)
+
+Description:
+- continued work from xh1_eh1 (see this for long description)
+
+
+xh1_eh3:  (checked in by mr at 19990222 03:48:00)
+
+Description:
+- continued work from xh1_eh1 (see this for long description)
+
+
+xh1_eh4:  (checked in by mr at 19990223 03:38:00)
+
+Description:
+- many LO, UT, REQ, etc. changed to lo, ut, req...
+- lockfile-handling fixed
+- some colors activated
+- keyboard-mappings fixed for some keys
+
+
+xh1_eh5:  (checked in by mr at 19990223 04:09:31)
+
+Description:
+ - fixes for linux-version
+
+New Files:
+ - btxe/linux/btxe.1 (1.1)
+ - btxe/linux/install (1.1)
+
+Removed Files:
+ - btxe/linux/lxdiffs (1.2 -> NONE)
+
+Changed Files:
+ - btxe/linux/Makefile (1.1 -> 1.2)
+ - btxe/linux/todo (1.3 -> 1.4)
+ - btxe/src/async_lx.c (1.3 -> 1.4)
+ - btxe/src/file_dos.c (1.2 -> 1.3)
+ - btxe/src/version.c (1.2 -> 1.3)
+
+
+xh1_eh6:  (checked in by mr at 19990223 15:16:49)
+
+Description:
+ - fixes for linux-version
+
+Changed Files:
+ - btxe/linux/Makefile ( 1.2 -> 1.3)
+ - btxe/linux/btxe.1 ( 1.1 -> 1.2)
+ - btxe/linux/install ( 1.1 -> 1.2)
+ - btxe/linux/todo ( 1.4 -> 1.5)
+ - btxe/src/async_lx.c ( 1.4 -> 1.5)
+ - btxe/src/b_initva.c ( 1.3 -> 1.4)
+ - btxe/src/b_termov.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/btutil.c ( 1.4 -> 1.5)
+ - btxe/src/hydra.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/language.txt ( 1.2 -> 1.3)
+
+
+mr:  (no diff, via cvs at 19990223 16:27:07)
+
+Description:
+ - updated docs
+
+Changed Files:
+ - btxe/doc/xe_user.doc ( 1.2 -> 1.3)
+ - btxe/doc/xr6/knwnbugs.xr6 ( 1.1.1.1 -> 1.2)
+
+
+mr:  (no diff, via cvs at 19990223 16:28:28)
+
+Description:
+ - added internal version to info screen (bt.exe info)
+
+Changed Files:
+ - btxe/src/version.c ( 1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990223 16:30:18)
+
+Description:
+ - indented some files
+
+Changed Files:
+ - btxe/src/debug.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/evtsetup.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/exceptio.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/heap.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/history.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/mailer.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/maxmcp.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/nodeproc.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/os2_pm.c ( 1.2 -> 1.3)
+ - btxe/src/pipe.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/protcomm.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/sbuf.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/stats.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/timer.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/times.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/v7debug.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/version7.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/vfos_nt.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/vfossil.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/vt100.c ( 1.2 -> 1.3)
+ - btxe/src/yoohoo.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/dos/xr5toxr6.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/gethist/getbgfax.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/gethist/getmax3.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/gethist/getra.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/gethist/gettg.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/os2/bink_pm/bink_pm.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/os2/binkpipe/binkpipe.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/os2/toss/toss.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/win32/semwait/semwait.c ( 1.1.1.1 -> 1.2)
+ - btxe/src/win32/snoopon/snoopon.c ( 1.1.1.1 -> 1.2)
+
+
+
+Beta XH4:
+---------
+
+mr:  (no diff, via cvs at 19990226 01:50:56)
+
+Description:
+ - added stylguid.txt
+
+New Files:
+ - btxe/doc/stylguid.txt (1.1)
+
+
+xh3_fix (by hjk):  (checked in by mr at 19990226 02:47:12)
+
+Description:
+ - Fix to make XH3 sourcetree compile under Windows and Linux
+
+Changed Files:
+ - btxe/include/bink.h (1.3 -> 1.4)
+ - btxe/include/includes.h (1.2 -> 1.3)
+ - btxe/src/mailer.c (1.2 -> 1.3)
+ - btxe/src/mailovly.c (1.5 -> 1.6)
+ - btxe/src/outbound.c (1.5 -> 1.6)
+ - btxe/src/version.c (1.4 -> 1.5)
+
+
+XH3_HK1:  (checked in by hjk at 19990226 20:31:14)
+
+Description:
+- Redesign Win32-Borland C++ Builder make file
+- Implemented zfree() function for Linux
+
+Changed Files:
+ - btxe/include/includes.h (1.3 -> 1.4)
+ - btxe/linux/todo (1.5 -> 1.6)
+ - btxe/src/file_dos.c (1.3 -> 1.4)
+ - btxe/src/mailovly.c (1.6 -> 1.7)
+ - btxe/win32/compile.bat (1.1.1.1 -> 1.2)
+ - btxe/win32/compilwf.bat (1.1.1.1 -> 1.2)
+
+
+hjk:  (no diff, via cvs at 19990226 20:34:57)
+
+Description:
+Some more work to Win32-Borland C++ Builder makefile
+
+New Files:
+ - btxe/win32/makefile (1.1)
+
+Removed Files:
+ - btxe/doc/w32_dev.doc (1.1.1.1)
+ - btxe/win32/bcppb.mak (1.1.1.1)
+ - btxe/win32/bcppbuti.mak (1.1.1.1)
+ - btxe/win32/bcppbwf.mak (1.1.1.1)
+
+
+mr:  (no diff, via cvs at 19990227 02:16:46)
+
+Description:
+ - fixed little typo in (hopefully) all new header files
+
+Changed Files:
+ - btxe/doc/c-header.tpl (1.1.1.1 -> 1.2)
+ - btxe/include/aglcrc.h (1.2 -> 1.3)
+ - btxe/include/async.h (1.1.1.1 -> 1.2)
+ - btxe/include/asyos2v1.h (1.1.1.1 -> 1.2)
+ - btxe/include/banner.h (1.1.1.1 -> 1.2)
+ - btxe/include/bbs_incl.h (1.1.1.1 -> 1.2)
+ - btxe/include/bink.h (1.4 -> 1.5)
+ - btxe/include/binkpipe.h (1.1.1.1 -> 1.2)
+ - btxe/include/box.h (1.1.1.1 -> 1.2)
+ - btxe/include/buffer.h (1.1.1.1 -> 1.2)
+ - btxe/include/cache.h (1.1.1.1 -> 1.2)
+ - btxe/include/callwin.h (1.1.1.1 -> 1.2)
+ - btxe/include/com.h (1.3 -> 1.4)
+ - btxe/include/com_dos.h (1.1.1.1 -> 1.2)
+ - btxe/include/com_lnx.h (1.2 -> 1.3)
+ - btxe/include/com_nt.h (1.1.1.1 -> 1.2)
+ - btxe/include/com_os2.h (1.1.1.1 -> 1.2)
+ - btxe/include/com_os2p.h (1.1.1.1 -> 1.2)
+ - btxe/include/css.h (1.1.1.1 -> 1.2)
+ - btxe/include/debug.h (1.1.1.1 -> 1.2)
+ - btxe/include/defines.h (1.2 -> 1.3)
+ - btxe/include/exceptio.h (1.1.1.1 -> 1.2)
+ - btxe/include/externs.h (1.6 -> 1.7)
+ - btxe/include/faxproto.h (1.1.1.1 -> 1.2)
+ - btxe/include/fidomail.h (1.1.1.1 -> 1.2)
+ - btxe/include/gethcomm.h (1.1.1.1 -> 1.2)
+ - btxe/include/history.h (1.1.1.1 -> 1.2)
+ - btxe/include/hydra.h (1.2 -> 1.3)
+ - btxe/include/includes.h (1.4 -> 1.5)
+ - btxe/include/janus.h (1.1.1.1 -> 1.2)
+ - btxe/include/keybd.h (1.1.1.1 -> 1.2)
+ - btxe/include/keyfncs.h (1.1.1.1 -> 1.2)
+ - btxe/include/language.h (1.1.1.1 -> 1.2)
+ - btxe/include/lngmagic.h (1.1.1.1 -> 1.2)
+ - btxe/include/maxcomm.h (1.1.1.1 -> 1.2)
+ - btxe/include/maxmcp.h (1.1.1.1 -> 1.2)
+ - btxe/include/msgs.h (1.1.1.1 -> 1.2)
+ - btxe/include/pktmsgs.h (1.1.1.1 -> 1.2)
+ - btxe/include/prototyp.h (1.5 -> 1.6)
+ - btxe/include/sbuf.h (1.2 -> 1.3)
+ - btxe/include/sched.h (1.1.1.1 -> 1.2)
+ - btxe/include/squish.h (1.1.1.1 -> 1.2)
+ - btxe/include/timer.h (1.1.1.1 -> 1.2)
+ - btxe/include/version7.h (1.1.1.1 -> 1.2)
+ - btxe/include/vfossil.h (1.2 -> 1.3)
+ - btxe/include/video.h (1.1.1.1 -> 1.2)
+ - btxe/include/vt100.h (1.1 -> 1.2)
+ - btxe/include/xfer.h (1.1.1.1 -> 1.2)
+ - btxe/include/zmodem.h (1.1.1.1 -> 1.2)
+ - btxe/src/aglcrc.c (1.1.1.1 -> 1.2)
+ - btxe/src/async.c (1.2 -> 1.3)
+ - btxe/src/async_lx.c (1.5 -> 1.6)
+ - btxe/src/async_nt.c (1.2 -> 1.3)
+ - btxe/src/async_os.c (1.2 -> 1.3)
+ - btxe/src/b_banner.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_bbs.c (1.2 -> 1.3)
+ - btxe/src/b_faxrcv.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_flofil.c (1.4 -> 1.5)
+ - btxe/src/b_frproc.c (1.4 -> 1.5)
+ - btxe/src/b_fuser.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_help.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_initva.c (1.4 -> 1.5)
+ - btxe/src/b_logs.c (1.2 -> 1.3)
+ - btxe/src/b_passwo.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_proto.c (1.2 -> 1.3)
+ - btxe/src/b_rspfil.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_sbinit.c (1.3 -> 1.4)
+ - btxe/src/b_script.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_search.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_sessio.c (1.6 -> 1.7)
+ - btxe/src/b_spawn.c (1.2 -> 1.3)
+ - btxe/src/b_term.c (1.3 -> 1.4)
+ - btxe/src/b_termov.c (1.2 -> 1.3)
+ - btxe/src/b_today.c (1.2 -> 1.3)
+ - btxe/src/b_wazoo.c (1.3 -> 1.4)
+ - btxe/src/b_whack.c (1.1.1.1 -> 1.2)
+ - btxe/src/b_wzsend.c (1.3 -> 1.4)
+ - btxe/src/banner.c (1.2 -> 1.3)
+ - btxe/src/bbs_ctra.c (1.2 -> 1.3)
+ - btxe/src/bbs_data.c (1.1.1.1 -> 1.2)
+ - btxe/src/bbs_io.c (1.2 -> 1.3)
+ - btxe/src/bink_asm.c (1.1.1.1 -> 1.2)
+ - btxe/src/binkdlg.c (1.1.1.1 -> 1.2)
+ - btxe/src/brec.c (1.1.1.1 -> 1.2)
+ - btxe/src/bsend.c (1.2 -> 1.3)
+ - btxe/src/bt.c (1.3 -> 1.4)
+ - btxe/src/btconfig.c (1.4 -> 1.5)
+ - btxe/src/btutil.c (1.5 -> 1.6)
+ - btxe/src/cache.c (1.2 -> 1.3)
+ - btxe/src/callback.c (1.3 -> 1.4)
+ - btxe/src/callerid.c (1.2 -> 1.3)
+ - btxe/src/callwin.c (1.2 -> 1.3)
+ - btxe/src/capi.c (1.3 -> 1.4)
+ - btxe/src/cfosline.c (1.2 -> 1.3)
+ - btxe/src/chat.c (1.2 -> 1.3)
+ - btxe/src/common.c (1.3 -> 1.4)
+ - btxe/src/cpuload.c (1.2 -> 1.3)
+ - btxe/src/css.c (1.2 -> 1.3)
+ - btxe/src/data.c (1.6 -> 1.7)
+ - btxe/src/debug.c (1.2 -> 1.3)
+ - btxe/src/dosfuncs.c (1.2 -> 1.3)
+ - btxe/src/emsi.c (1.2 -> 1.3)
+ - btxe/src/evtparse.c (1.1.1.1 -> 1.2)
+ - btxe/src/evtsetup.c (1.2 -> 1.3)
+ - btxe/src/exceptio.c (1.2 -> 1.3)
+ - btxe/src/file_dos.c (1.4 -> 1.5)
+ - btxe/src/fossil.c (1.2 -> 1.3)
+ - btxe/src/freepoll.c (1.5 -> 1.6)
+ - btxe/src/ftsc.c (1.2 -> 1.3)
+ - btxe/src/heap.c (1.2 -> 1.3)
+ - btxe/src/history.c (1.2 -> 1.3)
+ - btxe/src/hydra.c (1.2 -> 1.3)
+ - btxe/src/includes.c (1.1.1.1 -> 1.2)
+ - btxe/src/janus.c (1.3 -> 1.4)
+ - btxe/src/keymap.c (1.1.1.1 -> 1.2)
+ - btxe/src/langload.c (1.3 -> 1.4)
+ - btxe/src/language.txt (1.3 -> 1.4)
+ - btxe/src/m7rec.c (1.1.1.1 -> 1.2)
+ - btxe/src/m7send.c (1.1.1.1 -> 1.2)
+ - btxe/src/mailer.c (1.3 -> 1.4)
+ - btxe/src/mailovly.c (1.7 -> 1.8)
+ - btxe/src/mailroot.c (1.4 -> 1.5)
+ - btxe/src/maxmcp.c (1.2 -> 1.3)
+ - btxe/src/maxprm.c (1.1.1.1 -> 1.2)
+ - btxe/src/mdm_proc.c (1.2 -> 1.3)
+ - btxe/src/misc.c (1.3 -> 1.4)
+ - btxe/src/nodeproc.c (1.2 -> 1.3)
+ - btxe/src/os2_pm.c (1.3 -> 1.4)
+ - btxe/src/outbound.c (1.6 -> 1.7)
+ - btxe/src/pipe.c (1.2 -> 1.3)
+ - btxe/src/pktmsgs.c (1.3 -> 1.4)
+ - btxe/src/protcomm.c (1.2 -> 1.3)
+ - btxe/src/recvbark.c (1.1.1.1 -> 1.2)
+ - btxe/src/recvsync.c (1.1.1.1 -> 1.2)
+ - btxe/src/sbuf.c (1.2 -> 1.3)
+ - btxe/src/sched.c (1.2 -> 1.3)
+ - btxe/src/script2.c (1.3 -> 1.4)
+ - btxe/src/script2.inc (1.1.1.1 -> 1.2)
+ - btxe/src/sendbark.c (1.2 -> 1.3)
+ - btxe/src/sendsync.c (1.1.1.1 -> 1.2)
+ - btxe/src/squish.c (1.2 -> 1.3)
+ - btxe/src/srif.c (1.2 -> 1.3)
+ - btxe/src/statetbl.c (1.1.1.1 -> 1.2)
+ - btxe/src/stats.c (1.2 -> 1.3)
+ - btxe/src/timer.c (1.2 -> 1.3)
+ - btxe/src/times.c (1.2 -> 1.3)
+ - btxe/src/v7debug.c (1.2 -> 1.3)
+ - btxe/src/version.c (1.5 -> 1.6)
+ - btxe/src/version7.c (1.2 -> 1.3)
+ - btxe/src/vfos_lnx.c (1.2 -> 1.3)
+ - btxe/src/vfos_nt.c (1.2 -> 1.3)
+ - btxe/src/vfossil.c (1.2 -> 1.3)
+ - btxe/src/vt100.c (1.3 -> 1.4)
+ - btxe/src/xmrec.c (1.2 -> 1.3)
+ - btxe/src/xmsend.c (1.1.1.1 -> 1.2)
+ - btxe/src/yoohoo.c (1.2 -> 1.3)
+ - btxe/src/zmodem.c (1.2 -> 1.3)
+ - btxe/src/dos/xr5toxr6.c (1.2 -> 1.3)
+ - btxe/src/gethist/getbgfax.c (1.2 -> 1.3)
+ - btxe/src/gethist/gethcomm.c (1.1.1.1 -> 1.2)
+ - btxe/src/gethist/getmax3.c (1.2 -> 1.3)
+ - btxe/src/gethist/getra.c (1.2 -> 1.3)
+ - btxe/src/gethist/gettg.c (1.2 -> 1.3)
+ - btxe/src/os2/bink_pm/bink_pm.c (1.2 -> 1.3)
+ - btxe/src/os2/binkpipe/binkpipe.c (1.2 -> 1.3)
+ - btxe/src/os2/toss/toss.c (1.2 -> 1.3)
+ - btxe/src/win32/semwait/semwait.c (1.2 -> 1.3)
+ - btxe/src/win32/snoopon/snoopon.c (1.2 -> 1.3)
+ - btxe/xprmntl/bbs/ansi2bs.c (1.2 -> 1.3)
+ - btxe/xprmntl/bbs/compile.c (1.2 -> 1.3)
+
+
+XH3_CE1:  (checked in by mr at 19990227 02:42:31)
+
+Description:
+ - fix for IBMCPP 3.0x compilers
+
+Changed Files:
+ - btxe/os2/ibmvacpp.mak (1.1.1.1 -> 1.2)
+ - btxe/src/capi.c (1.4 -> 1.5)
+ - btxe/src/version.c (1.6 -> 1.7)
+
+
+xh3_ag1:  (checked in by mr at 19990227 12:53:15)
+
+Description:
+ - Implemented parsing of "Remote has x bytes for us" Hydra device messages.
+   This updates remote "mail on hold" value, after the remote site read the
+   whole outbound.
+ - Made some changes to EMX makefiles using EMX 2.8.1 and the runtime 0.9d
+   (emx28omf.mak).
+ - fixed typecast in EMSI output, when using high ascii characters, that
+   made EMX compiled versions crash.
+ - corrected some "#ifdef __IBMC__ || __IBMCPP__" to "#if defined ..."
+ - Changed function names in maxcomm.h to uppercase and added respective
+   #defines, to allow EMX omf link with maxcomm.dll.
+
+New Files:
+ - btxe/os2/cemx.cmd (1.1)
+ - btxe/os2/emx28omf.mak (1.1)
+
+Changed Files:
+ - btxe/include/com_os2.h (1.2 -> 1.3)
+ - btxe/include/maxcomm.h (1.2 -> 1.3)
+ - btxe/os2/emxgaout.mak (1.1.1.1 -> 1.2)
+ - btxe/os2/emxgomf.mak (1.1.1.1 -> 1.2)
+ - btxe/src/b_initva.c (1.5 -> 1.6)
+ - btxe/src/capi.c (1.5 -> 1.6)
+ - btxe/src/emsi.c (1.3 -> 1.4)
+ - btxe/src/hydra.c (1.3 -> 1.4)
+ - btxe/src/version.c (1.7 -> 1.8)
+
+
+EH1+HK1+EH234+HK2+EH5+HK3+EH678 (plus more not send as diff):  (checked in by ceh at 19990227 13:10:50)
+
+Description:
+- Fixes for Linux
+- Lowercased the results of all dfind()s. (Check under all OSs, please!)
+
+New Files:
+ - btxe/include/foffsets.h (1.1)
+ - btxe/src/fcfgread.c (1.1)
+
+Changed Files:
+ - btxe/readme.1st (1.1.1.1 -> 1.2)
+ - btxe/include/bbs_incl.h (1.2 -> 1.3)
+ - btxe/include/bink.h (1.5 -> 1.6)
+ - btxe/include/com.h (1.4 -> 1.5)
+ - btxe/include/com_lnx.h (1.3 -> 1.4)
+ - btxe/include/hydra.h (1.3 -> 1.4)
+ - btxe/include/includes.h (1.5 -> 1.6)
+ - btxe/include/keybd.h (1.2 -> 1.3)
+ - btxe/include/prototyp.h (1.6 -> 1.7)
+ - btxe/include/vfossil.h (1.3 -> 1.4)
+ - btxe/include/zmodem.h (1.2 -> 1.3)
+ - btxe/linux/Makefile (1.3 -> 1.4)
+ - btxe/linux/btxe.1 (1.2 -> 1.3)
+ - btxe/linux/credits (1.2 -> 1.3)
+ - btxe/linux/install (1.2 -> 1.3)
+ - btxe/linux/todo (1.6 -> 1.7)
+ - btxe/src/async_lx.c (1.6 -> 1.7)
+ - btxe/src/b_bbs.c (1.3 -> 1.4)
+ - btxe/src/b_frproc.c (1.5 -> 1.6)
+ - btxe/src/b_initva.c (1.6 -> 1.7)
+ - btxe/src/b_passwo.c (1.2 -> 1.3)
+ - btxe/src/b_proto.c (1.3 -> 1.4)
+ - btxe/src/b_search.c (1.2 -> 1.3)
+ - btxe/src/b_sessio.c (1.7 -> 1.8)
+ - btxe/src/b_termov.c (1.3 -> 1.4)
+ - btxe/src/bbs_io.c (1.3 -> 1.4)
+ - btxe/src/bt.c (1.4 -> 1.5)
+ - btxe/src/btconfig.c (1.5 -> 1.6)
+ - btxe/src/btutil.c (1.6 -> 1.7)
+ - btxe/src/common.c (1.4 -> 1.5)
+ - btxe/src/data.c (1.7 -> 1.8)
+ - btxe/src/dosfuncs.c (1.3 -> 1.4)
+ - btxe/src/file_dos.c (1.5 -> 1.6)
+ - btxe/src/fossil.c (1.3 -> 1.4)
+ - btxe/src/freepoll.c (1.6 -> 1.7)
+ - btxe/src/hydra.c (1.4 -> 1.5)
+ - btxe/src/janus.c (1.4 -> 1.5)
+ - btxe/src/langload.c (1.4 -> 1.5)
+ - btxe/src/language.txt (1.4 -> 1.5)
+ - btxe/src/mailer.c (1.4 -> 1.5)
+ - btxe/src/mailovly.c (1.8 -> 1.9)
+ - btxe/src/mailroot.c (1.5 -> 1.6)
+ - btxe/src/maxprm.c (1.2 -> 1.3)
+ - btxe/src/misc.c (1.4 -> 1.5)
+ - btxe/src/outbound.c (1.7 -> 1.8)
+ - btxe/src/pktmsgs.c (1.4 -> 1.5)
+ - btxe/src/sbuf.c (1.3 -> 1.4)
+ - btxe/src/sched.c (1.3 -> 1.4)
+ - btxe/src/script2.c (1.4 -> 1.5)
+ - btxe/src/version.c (1.8 -> 1.9)
+ - btxe/src/version7.c (1.3 -> 1.4)
+ - btxe/src/vfos_lnx.c (1.3 -> 1.4)
+ - btxe/src/zmodem.c (1.3 -> 1.4)
+ - btxe/xprmntl/bbs/ansi2bs.c (1.3 -> 1.4)
+ - btxe/xprmntl/bbs/compile.c (1.3 -> 1.4)
+
+
+ceh:  (no diff, via cvs at 19990227 13:16:20)
+
+Description:
+Fixed small typo in version.c
+
+Changed Files:
+ - btxe/src/version.c (1.9 -> 1.10)
+
+
+ceh:  (no diff, via cvs at 19990227 13:51:18)
+
+Description:
+- added myself to xe_user.doc
+- changed ml.org to uue.org in xe_user.doc
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990227 14:13:21)
+
+Description:
+ - changed version string, please only increase patch level
+
+Changed Files:
+ - btxe/src/version.c (1.10 -> 1.11)
+
+
+mr:  (no diff, via cvs at 19990227 14:14:44)
+
+Description:
+ - compileable again
+
+Changed Files:
+ - btxe/src/b_frproc.c (1.6 -> 1.7)
+ - btxe/src/janus.c (1.5 -> 1.6)
+
+
+mr:  (no diff, via cvs at 19990227 18:48:20)
+
+Description:
+ - minor clean ups
+
+Changed Files:
+ - btxe/src/bink_asm.c (1.2 -> 1.3)
+ - btxe/src/fcfgread.c (1.1 -> 1.2)
+ - btxe/src/maxprm.c (1.3 -> 1.4)
+ - btxe/src/version.c (1.11 -> 1.12)
+
+
+xh3_ag2:  (checked in by mr at 19990227 19:35:21)
+
+Description:
+ - Implemented counterpart to the incoming extended MoH handling. It is send
+   as a hydra device message with the text "Remote has x bytes for us".
+   HydraMsgSend is sent as a hydra con message, now.
+ - The clock in the status window will be updated more often to provide the
+   user with the correct time.
+ - Corrected the internal length of the history file name. It was limited 
+   to 80 characters what can result in problems under anything else than
+   plain DOS.
+ - In xHydra sessions the device message will only be sent in the second
+   batch.
+ - Fixed or better removed "Lost Carrier" messages at the end of every 
+   Zmodem session.
+ - DelBadCall also clears bad call counter for all the AKAs of the remote
+   site.
+ - updated knwnbugs.xr6 (hopefully, it's right, what I did ;)
+
+Bugfixes for:
+ - 0017 0025
+
+Changed Files:
+ - btxe/doc/xr6/knwnbugs.xr6 (1.2 -> 1.3)
+ - btxe/include/externs.h (1.7 -> 1.8)
+ - btxe/include/prototyp.h (1.7 -> 1.8)
+ - btxe/src/b_today.c (1.3 -> 1.4)
+ - btxe/src/b_wzsend.c (1.4 -> 1.5)
+ - btxe/src/bt.c (1.5 -> 1.6)
+ - btxe/src/data.c (1.8 -> 1.9)
+ - btxe/src/hydra.c (1.5 -> 1.6)
+ - btxe/src/mailer.c (1.5 -> 1.6)
+ - btxe/src/mailroot.c (1.6 -> 1.7)
+ - btxe/src/misc.c (1.5 -> 1.6)
+ - btxe/src/version.c (1.12 -> 1.13)
+ - btxe/src/zmodem.c (1.4 -> 1.5)
+
+
+HK4567+NS1+HJK_SCRN:  (checked in by hjk at 19990228 13:46:21)
+
+Description:
+- New keyword Win-version: SIOMode (almost same beheavior as in OS2)
+- Some bugfixes and cleanups
+- Support for Visual C++ (MSVC, uSoft)
+- Libfile to NTCOMM for MSVC
+- Added screenclasses for Win32 in the ideas.cpp\screen directory.
+
+Bugfixes for:
+ - 0016, 0020
+
+New Files:
+ - btxe/doc/sampcfg/w32/mailer.bat (1.1)
+ - btxe/doc/sampcfg/w32/mailerex.bat (1.1)
+ - btxe/lib/ntcommms.lib (1.1)
+ - btxe/xprmntl/screen/bcppb.mak (1.1)
+ - btxe/xprmntl/screen/scrnw32.h (1.1)
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.4 -> 1.5)
+ - btxe/doc/sampcfg/w32/extmail.bat (1.1.1.1 -> 1.2)
+ - btxe/doc/xr6/knwnbugs.xr6 (1.3 -> 1.4)
+ - btxe/include/com_nt.h (1.2 -> 1.3)
+ - btxe/include/externs.h (1.8 -> 1.9)
+ - btxe/include/msgs.h (1.2 -> 1.3)
+ - btxe/include/prototyp.h (1.8 -> 1.9)
+ - btxe/include/third/ntcomm.h (1.1.1.1 -> 1.2)
+ - btxe/src/async_nt.c (1.3 -> 1.4)
+ - btxe/src/b_initva.c (1.7 -> 1.8)
+ - btxe/src/btconfig.c (1.6 -> 1.7)
+ - btxe/src/btutil.c (1.7 -> 1.8)
+ - btxe/src/data.c (1.9 -> 1.10)
+ - btxe/src/dosfuncs.c (1.4 -> 1.5)
+ - btxe/src/fossil.c (1.4 -> 1.5)
+ - btxe/src/language.txt (1.5 -> 1.6)
+ - btxe/src/mailer.c (1.6 -> 1.7)
+ - btxe/src/mdm_proc.c (1.3 -> 1.4)
+ - btxe/src/outbound.c (1.8 -> 1.9)
+ - btxe/src/sendsync.c (1.2 -> 1.3)
+ - btxe/src/version.c (1.13 -> 1.14)
+ - btxe/src/vfos_lnx.c (1.4 -> 1.5)
+ - btxe/src/vfos_nt.c (1.3 -> 1.4)
+ - btxe/src/vfossil.c (1.3 -> 1.4)
+ - btxe/xprmntl/screen/scrnelem.cpp (1.1.1.1 -> 1.2)
+ - btxe/xprmntl/screen/scrnelem.hpp (1.1.1.1 -> 1.2)
+ - btxe/xprmntl/screen/scrntest.cpp (1.1.1.1 -> 1.2)
+ - btxe/xprmntl/screen/todo.lst (1.1.1.1 -> 1.2)
+ - btxe/xprmntl/screen/typesize.h (1.1.1.1 -> 1.2)
+
+
+hjk:  (no diff, via cvs at 19990228 14:48:02)
+
+Description:
+Removed support for V6 and Quick Nodelist
+
+New Files:
+ - btxe/src/old/b_fuser.c (1.1)
+ - btxe/src/old/nodeproc.old (1.1)
+
+Removed Files:
+ - btxe/src/b_fuser.c (1.2)
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.5 -> 1.6)
+ - btxe/dos/bt.def (1.1.1.1 -> 1.2)
+ - btxe/dos/btxec700.def (1.1.1.1 -> 1.2)
+ - btxe/dos/btxec700.mak (1.1.1.1 -> 1.2)
+ - btxe/include/prototyp.h (1.9 -> 1.10)
+ - btxe/os2/emx28omf.mak (1.1 -> 1.2)
+ - btxe/os2/emxgomf.mak (1.2 -> 1.3)
+ - btxe/os2/watcom10.mif (1.1.1.1 -> 1.2)
+ - btxe/src/async_nt.c (1.4 -> 1.5)
+ - btxe/src/btconfig.c (1.7 -> 1.8)
+ - btxe/src/data.c (1.10 -> 1.11)
+ - btxe/src/nodeproc.c (1.3 -> 1.4)
+ - btxe/src/version.c (1.14 -> 1.15)
+ - btxe/win32/makefile (1.1 -> 1.2)
+
+
+ceh:  (no diff, via cvs at 19990228 19:30:29)
+
+Description:
+removed hi-asciis from source (stats screen now uses selected boxtype)
+
+Changed Files:
+ - btxe/include/box.h (1.2 -> 1.3)
+ - btxe/linux/btxe.1 (1.3 -> 1.4)
+ - btxe/src/async_lx.c (1.7 -> 1.8)
+ - btxe/src/bbs_io.c (1.4 -> 1.5)
+ - btxe/src/bt.c (1.6 -> 1.7)
+ - btxe/src/cache.c (1.3 -> 1.4)
+ - btxe/src/sbuf.c (1.4 -> 1.5)
+ - btxe/src/script2.c (1.5 -> 1.6)
+ - btxe/src/stats.c (1.3 -> 1.4)
+ - btxe/src/version.c (1.15 -> 1.16)
+
+
+mr:  (no diff, via cvs at 19990228 22:45:54)
+
+Description:
+ - beautified opening screen
+
+Changed Files:
+ - btxe/src/bt.c (1.7 -> 1.8)
+
+
+xh3_ag3:  (checked in by mr at 19990228 23:08:35)
+
+Description:
+ - various year 2000 fixes
+
+Changed Files:
+ - btxe/doc/sampcfg/os2/ph-cost.cmd (1.1.1.1 -> 1.2)
+ - btxe/src/bbs_io.c (1.5 -> 1.6)
+ - btxe/src/ftsc.c (1.3 -> 1.4)
+ - btxe/src/hydra.c (1.6 -> 1.7)
+ - btxe/src/misc.c (1.6 -> 1.7)
+ - btxe/src/outbound.c (1.9 -> 1.10)
+ - btxe/src/pktmsgs.c (1.5 -> 1.6)
+ - btxe/src/version.c (1.16 -> 1.17)
+ - btxe/src/gethist/getmax3.c (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990228 23:34:24)
+
+Description:
+ - some code cleanups
+
+Changed Files:
+ - btxe/os2/borland.mak (1.1.1.1 -> 1.2)
+ - btxe/os2/emxaout.rsp (1.1.1.1 -> 1.2)
+ - btxe/os2/emxgaout.mak (1.2 -> 1.3)
+ - btxe/os2/emxnaout.mak (1.1.1.1 -> 1.2)
+ - btxe/os2/ibmcsets.mak (1.1.1.1 -> 1.2)
+ - btxe/os2/ibmvacpp.mak (1.2 -> 1.3)
+ - btxe/src/b_bbs.c (1.4 -> 1.5)
+ - btxe/src/b_faxrcv.c (1.2 -> 1.3)
+ - btxe/src/b_term.c (1.4 -> 1.5)
+ - btxe/src/btconfig.c (1.8 -> 1.9)
+ - btxe/src/cache.c (1.4 -> 1.5)
+ - btxe/src/fcfgread.c (1.2 -> 1.3)
+ - btxe/src/misc.c (1.7 -> 1.8)
+
+
+ceh:  (no diff, via cvs at 19990301 11:12:12)
+
+Description:
+- source cleanups
+
+Changed Files:
+ - btxe/src/async_lx.c (1.8 -> 1.9)
+ - btxe/src/bt.c (1.8 -> 1.9)
+ - btxe/src/cache.c (1.5 -> 1.6)
+
+
+mr:  (no diff, via cvs at 19990302 01:10:37)
+
+Description:
+ - removed release candidate version handling (back to one version string)
+
+Changed Files:
+ - btxe/src/bt.c (1.9 -> 1.10)
+ - btxe/src/version.c (1.17 -> 1.18)
+
+
+mr:  (no diff, via cvs at 19990302 13:06:57)
+
+Description:
+ - added todo list for next beta release
+
+New Files:
+ - btxe/todo.bbr (1.1)
+
+
+mr:  (no diff, via cvs at 19990302 13:45:37)
+
+Description:
+ - new build beta cmd for watcom
+
+New Files:
+ - btxe/os2/watrbeta.cmd (1.1)
+
+Changed Files:
+ - btxe/os2/watcom10.mif (1.2 -> 1.3)
+
+
+AG4:  (checked in by hjk at 19990302 18:05:37)
+
+Description:
+- changed size display for 5 characters width to show the most precise info possible by not dividing it by 1024 before the value exceeds 9999 [ kMG].
+- made some changes to support an EMX compiled version to link with MAXCOMM.DLL.
+
+New Files:
+ - btxe/src/emxmxcom.c (1.1)
+ - btxe/win32/bt32.ico (1.1)
+
+Changed Files:
+ - btxe/include/com_nt.h (1.3 -> 1.4)
+ - btxe/include/com_os2p.h (1.2 -> 1.3)
+ - btxe/include/includes.h (1.6 -> 1.7)
+ - btxe/include/maxcomm.h (1.3 -> 1.4)
+ - btxe/os2/emx28omf.mak (1.2 -> 1.3)
+ - btxe/os2/emxgomf.mak (1.3 -> 1.4)
+ - btxe/os2/emxomf.rsp (1.1.1.1 -> 1.2)
+ - btxe/src/b_bbs.c (1.5 -> 1.6)
+ - btxe/src/cache.c (1.6 -> 1.7)
+ - btxe/src/misc.c (1.8 -> 1.9)
+ - btxe/src/os2_pm.c (1.4 -> 1.5)
+
+
+ceh:  (no diff, via cvs at 19990302 19:35:56)
+
+Description:
+ - splitted file_dos.c into
+   - file_all.c (include this in your makefile for all OSs
+   - file_xxx.c (xxx=os2, lnx, w32, dos, include the appropriate one)
+ w32, os2 and dos are not completed yet!
+
+Changed Files:
+ - btxe/include/bink.h (1.6 -> 1.7)
+ - btxe/linux/Makefile (1.4 -> 1.5)
+ - btxe/linux/btxe.1 (1.4 -> 1.5)
+ - btxe/src/b_flofil.c (1.5 -> 1.6)
+ - btxe/src/b_sessio.c (1.8 -> 1.9)
+ - btxe/src/b_term.c (1.5 -> 1.6)
+ - btxe/src/file_dos.c (1.6 -> 1.7)
+ - btxe/src/freepoll.c (1.7 -> 1.8)
+ - btxe/src/ftsc.c (1.4 -> 1.5)
+ - btxe/src/m7send.c (1.2 -> 1.3)
+
+
+ceh:  (no diff, via cvs at 19990302 20:31:32)
+
+Description:
+ - added missing files (file_xxx.c)
+
+New Files:
+ - btxe/src/file_all.c (1.1)
+ - btxe/src/file_lnx.c (1.1)
+ - btxe/src/file_os2.c (1.1)
+ - btxe/src/file_w32.c (1.1)
+
+
+ceh:  (no diff, via cvs at 19990302 21:43:41)
+
+Description:
+ - "fixed" dos dfind (cound not test, because makefile does currently
+   not work (Michael?)
+
+Changed Files:
+ - btxe/src/file_dos.c (1.7 -> 1.8)
+
+
+mr:  (no diff, via cvs at 19990302 23:47:28)
+
+Description:
+ - now again compileable under OS/2 and DOS (with watcom)
+
+Changed Files:
+ - btxe/include/bink.h (1.7 -> 1.8)
+ - btxe/include/externs.h (1.9 -> 1.10)
+ - btxe/os2/watcom10.mif (1.3 -> 1.4)
+ - btxe/src/b_bbs.c (1.6 -> 1.7)
+ - btxe/src/cache.c (1.7 -> 1.8)
+ - btxe/src/css.c (1.3 -> 1.4)
+
+
+hjk:  (no diff, via cvs at 19990303 00:09:30)
+
+Description:
+- Updated file_w32.c, so it works now with Win32
+- Fixed empty outbound bug in OS/2 and Win32
+
+Changed Files:
+ - btxe/todo.bbr (1.1 -> 1.2)
+ - btxe/src/cache.c (1.8 -> 1.9)
+ - btxe/src/file_w32.c (1.1 -> 1.2)
+ - btxe/win32/makefile (1.2 -> 1.3)
+
+
+ceh:  (no diff, via cvs at 19990303 00:33:52)
+
+Description:
+ - tried to  fix dir_findfirst() / OS/2/32
+
+Changed Files:
+ - btxe/include/bink.h (1.8 -> 1.9)
+ - btxe/src/file_os2.c (1.1 -> 1.2)
+
+
+ceh:  (no diff, via cvs at 19990303 01:29:26)
+
+Description:
+ - fixes for dir_* os/2 32bit
+
+Changed Files:
+ - btxe/src/file_os2.c (1.2 -> 1.3)
+
+
+ceh:  (no diff, via cvs at 19990303 01:35:14)
+
+Description:
+ - more fixes
+
+Changed Files:
+ - btxe/src/file_os2.c (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990303 01:52:29)
+
+Description:
+ - some more fixes
+
+Changed Files:
+ - btxe/src/cache.c (1.9 -> 1.10)
+ - btxe/src/file_os2.c (1.4 -> 1.5)
+
+
+ceh:  (no diff, via cvs at 19990303 02:21:06)
+
+Description:
+ - removed some initializers for FILEINFOs
+
+Changed Files:
+ - btxe/include/bink.h (1.9 -> 1.10)
+ - btxe/linux/Makefile (1.5 -> 1.6)
+ - btxe/src/b_flofil.c (1.6 -> 1.7)
+ - btxe/src/b_sessio.c (1.9 -> 1.10)
+ - btxe/src/b_term.c (1.6 -> 1.7)
+ - btxe/src/freepoll.c (1.8 -> 1.9)
+ - btxe/src/m7send.c (1.3 -> 1.4)
+ - btxe/src/mailovly.c (1.9 -> 1.10)
+ - btxe/src/mailroot.c (1.7 -> 1.8)
+ - btxe/src/outbound.c (1.10 -> 1.11)
+ - btxe/src/xmsend.c (1.2 -> 1.3)
+
+
+ceh:  (no diff, via cvs at 19990303 02:28:39)
+
+Description:
+ - another initializer for FILEINFO removed
+
+Changed Files:
+ - btxe/linux/Makefile (1.6 -> 1.7)
+ - btxe/src/b_frproc.c (1.7 -> 1.8)
+
+
+mr:  (no diff, via cvs at 19990303 02:30:19)
+
+Description:
+ - removed OS/2 16bit version (which never worked)
+
+Changed Files:
+ - btxe/include/bink.h (1.10 -> 1.11)
+ - btxe/include/com_os2.h (1.3 -> 1.4)
+ - btxe/include/com_os2p.h (1.3 -> 1.4)
+ - btxe/include/includes.h (1.7 -> 1.8)
+ - btxe/os2/watcom10.mif (1.4 -> 1.5)
+ - btxe/src/async.c (1.3 -> 1.4)
+ - btxe/src/b_spawn.c (1.3 -> 1.4)
+ - btxe/src/dosfuncs.c (1.5 -> 1.6)
+
+
+mr:  (no diff, via cvs at 19990303 02:35:58)
+
+Description:
+ - removed another #ifdef OS_2_v1x
+
+Changed Files:
+ - btxe/src/async.c (1.4 -> 1.5)
+
+
+mr:  (no diff, via cvs at 19990303 03:10:22)
+
+Description:
+ - updated make files
+
+Changed Files:
+ - btxe/os2/borland.mak (1.2 -> 1.3)
+ - btxe/os2/emx28omf.mak (1.3 -> 1.4)
+ - btxe/os2/emxaout.rsp (1.2 -> 1.3)
+ - btxe/os2/emxgaout.mak (1.3 -> 1.4)
+ - btxe/os2/emxgomf.mak (1.4 -> 1.5)
+ - btxe/os2/emxnaout.mak (1.2 -> 1.3)
+ - btxe/os2/emxomf.rsp (1.2 -> 1.3)
+ - btxe/os2/ibmcsets.mak (1.2 -> 1.3)
+ - btxe/os2/ibmvacpp.mak (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990303 03:12:53)
+
+Description:
+ - forgot file_xxx update for this rsp
+
+Changed Files:
+ - btxe/os2/emxomf.rsp (1.3 -> 1.4)
+
+
+hjk:  (no diff, via cvs at 19990303 11:30:24)
+
+Description:
+Changed file_w32.c to use dynamic data
+
+Changed Files:
+ - btxe/include/bink.h (1.11 -> 1.12)
+ - btxe/src/file_w32.c (1.2 -> 1.3)
+
+
+hjk:  (no diff, via cvs at 19990303 14:34:41)
+
+Description:
+Added header and footer to emxmxcom.c
+
+Changed Files:
+ - btxe/src/emxmxcom.c (1.1 -> 1.2)
+
+
+hjk:  (no diff, via cvs at 19990303 18:28:58)
+
+Description:
+-Fixed problem with TimeSync in Win32 version
+-Added Microsoft VisualC makefile for Win32 version
+
+New Files:
+ - btxe/win32/msvc.mak (1.1)
+
+Removed Files:
+ - btxe/win32/w32bink.mak (1.1.1.1)
+
+Changed Files:
+ - btxe/include/vt100.h (1.2 -> 1.3)
+ - btxe/src/misc.c (1.9 -> 1.10)
+
+
+mr:  (no diff, via cvs at 19990305 03:24:43)
+
+Description:
+ - moved all file and dir related definitions into file_io.h
+
+New Files:
+ - btxe/include/file_io.h (1.1)
+
+Changed Files:
+ - btxe/include/bink.h (1.12 -> 1.13)
+ - btxe/include/includes.h (1.8 -> 1.9)
+ - btxe/include/xfer.h (1.2 -> 1.3)
+
+
+mr:  (no diff, via cvs at 19990305 03:51:59)
+
+Description:
+ - clean ups, styleguide !!!!
+
+Changed Files:
+ - btxe/readme.1st (1.2 -> 1.3)
+ - btxe/doc/xr6/announce.src (1.1.1.1 -> 1.2)
+ - btxe/include/com_nt.h (1.4 -> 1.5)
+ - btxe/include/externs.h (1.10 -> 1.11)
+ - btxe/include/foffsets.h (1.1 -> 1.2)
+ - btxe/include/maxcomm.h (1.4 -> 1.5)
+ - btxe/include/vt100.h (1.3 -> 1.4)
+ - btxe/src/async_lx.c (1.9 -> 1.10)
+ - btxe/src/async_nt.c (1.5 -> 1.6)
+ - btxe/src/async_os.c (1.3 -> 1.4)
+ - btxe/src/b_rspfil.c (1.2 -> 1.3)
+ - btxe/src/b_sbinit.c (1.4 -> 1.5)
+ - btxe/src/b_script.c (1.2 -> 1.3)
+ - btxe/src/bbs_io.c (1.6 -> 1.7)
+ - btxe/src/btutil.c (1.8 -> 1.9)
+ - btxe/src/cache.c (1.10 -> 1.11)
+ - btxe/src/chat.c (1.3 -> 1.4)
+ - btxe/src/debug.c (1.3 -> 1.4)
+ - btxe/src/dosfuncs.c (1.6 -> 1.7)
+ - btxe/src/emxmxcom.c (1.2 -> 1.3)
+ - btxe/src/exceptio.c (1.3 -> 1.4)
+ - btxe/src/fcfgread.c (1.3 -> 1.4)
+ - btxe/src/file_all.c (1.1 -> 1.2)
+ - btxe/src/file_dos.c (1.8 -> 1.9)
+ - btxe/src/file_lnx.c (1.1 -> 1.2)
+ - btxe/src/file_os2.c (1.5 -> 1.6)
+ - btxe/src/file_w32.c (1.3 -> 1.4)
+ - btxe/src/ftsc.c (1.5 -> 1.6)
+ - btxe/src/mailer.c (1.7 -> 1.8)
+ - btxe/src/misc.c (1.10 -> 1.11)
+ - btxe/src/os2_pm.c (1.5 -> 1.6)
+ - btxe/src/pktmsgs.c (1.6 -> 1.7)
+ - btxe/src/script2.c (1.6 -> 1.7)
+ - btxe/src/version.c (1.18 -> 1.19)
+
+
+mr:  (no diff, via cvs at 19990306 02:49:36)
+
+Description:
+ - changed all open() to fopen() calls
+ - some other modifications necessary because of this change
+
+Changed Files:
+ - btxe/todo.bbr (1.2 -> 1.3)
+ - btxe/include/prototyp.h (1.10 -> 1.11)
+ - btxe/src/b_flofil.c (1.7 -> 1.8)
+ - btxe/src/b_frproc.c (1.8 -> 1.9)
+ - btxe/src/exceptio.c (1.4 -> 1.5)
+ - btxe/src/freepoll.c (1.9 -> 1.10)
+ - btxe/src/hydra.c (1.7 -> 1.8)
+ - btxe/src/janus.c (1.6 -> 1.7)
+ - btxe/src/mailovly.c (1.10 -> 1.11)
+ - btxe/src/maxprm.c (1.4 -> 1.5)
+ - btxe/src/outbound.c (1.11 -> 1.12)
+ - btxe/src/version.c (1.19 -> 1.20)
+
+
+mr:  (no diff, via cvs at 19990306 02:59:18)
+
+Description:
+ - added some other rules to styleguide
+
+Changed Files:
+ - btxe/doc/stylguid.txt (1.1 -> 1.2)
+
+
+mr:  (no diff, via cvs at 19990306 03:06:29)
+
+Description:
+ - yet another try to fix this damn NO CARRIER message after ZModem session
+ - cleanups
+
+Bugfixes for:
+ - 0017
+
+Changed Files:
+ - btxe/src/zmodem.c (1.5 -> 1.6)
+
+
+mr:  (no diff, via cvs at 19990306 03:08:13)
+
+Description:
+ - cleanups
+
+Changed Files:
+ - btxe/src/b_initva.c (1.8 -> 1.9)
+ - btxe/src/btconfig.c (1.9 -> 1.10)
+ - btxe/src/mailroot.c (1.8 -> 1.9)
+ - btxe/src/maxmcp.c (1.3 -> 1.4)
+ - btxe/src/mdm_proc.c (1.4 -> 1.5)
+ - btxe/src/misc.c (1.11 -> 1.12)
+ - btxe/src/sbuf.c (1.5 -> 1.6)
+ - btxe/src/sched.c (1.4 -> 1.5)
+ - btxe/src/script2.c (1.7 -> 1.8)
+ - btxe/src/script2.inc (1.2 -> 1.3)
+ - btxe/src/sendbark.c (1.3 -> 1.4)
+ - btxe/src/srif.c (1.3 -> 1.4)
+ - btxe/src/v7debug.c (1.3 -> 1.4)
+ - btxe/src/version7.c (1.4 -> 1.5)
+ - btxe/src/vfossil.c (1.4 -> 1.5)
+ - btxe/src/xmrec.c (1.3 -> 1.4)
+ - btxe/src/xmsend.c (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990306 03:30:20)
+
+Description:
+ - outbound still broken :(
+
+Changed Files:
+ - btxe/todo.bbr (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990306 03:40:42)
+
+Description:
+ - fixed some warnings
+
+Changed Files:
+ - btxe/src/janus.c (1.7 -> 1.8)
+
+
+mr:  (no diff, via cvs at 19990306 03:43:52)
+
+Description:
+ - makefiles should work again
+
+Changed Files:
+ - btxe/os2/emx28omf.mak (1.4 -> 1.5)
+ - btxe/os2/emxnaout.mak (1.3 -> 1.4)
+
+
+hjk:  (no diff, via cvs at 19990306 11:49:10)
+
+Description:
+Update changes to example log file
+
+Changed Files:
+ - btxe/doc/sampcfg/binkley.cfg (1.1.1.1 -> 1.2)
+
+
+hjk:  (no diff, via cvs at 19990306 12:31:06)
+
+Description:
+Fixed broken outbound again.
+
+Changed Files:
+ - btxe/todo.bbr (1.4 -> 1.5)
+ - btxe/src/cache.c (1.11 -> 1.12)
+
+
+hjk:  (no diff, via cvs at 19990306 16:58:36)
+
+Description:
+Made filenaming for different OSses more clear, according to the styleguide. No code changes.
+
+New Files:
+ - btxe/include/com_w32.h (1.1)
+ - btxe/src/asyn_lnx.c (1.1)
+ - btxe/src/asyn_os2.c (1.1)
+ - btxe/src/asyn_w32.c (1.1)
+ - btxe/src/vfos_dos.c (1.1)
+ - btxe/src/vfos_os2.c (1.1)
+ - btxe/src/vfos_w32.c (1.1)
+
+Removed Files:
+ - btxe/include/com_nt.h (1.5)
+ - btxe/include/com_os2p.h (1.4)
+ - btxe/src/async.c (1.5)
+ - btxe/src/async_lx.c (1.10)
+ - btxe/src/async_nt.c (1.6)
+ - btxe/src/async_os.c (1.4)
+ - btxe/src/vfos_nt.c (1.4)
+ - btxe/src/vfossil.c (1.5)
+
+Changed Files:
+ - btxe/todo.bbr (1.5 -> 1.6)
+ - btxe/dos/btxec700.mak (1.2 -> 1.3)
+ - btxe/include/com.h (1.5 -> 1.6)
+ - btxe/include/com_os2.h (1.4 -> 1.5)
+ - btxe/include/vfossil.h (1.4 -> 1.5)
+ - btxe/linux/Makefile (1.7 -> 1.8)
+ - btxe/linux/todo (1.7 -> 1.8)
+ - btxe/os2/borland.mak (1.3 -> 1.4)
+ - btxe/os2/emx28omf.mak (1.5 -> 1.6)
+ - btxe/os2/emxaout.rsp (1.3 -> 1.4)
+ - btxe/os2/emxgaout.mak (1.4 -> 1.5)
+ - btxe/os2/emxgomf.mak (1.5 -> 1.6)
+ - btxe/os2/emxnaout.mak (1.4 -> 1.5)
+ - btxe/os2/emxomf.rsp (1.4 -> 1.5)
+ - btxe/os2/ibmcsets.mak (1.3 -> 1.4)
+ - btxe/os2/ibmvacpp.mak (1.4 -> 1.5)
+ - btxe/os2/watcom10.mif (1.5 -> 1.6)
+ - btxe/src/file_w32.c (1.4 -> 1.5)
+ - btxe/src/version.c (1.20 -> 1.21)
+ - btxe/win32/makefile (1.3 -> 1.4)
+ - btxe/win32/msvc.mak (1.1 -> 1.2)
+
+
+hjk:  (no diff, via cvs at 19990306 18:11:50)
+
+Description:
+- Updated BCC Win32 makefile to compile btutil
+
+Changed Files:
+ - btxe/include/com_w32.h (1.1 -> 1.2)
+ - btxe/linux/credits (1.3 -> 1.4)
+ - btxe/win32/makefile (1.4 -> 1.5)
+
+
+mr:  (no diff, via cvs at 19990306 21:16:51)
+
+Description:
+ - yet another problem: request processor broken :(
+
+Changed Files:
+ - btxe/todo.bbr (1.6 -> 1.7)
+
+
+ceh:  (no diff, via cvs at 19990306 23:44:36)
+
+Description:
+ - Fixed bug in getting data from fidoconfig
+ - Fixed problem detecting incoming *.req as requests
+   (might work now... maybe)
+
+Changed Files:
+ - btxe/linux/Makefile (1.8 -> 1.9)
+ - btxe/src/fcfgread.c (1.4 -> 1.5)
+ - btxe/src/misc.c (1.12 -> 1.13)
+
+
+ceh:  (no diff, via cvs at 19990306 23:51:48)
+
+Description:
+ - removed one line...
+
+Changed Files:
+ - btxe/src/misc.c (1.13 -> 1.14)
+
+
+mr:  (no diff, via cvs at 19990307 04:23:49)
+
+Description:
+ - changed all filenames to lowercase (btexit flag was broken)
+
+Changed Files:
+ - btxe/src/b_sessio.c (1.10 -> 1.11)
+
+
+mr:  (no diff, via cvs at 19990307 05:08:04)
+
+Description:
+ - fixed little bug in internal request processor that caused big problems...
+
+Changed Files:
+ - btxe/todo.bbr (1.7 -> 1.8)
+ - btxe/src/b_frproc.c (1.9 -> 1.10)
+ - btxe/src/version.c (1.21 -> 1.22)
+
+
+hjk:  (no diff, via cvs at 19990307 15:16:38)
+
+Description:
+For some reason all year-2000 fixes of AG did not work, I always got year 1900. Fixed it.
+
+Changed Files:
+ - btxe/src/bbs_io.c (1.7 -> 1.8)
+ - btxe/src/ftsc.c (1.6 -> 1.7)
+ - btxe/src/hydra.c (1.8 -> 1.9)
+ - btxe/src/misc.c (1.14 -> 1.15)
+ - btxe/src/outbound.c (1.12 -> 1.13)
+ - btxe/src/pktmsgs.c (1.7 -> 1.8)
+ - btxe/src/version.c (1.22 -> 1.23)
+
+
+mr:  (no diff, via cvs at 19990309 17:16:22)
+
+Description:
+ - version number in version.c is now maintained by daemon
+
+Changed Files:
+ - btxe/todo.bbr (1.8 -> 1.9)
+ - btxe/src/version.c (1.25 -> 1.26)
+
+
+
+Beta XH5:
+---------
+
+XH4_CE1:  (checked in by hjk at 19990318 12:46:39)
+
+Description:
+- make it runable under IBM VAC 3.0
+- include missing file include/com_os2p.h from XH3 (note HJK: file was not missing, only IBM VAC makefile was wrong, changed it)
+- change some includes in include/third/max3
+
+Changed Files:
+ - btxe/include/third/max3/alc.h (1.1.1.1 -> 1.2)
+ - btxe/include/third/max3/compiler.h (1.1.1.1 -> 1.2)
+ - btxe/include/third/max3/max_u.h (1.1.1.1 -> 1.2)
+ - btxe/include/third/max3/prog.h (1.1.1.1 -> 1.2)
+ - btxe/include/third/max3/stamp.h (1.1.1.1 -> 1.2)
+ - btxe/os2/ibmvacpp.mak (1.5 -> 1.6)
+
+
+mr:  (no diff, via cvs at 19990319 00:55:57)
+
+Description:
+ - new things to do
+
+Changed Files:
+ - btxe/todo.bbr (1.9 -> 1.10)
+
+
+mr:  (no diff, via cvs at 19990319 00:57:52)
+
+Description:
+ - fixed crash when spawning BBS (hopefully)
+
+Changed Files:
+ - btxe/src/b_bbs.c (1.7 -> 1.8)
+
+
+mr:  (no diff, via cvs at 19990319 00:58:49)
+
+Description:
+ - little fixes
+
+Changed Files:
+ - btxe/os2/watrbeta.cmd (1.1 -> 1.2)
+
+
+xh4_aw1:  (checked in by mr at 19990320 05:08:32)
+
+Description:
+ - fix for fts-1 and 100% cpu usage on incoming garbage calls
+   (CONNECT 28800/NONE and fallback into fts-1 session)
+ - time info in the logfile was not always correct. Fixed in
+   in misc.c::status_line(), get complete time info with dostime() and not
+   the hundreth seconds with dostime() and the seconds with time()/localtime().
+ - fix for broken bbs spawn+commandline options in bbs exit, bbs batch, bbs
+   spawn that was introduced in XH4.
+   (Note MR: not included, already fixed in previous patch)
+
+Bugfixes for:
+ - 0031
+
+Changed Files:
+ - btxe/doc/xr5/knwnbugs.xr5 (1.1.1.1 -> 1.2)
+ - btxe/doc/xr6/knwnbugs.xr6 (1.4 -> 1.5)
+ - btxe/include/prototyp.h (1.11 -> 1.12)
+ - btxe/src/brec.c (1.2 -> 1.3)
+ - btxe/src/bsend.c (1.3 -> 1.4)
+ - btxe/src/ftsc.c (1.7 -> 1.8)
+ - btxe/src/m7rec.c (1.2 -> 1.3)
+ - btxe/src/m7send.c (1.4 -> 1.5)
+ - btxe/src/misc.c (1.15 -> 1.16)
+ - btxe/src/sendbark.c (1.4 -> 1.5)
+ - btxe/src/xmrec.c (1.4 -> 1.5)
+ - btxe/src/xmsend.c (1.4 -> 1.5)
+
+
+xh4_ag1:  (checked in by mr at 19990322 02:49:31)
+
+Description:
+ - erased a duplicate #define for COMOPEN in maxcomm.h.
+ - corrected emxomf.rsp to not use b_fuser.obj for linking, as this is no
+   longer used.
+ - fixed parser for remote mail on hold information.
+ - emx+gcc trapped on a toupper of >8bit values, as it can occur on READKB
+   in the stats screens.
+ - added #define BINKLEY_SOUNDS for OS/2.
+ - We don't need to define __32BIT__ for IBMC(++).
+ - The efficiency computation in xmrec.c/show_block was useless.
+ - disabled CapiCID feature for emx+gcc, because it's not really possible
+   to implement the 16bit callback function.
+
+Changed Files:
+ - btxe/include/includes.h (1.9 -> 1.10)
+ - btxe/include/maxcomm.h (1.5 -> 1.6)
+ - btxe/os2/emxomf.rsp (1.5 -> 1.6)
+ - btxe/src/b_sessio.c (1.11 -> 1.12)
+ - btxe/src/bt.c (1.10 -> 1.11)
+ - btxe/src/btconfig.c (1.10 -> 1.11)
+ - btxe/src/callback.c (1.4 -> 1.5)
+ - btxe/src/callerid.c (1.3 -> 1.4)
+ - btxe/src/capi.c (1.6 -> 1.7)
+ - btxe/src/data.c (1.11 -> 1.12)
+ - btxe/src/evtsetup.c (1.3 -> 1.4)
+ - btxe/src/hydra.c (1.9 -> 1.10)
+ - btxe/src/mailroot.c (1.9 -> 1.10)
+ - btxe/src/mdm_proc.c (1.5 -> 1.6)
+ - btxe/src/stats.c (1.4 -> 1.5)
+ - btxe/src/xmrec.c (1.5 -> 1.6)
+
+
+mr:  (no diff, via cvs at 19990322 04:47:51)
+
+Description:
+ - misc cleanups
+
+Changed Files:
+ - btxe/src/asyn_lnx.c (1.1 -> 1.2)
+ - btxe/src/asyn_os2.c (1.1 -> 1.2)
+ - btxe/src/asyn_w32.c (1.1 -> 1.2)
+ - btxe/src/b_banner.c (1.2 -> 1.3)
+ - btxe/src/b_faxrcv.c (1.3 -> 1.4)
+ - btxe/src/b_flofil.c (1.8 -> 1.9)
+ - btxe/src/b_help.c (1.2 -> 1.3)
+ - btxe/src/b_initva.c (1.9 -> 1.10)
+ - btxe/src/b_logs.c (1.3 -> 1.4)
+ - btxe/src/b_passwo.c (1.3 -> 1.4)
+ - btxe/src/b_proto.c (1.4 -> 1.5)
+ - btxe/src/b_rspfil.c (1.3 -> 1.4)
+ - btxe/src/b_sbinit.c (1.5 -> 1.6)
+ - btxe/src/b_script.c (1.3 -> 1.4)
+ - btxe/src/b_search.c (1.3 -> 1.4)
+ - btxe/src/b_spawn.c (1.4 -> 1.5)
+ - btxe/src/b_term.c (1.7 -> 1.8)
+ - btxe/src/b_termov.c (1.4 -> 1.5)
+ - btxe/src/b_today.c (1.4 -> 1.5)
+ - btxe/src/b_wazoo.c (1.4 -> 1.5)
+ - btxe/src/b_whack.c (1.2 -> 1.3)
+ - btxe/src/b_wzsend.c (1.5 -> 1.6)
+ - btxe/src/btutil.c (1.9 -> 1.10)
+ - btxe/src/cache.c (1.12 -> 1.13)
+ - btxe/src/chat.c (1.4 -> 1.5)
+ - btxe/src/common.c (1.5 -> 1.6)
+ - btxe/src/css.c (1.4 -> 1.5)
+ - btxe/src/dosfuncs.c (1.7 -> 1.8)
+ - btxe/src/emsi.c (1.4 -> 1.5)
+ - btxe/src/evtparse.c (1.2 -> 1.3)
+ - btxe/src/file_all.c (1.2 -> 1.3)
+ - btxe/src/file_dos.c (1.9 -> 1.10)
+ - btxe/src/file_os2.c (1.6 -> 1.7)
+ - btxe/src/file_w32.c (1.5 -> 1.6)
+ - btxe/src/fossil.c (1.5 -> 1.6)
+ - btxe/src/freepoll.c (1.10 -> 1.11)
+ - btxe/src/janus.c (1.8 -> 1.9)
+ - btxe/src/langload.c (1.5 -> 1.6)
+ - btxe/src/mailer.c (1.8 -> 1.9)
+ - btxe/src/mailovly.c (1.11 -> 1.12)
+ - btxe/src/maxprm.c (1.5 -> 1.6)
+ - btxe/src/nodeproc.c (1.4 -> 1.5)
+ - btxe/src/os2_pm.c (1.6 -> 1.7)
+ - btxe/src/outbound.c (1.13 -> 1.14)
+ - btxe/src/pipe.c (1.3 -> 1.4)
+ - btxe/src/recvbark.c (1.2 -> 1.3)
+ - btxe/src/recvsync.c (1.2 -> 1.3)
+ - btxe/src/sbuf.c (1.6 -> 1.7)
+ - btxe/src/sched.c (1.5 -> 1.6)
+ - btxe/src/script2.c (1.8 -> 1.9)
+ - btxe/src/sendsync.c (1.3 -> 1.4)
+ - btxe/src/srif.c (1.4 -> 1.5)
+ - btxe/src/v7debug.c (1.4 -> 1.5)
+ - btxe/src/version.c (1.32 -> 1.33)
+ - btxe/src/version7.c (1.5 -> 1.6)
+ - btxe/src/vfos_dos.c (1.1 -> 1.2)
+ - btxe/src/vfos_w32.c (1.1 -> 1.2)
+ - btxe/src/yoohoo.c (1.3 -> 1.4)
+ - btxe/src/zmodem.c (1.6 -> 1.7)
+ - btxe/src/gethist/getmax3.c (1.4 -> 1.5)
+
+
+mr:  (no diff, via cvs at 19990322 05:16:28)
+
+Description:
+ - bbs spawn really works now again
+
+Changed Files:
+ - btxe/todo.bbr (1.10 -> 1.11)
+ - btxe/src/b_bbs.c (1.8 -> 1.9)
+
+
+mr:  (no diff, via cvs at 19990323 01:30:57)
+
+Description:
+ - fixed makefile
+
+Changed Files:
+ - btxe/os2/emxgomf.mak (1.6 -> 1.7)
+
+
+hjk:  (no diff, via cvs at 19990323 12:15:18)
+
+Description:
+Make it compile with Borland/Win32 again
+
+Changed Files:
+ - btxe/src/b_bbs.c (1.9 -> 1.10)
+
+
+mr:  (no diff, via cvs at 19990323 23:29:01)
+
+Description:
+ - changed filenames from uppercase to lowercase
+
+Changed Files:
+ - btxe/src/b_faxrcv.c (1.4 -> 1.5)
+ - btxe/src/b_logs.c (1.4 -> 1.5)
+ - btxe/src/b_rspfil.c (1.4 -> 1.5)
+ - btxe/src/b_sbinit.c (1.6 -> 1.7)
+ - btxe/src/brec.c (1.3 -> 1.4)
+ - btxe/src/bt.c (1.11 -> 1.12)
+ - btxe/src/btconfig.c (1.11 -> 1.12)
+ - btxe/src/btutil.c (1.10 -> 1.11)
+ - btxe/src/cache.c (1.13 -> 1.14)
+ - btxe/src/data.c (1.12 -> 1.13)
+ - btxe/src/exceptio.c (1.5 -> 1.6)
+ - btxe/src/hydra.c (1.10 -> 1.11)
+ - btxe/src/janus.c (1.9 -> 1.10)
+ - btxe/src/langload.c (1.6 -> 1.7)
+ - btxe/src/maxmcp.c (1.4 -> 1.5)
+ - btxe/src/misc.c (1.16 -> 1.17)
+ - btxe/src/outbound.c (1.14 -> 1.15)
+ - btxe/src/sched.c (1.6 -> 1.7)
+ - btxe/src/xmrec.c (1.6 -> 1.7)
+ - btxe/src/zmodem.c (1.7 -> 1.8)
+
+
+mr:  (no diff, via cvs at 19990323 23:40:16)
+
+Description:
+ - little cleanups
+
+Changed Files:
+ - btxe/src/b_whack.c (1.3 -> 1.4)
+ - btxe/src/mailer.c (1.9 -> 1.10)
+ - btxe/src/mdm_proc.c (1.6 -> 1.7)
+ - btxe/src/pipe.c (1.4 -> 1.5)
+ - btxe/src/pktmsgs.c (1.8 -> 1.9)
+ - btxe/src/recvbark.c (1.3 -> 1.4)
+ - btxe/src/recvsync.c (1.3 -> 1.4)
+ - btxe/src/script2.c (1.9 -> 1.10)
+ - btxe/src/sendsync.c (1.4 -> 1.5)
+ - btxe/src/stats.c (1.5 -> 1.6)
+ - btxe/src/version7.c (1.6 -> 1.7)
+ - btxe/src/vfos_lnx.c (1.5 -> 1.6)
+ - btxe/src/vfos_w32.c (1.2 -> 1.3)
+ - btxe/src/yoohoo.c (1.4 -> 1.5)
+
+
+mr:  (no diff, via cvs at 19990323 23:42:15)
+
+Description:
+ - more things to do
+
+Changed Files:
+ - btxe/todo.bbr (1.11 -> 1.12)
+
+
+ceh:  (no diff, via cvs at 19990324 12:29:02)
+
+Description:
+ - updated todo.bbr
+
+Changed Files:
+ - btxe/todo.bbr (1.12 -> 1.13)
+ - btxe/include/includes.h (1.10 -> 1.11)
+ - btxe/linux/Makefile (1.9 -> 1.10)
+
+
+hjk:  (no diff, via cvs at 19990331 18:45:23)
+
+Description:
+- Some cleanups
+- Removed mtask_name, was not used or displayed anymore
+
+New Files:
+ - btxe/src/old/vfos_w32.c (1.1)
+
+Changed Files:
+ - btxe/include/externs.h (1.11 -> 1.12)
+ - btxe/src/b_frproc.c (1.10 -> 1.11)
+ - btxe/src/data.c (1.13 -> 1.14)
+ - btxe/src/dosfuncs.c (1.8 -> 1.9)
+ - btxe/src/vfos_w32.c (1.3 -> 1.4)
+
+
+ceh:  (no diff, via cvs at 19990331 22:40:18)
+
+Description:
+ - Fixed internal frequest-processor for Linux-Version
+
+Changed Files:
+ - btxe/todo.bbr (1.13 -> 1.14)
+ - btxe/linux/Makefile (1.10 -> 1.11)
+ - btxe/src/b_frproc.c (1.11 -> 1.12)
+
+
+ceh:  (no diff, via cvs at 19990331 23:16:34)
+
+Description:
+ - An attempt to make the linux-version more stable receiving files
+   under heavy load (I neither know if this is neccessary nor if it
+   works ;)
+
+Changed Files:
+ - btxe/include/com_lnx.h (1.4 -> 1.5)
+ - btxe/src/asyn_lnx.c (1.2 -> 1.3)
+ - btxe/src/dosfuncs.c (1.9 -> 1.10)
+
+
+ceh:  (no diff, via cvs at 19990331 23:25:43)
+
+Description:
+ - fixed typo in todo.bbr
+
+Changed Files:
+ - btxe/todo.bbr (1.14 -> 1.15)
+
+
+xh4_aw2:  (checked in by mr at 19990401 01:52:21)
+
+Description:
+ - fixed flo file write error message on janus transfers (cosmetic error)
+ - fixes for Maximus3 ACS analysis (skip leading+trailing spaces)
+ - adapted Maximus3 ACS handling to be more Maximus3-like (empty ACS means
+   "every user has access" instead of "no user has access")
+ - added some comments to the ACS handling routines (makes it easier for the
+   next programmer generation ;-)
+ - added recognition of ALIAS definitions in Maximus3 access.ctl
+ - fixed Watcoms "Warning! W111: Meaningless use of an expression" in gettg.c
+ - fixed display-bug in zoomed outbound ALT-I node info
+ - work on the Txy flag recognition. Currently the online hours is only
+   shown on the ALT-I node info but not regarded when calling out.
+   The upcoming full implementation will regard a system as 'CM' during its
+   online hours and non-CM during its offline-hours. The biggest problem is
+   the shared outbound and the necessary outbound-reread at full and half hour
+   if there is any mail for Txy-flagged nodes in the outbound.
+
+Bugfixes for:
+ - 0027
+
+Changed Files:
+ - btxe/doc/xr6/knwnbugs.xr6 (1.5 -> 1.6)
+ - btxe/include/bink.h (1.13 -> 1.14)
+ - btxe/src/b_frproc.c (1.12 -> 1.13)
+ - btxe/src/janus.c (1.10 -> 1.11)
+ - btxe/src/mailroot.c (1.10 -> 1.11)
+ - btxe/src/nodeproc.c (1.5 -> 1.6)
+ - btxe/src/outbound.c (1.15 -> 1.16)
+ - btxe/src/version7.c (1.7 -> 1.8)
+ - btxe/src/gethist/gettg.c (1.3 -> 1.4)
+
+
+hjk:  (no diff, via cvs at 19990407 17:12:07)
+
+Description:
+- Fixed bug in Linux version that made it always report no space available on disk when recieving files
+
+Changed Files:
+ - btxe/linux/Makefile (1.11 -> 1.12)
+ - btxe/src/file_lnx.c (1.2 -> 1.3)
+
+
+ceh:  (no diff, via cvs at 19990420 20:46:45)
+
+Description:
+ - fix for scanning outbound directories more than once under linux
+
+Changed Files:
+ - btxe/todo.bbr (1.15 -> 1.16)
+ - btxe/include/zmodem.h (1.3 -> 1.4)
+ - btxe/src/file_lnx.c (1.3 -> 1.4)
+ - btxe/src/mailovly.c (1.12 -> 1.13)
+
+
+ceh:  (no diff, via cvs at 19990504 22:07:25)
+
+Description:
+ - LINUX: Fixed "rename"-Bug. Other OSs rename returns an error when the
+   destination already exists. Linux just overwrites. Now it stat()s the
+   destination and returns an error if it exists, too.
+ - Allowd "0" as parameter for RejectIgnoreSize (zero is the example in
+   xe_user.doc, so it shoul work... ;)
+
+Changed Files:
+ - btxe/include/includes.h (1.11 -> 1.12)
+ - btxe/linux/Makefile (1.12 -> 1.13)
+ - btxe/src/asyn_lnx.c (1.3 -> 1.4)
+ - btxe/src/btconfig.c (1.12 -> 1.13)
+ - btxe/src/fcfgread.c (1.5 -> 1.6)
+ - btxe/src/file_lnx.c (1.4 -> 1.5)
+ - btxe/src/freepoll.c (1.11 -> 1.12)
+
+
+hjk:  (no diff, via cvs at 19990504 22:20:37)
+
+Description:
+- Fixed Win32 timing problem
+- Fixed Linux free inode problem
+
+Changed Files:
+ - btxe/src/dosfuncs.c (1.10 -> 1.11)
+
+
+ceh:  (no diff, via cvs at 19990507 12:48:29)
+
+Description:
+ - LINUX: Fixed F5/F6 to F10
+
+Changed Files:
+ - btxe/linux/Makefile (1.13 -> 1.14)
+ - btxe/linux/credits (1.4 -> 1.5)
+ - btxe/linux/install (1.3 -> 1.4)
+ - btxe/src/asyn_lnx.c (1.4 -> 1.5)
+
+
+ag:  (no diff, via cvs at 19990512 23:15:12)
+
+Description:
+- added patch for maxcomm.dll included in the BT-XE package
+
+Changed Files:
+ - btxe/doc/sampcfg/os2/maxcomm.pat (1.1.1.1 -> 1.2)
+
+
+ag:  (no diff, via cvs at 19990513 12:06:13)
+
+Description:
+- fread in 0-byte files caused endless loops.
+
+Changed Files:
+ - btxe/os2/cemx.cmd (1.1 -> 1.2)
+ - btxe/src/outbound.c (1.16 -> 1.17)
+
+
+mr:  (no diff, via cvs at 19990513 14:22:19)
+
+Description:
+ - some more bugs
+
+Changed Files:
+ - btxe/doc/xr6/knwnbugs.xr6 (1.6 -> 1.7)
+
+
+ag:  (no diff, via cvs at 19990514 13:52:05)
+
+Description:
+- update todo.bbr
+
+Changed Files:
+ - btxe/todo.bbr (1.16 -> 1.17)
+
+
+ceh:  (no diff, via cvs at 19990514 15:01:29)
+
+Description:
+ - removed domain_loc (someone using domain-setup please test!)
+
+Changed Files:
+ - btxe/include/externs.h (1.12 -> 1.13)
+ - btxe/linux/Makefile (1.14 -> 1.15)
+ - btxe/linux/install (1.4 -> 1.5)
+ - btxe/src/btconfig.c (1.13 -> 1.14)
+ - btxe/src/data.c (1.14 -> 1.15)
+ - btxe/src/fcfgread.c (1.6 -> 1.7)
+ - btxe/src/mailovly.c (1.13 -> 1.14)
+ - btxe/src/mailroot.c (1.11 -> 1.12)
+
+
+ceh:  (no diff, via cvs at 19990514 19:41:39)
+
+Description:
+ - added '#' as comment-starting character (if 1st whitespace char only)
+
+Changed Files:
+ - btxe/todo.bbr (1.17 -> 1.18)
+ - btxe/doc/xe_user.doc (1.6 -> 1.7)
+ - btxe/src/btconfig.c (1.14 -> 1.15)
+
+
+ag:  (no diff, via cvs at 19990516 01:53:40)
+
+Description:
+- invalid entries in the history file could crash binkley under weird
+  circumstances
+
+Changed Files:
+ - btxe/src/stats.c (1.6 -> 1.7)
+
+
+ceh:  (no diff, via cvs at 19990517 17:48:47)
+
+Description:
+ - replaced match/prep_match with wildcard-check for okfile-requests
+
+Changed Files:
+ - btxe/linux/install (1.5 -> 1.6)
+ - btxe/src/b_frproc.c (1.13 -> 1.14)
+ - btxe/src/vfos_lnx.c (1.6 -> 1.7)
+
+
+ceh:  (no diff, via cvs at 19990517 17:51:56)
+
+Description:
+ - added find_event() before polling when started with "mail" or "poll"
+   (to set pickup_ok according to schedule)
+
+Changed Files:
+ - btxe/src/bt.c (1.12 -> 1.13)
+
+
+ceh:  (no diff, via cvs at 19990519 01:17:21)
+
+Description:
+ - LINUX: Enabled Signal-Handling (SIGINT, SIGTERM)
+
+Changed Files:
+ - btxe/include/includes.h (1.12 -> 1.13)
+ - btxe/linux/todo (1.8 -> 1.9)
+ - btxe/src/bt.c (1.13 -> 1.14)
+
+
+ns:  (no diff, via cvs at 19990527 05:47:59)
+
+Description:
+- some patches for MSVC
+
+Changed Files:
+ - btxe/include/file_io.h (1.1 -> 1.2)
+ - btxe/include/includes.h (1.13 -> 1.14)
+ - btxe/src/bt.c (1.14 -> 1.15)
+
+
+xh4_aw4:  (checked in by mr at 19990529 20:36:47)
+
+Description:
+- DOS version: fixed dfind() handling on findnext/findclose function.
+  dfind(2) resulted in endless loop.
+
+Changed Files:
+ - btxe/src/file_dos.c (1.10 -> 1.11)
+
+
+ceh:  (no diff, via cvs at 19990530 17:18:13)
+
+Description:
+ - little ifdef-fix
+ - LINUX: logfile in fidoconfig's log-dir now contains task-number
+   (no longer one logfile for all tasks... ;)
+
+Changed Files:
+ - btxe/include/file_io.h (1.2 -> 1.3)
+ - btxe/src/fcfgread.c (1.7 -> 1.8)
+
+
+hjk:  (no diff, via cvs at 19990601 20:50:27)
+
+Description:
+ - Fixed problem with WinFossil and high CPU loads
+ - Updated knownbugs list
+
+Changed Files:
+ - btxe/doc/xr6/knwnbugs.xr6 (1.7 -> 1.8)
+ - btxe/src/asyn_w32.c (1.2 -> 1.3)
+
+
+ceh:  (no diff, via cvs at 19990605 00:38:54)
+
+Description:
+ - New keyword: ReadFlagTime to set minimal time between scans for flags
+   (btexit??.??, forcexit etc.) Default 15 seconds (as hardcoded before)
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.7 -> 1.8)
+ - btxe/include/externs.h (1.13 -> 1.14)
+ - btxe/src/b_sessio.c (1.12 -> 1.13)
+ - btxe/src/btconfig.c (1.15 -> 1.16)
+ - btxe/src/data.c (1.15 -> 1.16)
+
+
+ceh:  (no diff, via cvs at 19990608 22:20:37)
+
+Description:
+ - LiNuX: Fixed diskfree bug with free space >2GB
+ - changed Alpha -> Beta
+
+Changed Files:
+ - btxe/linux/install (1.6 -> 1.7)
+ - btxe/src/file_lnx.c (1.5 -> 1.6)
+ - btxe/src/version.c (1.65 -> 1.66)
+
+
+ceh:  (no diff, via cvs at 19990608 22:26:54)
+
+Description:
+ - removed unused file
+
+Removed Files:
+ - btxe/src/script2.inc (1.3)
+
+
+ceh:  (no diff, via cvs at 19990610 18:55:41)
+
+Description:
+ - Linux: Fidoconfig: Small Password Fix
+
+Changed Files:
+ - btxe/src/b_passwo.c (1.4 -> 1.5)
+ - btxe/src/bbs_io.c (1.8 -> 1.9)
+ - btxe/src/script2.c (1.10 -> 1.11)
+
+
+xh4_aw5:  (checked in by mr at 19990611 00:01:16)
+
+Description:
+- DOS version: fixed dfind() handling on findnext/findclose function.
+  dfind(2) resulted in endless loop.
+- DOS version: fixed more bugs in dfind() handling of filenames.
+
+Changed Files:
+ - btxe/include/file_io.h (1.3 -> 1.4)
+ - btxe/src/file_dos.c (1.11 -> 1.12)
+
+
+ceh:  (no diff, via cvs at 19990611 00:02:52)
+
+Description:
+ - linux: fixed small typo in linux_pause
+
+Changed Files:
+ - btxe/src/asyn_lnx.c (1.5 -> 1.6)
+
+
+ceh:  (no diff, via cvs at 19990611 00:21:20)
+
+Description:
+ - Linux: Fixed small linux_pause-bug
+
+Changed Files:
+ - btxe/include/bbs_incl.h (1.3 -> 1.4)
+ - btxe/src/asyn_lnx.c (1.6 -> 1.7)
+
+
+ceh:  (no diff, via cvs at 19990612 23:41:37)
+
+Description:
+ - Changed SHARE_DEFAULT for Linux to 0 (to make sure lockfile will be
+   deleted on exit).
+ - Added new KeyWord: LocalInbound <inbound> where Binkley will write
+   PKTs to the system (dayly statistics). Defaults to ProtInbound.
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.8 -> 1.9)
+ - btxe/include/externs.h (1.14 -> 1.15)
+ - btxe/include/includes.h (1.14 -> 1.15)
+ - btxe/src/btconfig.c (1.16 -> 1.17)
+ - btxe/src/data.c (1.16 -> 1.17)
+ - btxe/src/fcfgread.c (1.8 -> 1.9)
+ - btxe/src/sched.c (1.7 -> 1.8)
+
+
+ceh:  (no diff, via cvs at 19990614 23:57:14)
+
+Description:
+ - small clean-up
+
+Changed Files:
+ - btxe/src/b_initva.c (1.10 -> 1.11)
+ - btxe/src/btconfig.c (1.17 -> 1.18)
+
+
+ceh:  (no diff, via cvs at 19990615 19:26:38)
+
+Description:
+ - TZ-Fix for Linux
+
+Changed Files:
+ - btxe/src/misc.c (1.17 -> 1.18)
+
+
+
+Beta XH6:
+---------
+
+hjk:  (no diff, via cvs at 19990704 18:41:01)
+
+Description:
+ - Fixed bug with relative paths in zfree() function for Win32
+
+Changed Files:
+ - btxe/src/file_w32.c (1.6 -> 1.7)
+
+
+ceh:  (no diff, via cvs at 19990720 18:27:11)
+
+Description:
+ - Linux: timzone-fix and restart after errlevelshell fixed
+
+Changed Files:
+ - btxe/linux/Makefile (1.15 -> 1.16)
+ - btxe/linux/credits (1.5 -> 1.6)
+ - btxe/src/asyn_lnx.c (1.7 -> 1.8)
+ - btxe/src/misc.c (1.18 -> 1.19)
+
+
+ceh:  (no diff, via cvs at 19990730 19:37:20)
+
+Description:
+ - okfile frequest processor fixed
+
+Changed Files:
+ - btxe/src/b_frproc.c (1.14 -> 1.15)
+
+
+ceh:  (no diff, via cvs at 19990823 02:27:11)
+
+Description:
+ - LINUX: Fixed Msg-Pkt generation (Dayly Stats/Frequest-Responses
+   should work now)
+
+Changed Files:
+ - btxe/include/foffsets.h (1.2 -> 1.3)
+ - btxe/src/pktmsgs.c (1.9 -> 1.10)
+
+
+ceh:  (no diff, via cvs at 19990829 21:55:50)
+
+Description:
+ - Linux: Freeze-Fix
+
+Changed Files:
+ - btxe/src/asyn_lnx.c (1.8 -> 1.9)
+
+
+sms:  (no diff, via cvs at 19990912 23:53:37)
+
+Description:
+- now using sessionPwd instead of defaultPwd from fidoconfig
+
+Changed Files:
+ - btxe/src/fcfgread.c (1.9 -> 1.10)
+
+
+ag:  (no diff, via cvs at 19990926 23:35:05)
+
+Description:
+- fixed bug that occured in BiDi sessions when remote set NoPickup.
+  Now you should be able to receive mail in those sessions.
+
+Changed Files:
+ - btxe/src/b_wazoo.c (1.5 -> 1.6)
+
+
+mr:  (no diff, via cvs at 19990927 16:59:13)
+
+Description:
+ - removed "Notes:"
+
+Changed Files:
+ - btxe/src/win32/semwait/semwait.c (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990927 17:01:43)
+
+Description:
+ - changed btxever to XH5
+
+Changed Files:
+ - btxe/os2/watrbeta.cmd (1.2 -> 1.3)
+
+
+mr:  (no diff, via cvs at 19990927 17:29:46)
+
+Description:
+ - added indent profiles to every directory under indent check
+
+New Files:
+ - btxe/include/.indent.pro (1.1)
+ - btxe/src/.indent.pro (1.1)
+ - btxe/src/dos/.indent.pro (1.1)
+ - btxe/src/gethist/.indent.pro (1.1)
+ - btxe/src/old/.indent.pro (1.1)
+ - btxe/src/os2/.indent.pro (1.1)
+ - btxe/src/os2/bink_pm/.indent.pro (1.1)
+ - btxe/src/os2/binkpipe/.indent.pro (1.1)
+ - btxe/src/os2/toss/.indent.pro (1.1)
+ - btxe/src/win32/.indent.pro (1.1)
+ - btxe/src/win32/semwait/.indent.pro (1.1)
+ - btxe/src/win32/snoopon/.indent.pro (1.1)
+
+Changed Files:
+ - btxe/doc/stylguid.txt (1.2 -> 1.3)
+
+
+sms:  (no diff, via cvs at 19990927 17:44:10)
+
+Description:
+added sms to xe_user.doc
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.9 -> 1.10)
+
+
+ceh:  (no diff, via cvs at 19990927 19:40:20)
+
+Description:
+ - made DZA addable to protocol-preference
+ - Linux: undefined language-file warnings
+
+Changed Files:
+ - btxe/src/emsi.c (1.5 -> 1.6)
+ - btxe/src/langload.c (1.7 -> 1.8)
+
+
+xh5-vp2.dif:  (checked in by mr at 19990927 22:51:42)
+
+Description:
+ - added Txy support in outbound
+ - added Online time override (see xe_user.doc)
+ - added SendHoldIfCaller (see xe_user.doc)
+ - added RestorePoll (see xe_user.doc)
+ - Binkley now sets mailflag (if defined) after generating daily stats
+ - added Hidden lines support (see xe_user.doc)
+ - "SmartBiDi Outgouing" didn't work, fixed
+ - Changed ExtSession behaviour (see xe_user.doc)
+ - Session results are now saved into CallHist.All file (for mailer and
+   external mail sessions) in the field CallHist.h.m.success.
+ - added NetMailFlag, ArcMailFlag and TicFlag (see xe_user.doc)
+ - added SaveExtSession (see xe_user.doc)
+ - fixed bug with outbound cache in Win32 version with Watcom C (by Stas
+   Mekhanoshin)
+ - some minor cosmetic changes in the sources (by mr, not in diff)
+ - emx gnu make file now uses '/' instead of '\' (by mr, not in diff)
+
+Bugfixes for:
+ - 0038
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.10 -> 1.11)
+ - btxe/doc/xr6/knwnbugs.xr6 (1.8 -> 1.9)
+ - btxe/dos/btxec700.def (1.2 -> 1.3)
+ - btxe/dos/btxec700.mak (1.3 -> 1.4)
+ - btxe/include/bink.h (1.14 -> 1.15)
+ - btxe/include/externs.h (1.15 -> 1.16)
+ - btxe/include/file_io.h (1.4 -> 1.5)
+ - btxe/include/history.h (1.2 -> 1.3)
+ - btxe/include/prototyp.h (1.12 -> 1.13)
+ - btxe/include/sched.h (1.2 -> 1.3)
+ - btxe/linux/Makefile (1.16 -> 1.17)
+ - btxe/os2/borland.mak (1.4 -> 1.5)
+ - btxe/os2/emx28omf.mak (1.6 -> 1.7)
+ - btxe/os2/emxaout.rsp (1.4 -> 1.5)
+ - btxe/os2/emxgaout.mak (1.5 -> 1.6)
+ - btxe/os2/emxgomf.mak (1.7 -> 1.8)
+ - btxe/os2/emxnaout.mak (1.5 -> 1.6)
+ - btxe/os2/emxomf.rsp (1.6 -> 1.7)
+ - btxe/os2/ibmcsets.mak (1.4 -> 1.5)
+ - btxe/os2/ibmvacpp.mak (1.6 -> 1.7)
+ - btxe/os2/watcom10.mif (1.6 -> 1.7)
+ - btxe/src/b_flofil.c (1.9 -> 1.10)
+ - btxe/src/b_initva.c (1.11 -> 1.12)
+ - btxe/src/b_sessio.c (1.13 -> 1.14)
+ - btxe/src/b_wazoo.c (1.6 -> 1.7)
+ - btxe/src/b_wzsend.c (1.6 -> 1.7)
+ - btxe/src/btconfig.c (1.18 -> 1.19)
+ - btxe/src/data.c (1.17 -> 1.18)
+ - btxe/src/emsi.c (1.6 -> 1.7)
+ - btxe/src/ftsc.c (1.8 -> 1.9)
+ - btxe/src/history.c (1.3 -> 1.4)
+ - btxe/src/mailer.c (1.10 -> 1.11)
+ - btxe/src/mailovly.c (1.14 -> 1.15)
+ - btxe/src/mailroot.c (1.12 -> 1.13)
+ - btxe/src/mdm_proc.c (1.7 -> 1.8)
+ - btxe/src/misc.c (1.19 -> 1.20)
+ - btxe/src/nodeproc.c (1.6 -> 1.7)
+ - btxe/src/outbound.c (1.17 -> 1.18)
+ - btxe/src/sched.c (1.8 -> 1.9)
+ - btxe/src/times.c (1.3 -> 1.4)
+ - btxe/src/version7.c (1.8 -> 1.9)
+
+
+mr:  (no diff, via cvs at 19990928 20:07:08)
+
+Description:
+ - moved "modifications done by"-list from xe_user.doc into team.lst
+ - rewrote header of xe_user.doc
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.11 -> 1.12)
+ - btxe/doc/team.lst (1.1.1.1 -> 1.2)
+
+
+mr:  (no diff, via cvs at 19990928 20:11:16)
+
+Description:
+ - moved "don't use TABs" from readthis.!!! into stylguid.txt
+ - readthis.!!! is no longer necessary (indent removes TABs)
+
+Removed Files:
+ - btxe/doc/readthis.!!! (1.1.1.1)
+
+Changed Files:
+ - btxe/doc/stylguid.txt (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990928 22:06:13)
+
+Description:
+ - added team.lst to the release archive
+
+Changed Files:
+ - btxe/os2/watrbeta.cmd (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19990930 11:38:03)
+
+Description:
+ - RestorePoll cra[sh] showed error message "unknown flavour"
+
+Changed Files:
+ - btxe/src/btconfig.c (1.19 -> 1.20)
+
+
+ceh:  (no diff, via cvs at 19990930 19:50:10)
+
+Description:
+ - Linux: Fix for NodeExtraDir
+
+Changed Files:
+ - btxe/doc/team.lst (1.2 -> 1.3)
+ - btxe/include/includes.h (1.15 -> 1.16)
+ - btxe/src/b_flofil.c (1.10 -> 1.11)
+ - btxe/src/freepoll.c (1.12 -> 1.13)
+
+
+mr:  (no diff, via cvs at 19991002 02:45:29)
+
+Description:
+ - little fixes, now they should work with sh (exception: clean)
+
+Changed Files:
+ - btxe/os2/emx28omf.mak (1.7 -> 1.8)
+ - btxe/os2/emxgaout.mak (1.6 -> 1.7)
+ - btxe/os2/emxgomf.mak (1.8 -> 1.9)
+
+
+mr:  (no diff, via cvs at 19991002 22:10:37)
+
+Description:
+ - corrected entry of jan n. klug
+
+Changed Files:
+ - btxe/doc/team.lst (1.3 -> 1.4)
+
+
+mr:  (no diff, via cvs at 19991003 15:42:56)
+
+Description:
+ - added some members who were only listed in bt.c
+
+Changed Files:
+ - btxe/doc/team.lst (1.4 -> 1.5)
+
+
+mr:  (no diff, via cvs at 19991003 15:44:06)
+
+Description:
+ - very little changes
+
+Changed Files:
+ - btxe/doc/cbdjl.lst (1.1.1.1 -> 1.2)
+ - btxe/doc/join.us (1.1.1.1 -> 1.2)
+
+
+mr:  (no diff, via cvs at 19991003 15:46:48)
+
+Description:
+ - removed team list from bt.c
+
+Changed Files:
+ - btxe/src/bt.c (1.15 -> 1.16)
+
+
+mr:  (no diff, via cvs at 19991003 17:08:11)
+
+Description:
+ - corrected / removed some wrong homepage links
+
+Changed Files:
+ - btxe/doc/team.lst (1.5 -> 1.6)
+
+
+ag:  (no diff, via cvs at 19991003 23:18:02)
+
+Description:
+- changed entry of Andre Grueneberg in team.lst.
+
+Changed Files:
+ - btxe/doc/team.lst (1.6 -> 1.7)
+
+
+mr:  (no diff, via cvs at 19991005 16:00:53)
+
+Description:
+ - VRP is now listed under members
+ - added SVM
+
+Changed Files:
+ - btxe/doc/team.lst (1.7 -> 1.8)
+
+
+hjk:  (no diff, via cvs at 19991005 16:22:05)
+
+Description:
+ - rewritten zfree() function for Win32
+ - updated my entry in team.lst
+
+Changed Files:
+ - btxe/doc/team.lst (1.8 -> 1.9)
+ - btxe/doc/xe_user.doc (1.12 -> 1.13)
+ - btxe/src/file_w32.c (1.7 -> 1.8)
+
+
+mr:  (no diff, via cvs at 19991005 16:44:56)
+
+Description:
+ - SM is SVM now
+
+Changed Files:
+ - btxe/src/file_w32.c (1.8 -> 1.9)
+
+
+mr:  (no diff, via cvs at 19991005 16:47:59)
+
+Description:
+ - SM is SVM now
+
+Changed Files:
+ - btxe/doc/xe_user.doc (1.13 -> 1.14)
+
+

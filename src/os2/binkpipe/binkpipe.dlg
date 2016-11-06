@@ -1,0 +1,128 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+DLGINCLUDE 1 "H:\sourceXT\include\binkpipe.h"
+
+DLGTEMPLATE IDD_BINKLEY LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "", IDD_BINKLEY, 0, 0, 355, 171, NOT FS_DLGBORDER | FS_BORDER | 
+            FS_SCREENALIGN | WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR | 
+            FCF_MINBUTTON
+    BEGIN
+        GROUPBOX        "Current Settings", T_TEXT_STATUS, 5, 108, 85, 63
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000L
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Event:", S_TEXT_EVENT, 10, 150, 40, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Port:", S_TEXT_PORT, 10, 144, 40, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "DTE:", S_TEXT_DTE, 10, 138, 40, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "4.System VIO"
+        LTEXT           "Status:", S_TEXT_STATUS, 10, 132, 40, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_DTE, 50, 138, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_STATUS, 50, 132, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_EVENT, 50, 150, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_PORT, 50, 144, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", S_TEXT_DATUM, 10, 156, 75, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        GROUPBOX        "Today at a Glance", T_TEXT_OVERVIEW, 90, 129, 90, 
+                        42
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000L
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Tx #/Vol.:", E_FILES, 95, 138, 80, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Last:", E_LAST, 95, 132, 80, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Out:", E_OUTBOUND, 95, 150, 80, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Rx #/Vol.:", E_COST, 95, 144, 80, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "In M/B/F", E_INOUT, 95, 156, 80, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        GROUPBOX        "Pending Outbound Mail", T_TEXT_OUTBOUND, 180, 129, 
+                        170, 42
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000L
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_HOLDWIN_1, 185, 156, 160, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_HOLDWIN_2, 185, 150, 160, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_HOLDWIN_3, 185, 144, 160, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_HOLDWIN_4, 185, 138, 160, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_HOLDWIN_5, 185, 132, 160, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        GROUPBOX        "Recent activities", T_TEXT_ACTIVITY, 4, 11, 345, 96
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000L
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LISTBOX         CALLWIN, 9, 19, 335, 81, LS_HORZSCROLL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        GROUPBOX        "Status", T_TEXT_TRANSFER, 90, 108, 260, 22
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000L
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", TRANSFER_SEND, 94, 117, 249, 6
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", TRANSFER_RECV, 94, 111, 249, 6
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", BOTTOM_LINE_L, 5, 0, 210, 10
+                        PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000L
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        RTEXT           "", BOTTOM_LINE_R, 220, 0, 135, 10
+                        PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        LTEXT           "Session:", S_TEXT_SESSION, 10, 126, 40, 6, 
+                        DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Protocol:", S_TEXT_PROTOCOL, 10, 120, 40, 6, 
+                        DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_SESSION, 50, 126, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_PROTOCOL, 50, 120, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "Netmail:", S_TEXT_NETMAIL, 10, 114, 40, 6, 
+                        DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "MemFree:", S_TEXT_MEMORY, 10, 109, 40, 6, 
+                        DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_NETMAIL, 50, 114, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+        LTEXT           "", E_MEMORY, 50, 109, 35, 6, DT_VCENTER
+                        PRESPARAMS PP_BACKGROUNDCOLOR, 0x00FFFFFFL
+                        PRESPARAMS PP_FONTNAMESIZE, "5.System VIO"
+    END
+END

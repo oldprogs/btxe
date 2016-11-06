@@ -1,0 +1,321 @@
+
+                Known Problems with BinkleyTerm 2.60XE/Gamma-6
+              -================================================-
+
+
+Description:
+
+ Bug TSSSS[=XRV,SSSS]
+     |   |  |
+     |   |  \-- bug was found in a previous version V but not fixed
+     |   \----- serial number
+     \--------- type: R = reported misbehaviour/problem/bug, not verified yet
+                      K = known bug, known reason, not fixed yet
+                      F = fixed bug
+                      N = no bug, config/user error
+
+ Status may be:
+  - fixed   (in internal beta, developer(s) who fixed it)
+  - unfixed (developer(s) working on this problem)
+  - none    (only for bug type 'N')
+  - nofix   (there will be no fix for this problem in next release)
+
+
+
+Bug K0001=XR5,0039
+ OS         : all
+ Description: Hydra (not xHydra) has problems if you chat when it wants to end
+              hydra batch (e.g. to invoke FREQ processor and continue sending
+              in 2nd batch)
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug K0002=XR5,0040
+ OS         : OS/2
+ Description: if you start from directory .\ but have BT32.EXE and BINK_PM.DLL
+              in directory .\bin binkley doesn't find BINK_PM.DLL
+ Workaround : put DLL in .\ or set environment variable BINKLEY
+ Status     : unfixed ()
+
+
+Bug K0003=XR5,0042
+ OS         : OS/2
+ Description: PipeTo <remoteserver> has two problems: slows down BT startup if
+              remote is not there and hangs on BT exit if remote is not there
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug K0004=XR5,0049
+ OS         : all
+ Description: skip and synchronize doesn't update CSS, total RX isn't updated
+              if we receive more than expected.
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug K0005=XR5,0056
+ OS         : all
+ Description: Alt-A no longer works after RING is detected (while waiting for
+              RingWait RINGs)
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug K0006=XR5,0060
+ OS         : all
+ Description: if NoHydraChat is specified, Hydra cannot be interrupted via ESC
+ Workaround : don't use NoHydraChat
+ Status     : unfixed ()
+
+
+Bug K0007=XR5,0066
+ OS         : all
+ Description: Binkley might crash if it does a nodelist lookup and the
+              nodelist index is replaced at the same time (this doesn't happen
+              often, but it can happen)
+ Workaround : freeze binkley before replacing the index
+ Status     : unfixed ()
+
+
+Bug K0008=XR5,0067
+ OS         : all
+ Description: requests are aborted if event is overrun (e.g. calling at 23:59)
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug K0009=XR5,0071
+ OS         : all
+ Description: file requests to (not from!) point systems may not work if not
+              both systems use bink, as bink sends/expects 0000<pntnr>.REQ and
+              not <net><node>.REQ as some other mailers do.
+ Workaround : "Well, and a point who can offer freqs could also get node,
+              couldn't he !?"
+ Status     : unfixed ()
+
+
+Bug K0010
+ OS         : all
+ Description: recent activity search function has several known bugs (e.g.
+              scrambling screen attributes) and is not fully functional yet
+ Workaround : only use at your own risk, or not at all
+ Status     : unfixed ()
+
+
+Bug K0011=XR5,0089
+ OS         : DOS
+ Description: if VFossil isn't installed, screen output can become a real mess
+ Workaround : install VFossil
+ Status     : unfixed ()
+
+
+Bug K0012=XR5,0102
+ OS         : all
+ Description: problems when ifcico and Bink use ZModem
+ Workaround : use Hydra
+ Status     : unfixed ()
+
+
+Bug K0012=XR5,0103
+ OS         : all
+ Description: if caller doesn't send anything to Bink in a ZedZap Session, it
+              sends two ZFINs but it should only send one
+ Workaround : make sure other end sends something or ignores second ZFIN
+ Status     : unfixed ()
+
+
+Bug K0014=XR5,0104
+ OS         : DOS
+ Description: bink crashes if more than 640 nodes are listed in stat file
+ Workaround : choose to show shorter time
+ Status     : unfixed ()
+
+
+Bug F0015
+ OS         : OS/2
+ Description: CapiCID crashes Bink
+ Workaround : remove CapiCID
+ Status     : fixed (XH3, AW)
+
+
+Bug F0016
+ OS         : all
+ Description: btutil ctl doesn't recognise the new alias Outbound
+ Workaround : none
+ Status     : fixed (XH4, HJK)
+
+
+Bug F0017
+ OS         : all
+ Description: lost carrier error msg after every ZModem session
+ Workaround : none
+ Status     : fixed (XH4, AG)
+
+
+Bug N0018
+ OS         : OS/2
+ Description: negative timelength shown for complete transfer time
+ Workaround : fix your TZ environment variable
+ Status     : nofix
+
+
+Bug F0019
+ OS         : Win32
+ Description: performance problems running mulitiline
+ Workaround : none
+ Status     : fixed (XH5, HJK)
+
+
+Bug N0020
+ OS         : Win32
+ Description: bink's sound feature doesn't work (NT4)
+ Workaround : none
+ Status     : none (XH4, HJK)
+
+
+Bug F0021
+ OS         : Win32
+ Description: problems with bidir transfers using Hydra and T-Mail
+ Workaround : none
+ Status     : fixed (XH5, HJK)
+
+
+Bug F0022
+ OS         : all
+ Description: internal request processor only allows 8.3 file names
+ Workaround : none
+ Status     : fixed (XH5, HJK)
+
+
+Bug R0023
+ OS         : all
+ Description: NoPickUp bug that should be fixed in XR3 is still not fixed
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug F0024
+ OS         : all
+ Description: NodeInboundDir causes problems
+ Workaround : none
+ Status     : fixed (XH3, CE)
+
+
+Bug F0025
+ OS         : all
+ Description: DelBadCall only works for main AKA which caller presents
+ Workaround : none
+ Status     : fixed (XH4, AG)
+
+
+Bug R0026
+ OS         : all
+ Description: bink always scans outbound twice
+ Workaround : none
+ Status     : fixed (XH3, AW)
+
+
+Bug F0027
+ OS         : all
+ Description: possible password errors when using max 3.0 index files
+ Workaround : check for spaces after access classnames in max's filearea.ctl
+ Status     : fixed (XH5, AW)
+
+
+Bug R0028
+ OS         : all
+ Description: NodeExtraDir doesn't work with spaces in directory names
+ Workaround : remove the spaces
+ Status     : unfixed ()
+
+
+Bug F0029
+ OS         : all
+ Description: double line feed in the terminal mode
+ Workaround : none
+ Status     : fixed (XH3, AW)
+
+
+Bug F0030
+ OS         : all
+ Description: rescan problems if time of network server with \flags\ directory
+              differs with workstation running bink.
+ Workaround : synchronize time
+ Status     : fixed (XH3, AW)
+
+
+Bug F0031=XR5,0051
+ OS         : all
+ Description: FTS-0001 / bad connect sometimes freez Bink (100% CPU usage)
+ Workaround : none
+ Status     : fixed (XH5, AW)
+
+
+Bug R0032
+ OS         : all
+ Description: filenames with more than one dot can't be received
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug F0033
+ OS         : all
+ Description: in the filerequest window you can only enter filenames with up
+              to 12 chars
+ Workaround : none
+ Status     : fixed (XH5, HJK)
+
+
+Bug R0034
+ OS         : OS/2
+ Description: CapiCID does not work with CAPI 2.0
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug R0035
+ OS         : all
+ Description: when calling bink with parameter POLL it doesn't initialize the
+              modem
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug F0036
+ OS         : Win23
+ Description: bink has some problems with relative paths
+ Workaround : don't use relative paths
+ Status     : fixed (XH6, HJK)
+
+
+Bug F0037
+ OS         : all
+ Description: BiDi sessions and NoPickup don't work
+ Workaround : none
+ Status     : fixed (XH6, AG)
+
+
+Bug F0038
+ OS         : all
+ Description: SmartBiDi Outgouing doesn't work
+ Workaround : none
+ Status     : fixed (XH6, VRP)
+
+
+Bug ?0039
+ OS         : 
+ Description: 
+ Workaround : 
+ Status     : unfixed ()
+
+
+Bug ?0040
+ OS         : 
+ Description: 
+ Workaround : 
+ Status     : unfixed ()
+
+
+$Id: knwnbugs.xr6,v 1.9 1999/09/27 20:51:03 mr Exp $

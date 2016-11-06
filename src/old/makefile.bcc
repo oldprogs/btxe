@@ -1,0 +1,59 @@
+# Borland compile
+# Define BTPE_DEBUG if you want extra debug info that Paul Edwards likes
+
+CC = bcc
+COPTS = -DOS_2 -DBTPE_DEBUG -DNEED_OS2COMMS -c -I..\include
+
+cobj1=BT.OBJ       ASYNC_OS.OBJ    FTSC.OBJ     B_SCRIPT.OBJ SBUF.OBJ
+cobj2=BTCONFIG.OBJ BREC.OBJ     B_SEARCH.OBJ B_TODAY.OBJ
+cobj3=B_TERMOV.OBJ BSEND.OBJ    B_SESSIO.OBJ B_FAXRCV.OBJ
+cobj4=B_BANNER.OBJ B_SPAWN.OBJ  UPLOAD.OBJ   DOWNLOAD.OBJ
+cobj5=B_BBS.OBJ    MAILER.OBJ   B_TERM.OBJ
+cobj6=B_FLOFIL.OBJ MAILROOT.OBJ B_WAZOO.OBJ  MAILOVLY.OBJ SQUISH.OBJ
+cobj7=B_FRPROC.OBJ MDM_PROC.OBJ B_WHACK.OBJ  SCHED.OBJ
+cobj8=B_FUSER.OBJ  MISC.OBJ     B_WZSEND.OBJ TIMER.OBJ
+cobj9=B_HELP.OBJ   NODEPROC.OBJ SENDBARK.OBJ VFOSSIL.OBJ
+cobja=B_INITVA.OBJ M7REC.OBJ    DATA.OBJ     M7SEND.OBJ   EMSI.OBJ
+cobjb=B_PASSWO.OBJ YOOHOO.OBJ   VERSION7.OBJ
+cobjc=B_PROTO.OBJ  DOSFUNCS.OBJ ZMISC.OBJ
+cobjd=B_RSPFIL.OBJ EVTPARSE.OBJ ZRECEIVE.OBJ
+cobje=B_SBINIT.OBJ FOSSIL.OBJ   ZSEND.OBJ
+cobjf=KEYMAP.OBJ   JANUS.OBJ    OUTBOUND.OBJ SENDSYNC.OBJ FILE_DOS.OBJ
+cobjg=STATETBL.OBJ XMREC.OBJ    XMSEND.OBJ   LANGLOAD.OBJ
+cobjh=RECVBARK.OBJ RECVSYNC.OBJ HYDRA.OBJ    AGLCRC.OBJ
+
+cobjs1=BTCTL.OBJ
+
+cobjs2=BTLNG.OBJ   GET_LANG.OBJ PUT_LANG.OBJ
+
+btobjs = $(cobj1) $(cobj2) $(cobj3) $(cobj4) $(cobj5) $(cobj6) $(cobj7) $(cobj8) $(cobj9) $(cobja) $(cobjb) $(cobjc) $(cobjd) $(cobje) $(cobjf) $(cobjg) $(cobjh)
+
+
+all: btp.exe btctlp.exe btlngp.exe binkley.lng
+
+btp.exe: $(btobjs)
+  touch btctl.obj
+  touch btlng.obj
+  touch get_lang.obj
+  touch put_lang.obj
+  del btctl.obj
+  del btlng.obj
+  del get_lang.obj
+  del put_lang.obj
+  $(CC) -ebtp.exe *.obj 
+  
+#  ..\lib\maxcomm.lib
+
+btctlp.exe: $(cobjs1)
+  $(CC) -ebtctlp.exe $(cobjs1)
+
+btlngp.exe: $(cobjs2)
+  $(CC) -ebtlngp.exe $(cobjs2)
+
+binkley.lng: btlngp.exe english.txt
+  btlngp english.txt binkley.lng
+
+.c.obj:
+  $(CC) $(COPTS) $<
+
+

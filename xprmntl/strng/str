@@ -1,0 +1,47 @@
+#include <string.h>               <strng.h> ???
+
+strdup                            operator =
+
+strcpy                            operator =
+strncpy                           substr
+strntcpy                          substr
+
+strcat                            operator +
+
+strcmp                            operator ==
+strncmp                           substr == substr
+stricmp                           uppercase == uppercase
+strnicmp                          substr uppercase == substr uppercase
+
+strlen                            length
+
+strupr                            uppercase
+strlwr                            lowercase
+
+strchr                            indexof
+strrchr                           lastindexof
+strstr                            indexof
+
+strnpbk                           ???
+strtok                            ???
+
+memcpy                            operator =
+memset                            ???
+
+isdigit                           isdigit
+isalpha                           isalpha
+isprint                           isprint
+isspace                           isspace
+
+strip                             strip
+
+strtol                            ???
+
+strstrci                          ???
+
+                                  ctors:
+                                  string()
+                                  string(char)
+                                  string(char *)
+                                  string(string &)
+                                  string(char *buf, size_t len)

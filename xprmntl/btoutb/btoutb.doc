@@ -1,0 +1,402 @@
+
+
+                       BinkleyTerm XE outbound in detail
+                       =================================
+
+Regard this document as trial for some sort of documentation of BT outbound,
+outbound flavours and how BT handles them.
+
+If you are familiar with standard BT outbound, you may continue reading at
+section 1.6.2. !
+
+
+
+1. Binkley outbound structure
+-----------------------------
+
+ Binkley outbound structure uses 8.3 file and directory names to represent
+ domain, zone, net, node and point information.
+
+ Nodes:  x:\out\<domain>.<zone>\<net><node>.<flavour><type>
+
+ Points: x:\out\<domain>.<zone>\<net><node>.PNT\0000<point>.<flavour><type>
+
+  <domain>  : 8 chars domain outbound name                 ( see 1.1. )
+  <zone>    : 3 hex digits for zone number                 ( see 1.2. )
+  <net>     : 4 hex digits for net number                  ( see 1.3. )
+  <node>    : 4 hex digits for node number                 ( see 1.4. )
+  <point>   : 4 hex digits for point number                ( see 1.5. )
+  <flavour> : 1 char for flavour                           ( see 1.6. )
+  <type>    : 2 chars for type                             ( see 1.7. )
+
+
+1.1. DOMAIN
+
+ Binkley outbound structure uses up to 8 chars to represent domain information.
+
+ If you do NOT use a DOMAIN SETUP, <domain> will be the default name specified
+ in the config file (maybe "outbound", "out" or whatever you like).
+
+ If you DO use a DOMAIN SETUP, <domain> will be the domain outbound name.
+
+
+1.2. ZONE
+
+ Binkley outbound structure uses 3 hex digits to represent zone information.
+ <zone> is NOT used if destination zone is the same as your MAIN zone.
+
+ The range of representable zone numbers is 000..FFF (hex) = 0..4095 (dec).
+
+
+1.3. NET
+
+ Binkley outbound structure uses 4 hex digits to represent net information.
+
+ The range of representable net numbers is 0000..FFFF (hex) = 0..65535 (dec).
+
+
+1.4. NODE
+
+ Binkley outbound structure uses 4 hex digits to represent node information.
+
+ The range of representable node numbers is 0000..FFFF (hex) = 0..65535 (dec).
+
+
+1.5. POINT
+
+ Binkley outbound structure uses 8 hex digits to represent point information.
+ The first 4 digits are 0000 in any case.
+
+ The range of representable point numbers is 0000..FFFF (hex) = 0..65535 (dec).
+
+
+1.6. FLAVOUR
+
+ <flavour> := { C | D | { F | O } | H }                    ( see 1.6.1. )
+
+ <flavour> := { 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 }    ( see 1.6.2. )
+
+
+1.6.1. OLD STYLE FLAVOURs
+
+ - C is used for CONTINUOUS ( "CRASH" ) flavour
+ - D is used for DIRECT flavour
+ - F is used for NORMAL flavour ( flow files only, see 1.6.2. )
+ - O is used for NORMAL flavour ( FTN mail packets only, see 1.6.2. )
+ - H is used for HOLD flavour
+
+ Further, "REQ" extension is used for outbound file request files.
+
+ REQ itself doesn't have any flavour, so you need some other stuff of "C"
+ flavour to get it "crashed" out.
+
+
+1.6.2. NEW BT-XE-STYLE FLAVOURs
+
+ The standard "flavour system" of Binkley outbound was extended to get some
+ more flexibility and save costs while even SIMPLYFYING the flavour system.
+ We simply use the numbers from 0 to 9 as our new FLAVOURs instead of the
+ old flavours C,D,F/O and H.
+
+ For some time, old flavours will be supported, too, but it is highly
+ recommended to implement new flavours in new software releases as old flavours
+ will be dropped (further simplifying and speeding up things) as soon as
+ possible.
+
+ The basic idea is that some outbound stuff is of higher priority (more
+ important, more urgent - e.g. mails) than other stuff (e.g. tons of files
+ spread by file nets).
+
+ So you might want to pick up just your mail (or in general: high priority
+ stuff) at expensive daytime tariff and get your tons of files (low prio stuff)
+ at cheaper night tariff only.
+ 
+ Further, the new flavours can fully replace the old flavours giving you more
+ flexibility. So for the first time, there will be some "mapping" from old
+ flavours to new flavours (concerning behaviour of the mailer).
+
+ The rule to implement that is simple: the higher priority the stuff has, the
+ higher number it will get as flavour.
+
+ What has to be sent and what should not be sent at a specified time can be
+ defined with the event system ( see 2. )
+
+
+1.7. TYPE
+
+ <type> := { LO | UT }            (old style)
+           { LO | UT | RQ | FX }  (new BT-XE style)
+
+ - LO is used for FLOW files. Those contain a list af files to send.
+   Format: plain ASCII, one file per line:
+
+    [<sent_option>]<filename>
+
+   <sent_option> := { ^ | # }
+       ^         : the file should be deleted after it is sent
+       #         : the file should be truncated to 0 bytes after it is sent
+
+   <filename>    := full path and filename of the file to send
+   
+
+ - UT is used for FTN MAIL packet files. They must be renamed to .PKT when they
+   get sent. Format: see corresponding FTSs.
+
+ - RQ is used for FILE REQUESTS. Those files contain a list of files (or
+   functions or ...) you want to request from the system defined with
+   <zone>:<net>\<node>.<point>[@<domain>].
+
+ - FX is reserved for an upcoming FAX SERVER feature. Those files contain a
+   list of fax files you want to send to the system defined with
+   <zone>:<net>\<node>.<point>[@<domain>].
+
+
+
+1.8. EXAMPLES
+
+ Assume zone 2 as main zone. Assume that x:\outbound\outbound is configured as
+ default/main outbound directory (Binkley: "Hold x:\outbound\outbound").
+
+ x:\outbound\outbound\09aa0190.CLO would be a flow file for 2:2474/400 with the
+ flavour CONTINOUS ("CRASH").
+
+ x:\outbound\outbound.003\09aa0190.OUT would be a FTN mail pkt for 3:2474/400
+ with the flavour NORMAL.
+
+ x:\outbound\outbound.015\09aa0190.pnt\00000010.FLO would a flow file for
+ 21:2474/400.16 with the flavour NORMAL.
+
+
+
+2. EVENTs and EXTENDED FLAVOURs
+-------------------------------
+
+ The EVENT system is used to define what the different priorities shall do at
+ different daytimes (for example).
+
+ <x> is used for the numbers from 0 up to 9.
+
+
+2.1. EVENTs and flavours and YOUR costs (calling someone) "CALL PRIO <x>"
+
+ Everything with priority equal or higher than <x> can initiate a call and
+ if the connection is established, it will get sent.
+ 
+
+2.2. EVENTs and flavours and YOUR costs (sending stuff)   "SEND PRIO <x>"
+
+ Everything with priority equal or higher than <x> will be sent, when we are
+ calling someone. A flavour equal or higher than SEND PRIO will NOT initiate a
+ call - a call will only be initiated by stuff having at least CALL PRIO ( see
+ 2.1. ).
+
+
+2.3. EVENTs and flavours and YOUR costs (polling stuff)   "GIVE ME PRIO <x>"
+
+ Tell the called system that it should send everything with priority equal or
+ higher than <x>. This only works if the remote system supports the priority
+ system ( see also 3. ).
+
+
+2.4. EVENTs and flavours and CALLER's cost                "GIVE HIM PRIO <x>"
+
+ If a calling system does not support the priority system, everything with
+ priority equal or higher than <x> will be sent to it.
+
+ If a calling system does supports the priority system, it will tell us what
+ shall be sent to it using the EMSI extension ( see 3. ).
+
+
+
+3. EMSI and EXTENDED FLAVOURs
+-----------------------------
+
+ If you call a system at expensive daytime tariff, it's nice if you can tell
+ the remote system to send stuff of some specific priority (and higher) ONLY.
+
+ To implement that (see 2.2. and 1.6.2., too), there is a new EMSI field
+ "PRIO" containing the priority values "0" .. "9" as follows:
+
+ EMSI-String sent: {PRIO}{<SEND PRIO>,<GIVE ME PRIO>}
+ e.g.:             {PRIO}{6,4}
+
+ This would mean:
+
+  - "I send mail/stuff to you of priority 6 and higher (and I'm holding all
+    stuff of lower priority)"
+  - "Give me mail/stuff of priority 4 and higher (and hold all stuff of lower
+    priority)"
+
+ Sender and Called System will both send this EMSI field.
+
+ EMSI processing:
+ 
+ 1. Sender Init:
+    send_prio   = event[current].send_prio;    /* e.g.: 6 */
+    giveme_prio = event[current].giveme_prio;  /* e.g.: 4 */
+    
+    Called System Init:
+    send_prio   = event[current].givehim_prio; /* e.g.: 5 */
+    giveme_prio = event[current].giveme_prio;  /* e.g.: 4 */ 
+ 
+
+ 2. Sender encodes send_prio and giveme_prio into an EMSI block and sends it to
+    the called system.
+
+    e.g.: send EMSI = ... {PRIO}{6,4} ...
+
+    
+ 3. Called system receives this EMSI block and chooses its own SEND PRIO being
+    at least the same value as requested by Sender with GIVE ME PRIO (normally
+    the SAME value, under special conditions it's allowed to choose a HIGHER
+    priority).
+
+    Further, called System chooses its own GIVE ME PRIO being at least the same
+    value as announced by Sender with SEND PRIO (normally the SAME value, under
+    special conditions it's allowed to choose a HIGHER priority).
+
+    It encodes chosen values in its own EMSI block and sends them back.
+
+    Normal case, caller driven behaviour:
+
+    e.g.: received EMSI = ... {PRIO}{6,4} ...
+          send_prio     = 4    /* as requested by caller with GIVE ME PRIO */
+          giveme_prio   = 6    /* as announced by caller with SEND PRIO    */
+          send EMSI     = ... {PRIO}{4,6} ...
+
+
+    Or, called system influenced behaviour:
+
+    e.g.: received EMSI = ... {PRIO}{6,4} ...
+          send_prio     = 9
+          giveme_prio   = 9
+          send EMSI     = ... {PRIO}{9,9} ...
+
+          Called system seems to be very busy at the moment with stuff of
+          really high importance and priority and because of that only likes to
+          receive and send really high-priority stuff
+
+    If there is no PRIO information in EMSI block received, the called system
+    doesn't change send_prio and giveme_prio chosen in init phase. So these
+    values will get sent in EMSI.
+    
+
+ 4. Sender receives EMSI block of called system and adjusts its own SEND PRIO
+    with the value received as sender's GIVE ME PRIO. Also it adjusts its own
+    GIVE ME PRIO to the value received as sender's SEND PRIO.
+
+    e.g.: received EMSI = ... {PRIO}{4,6} ...
+          send_prio     = 6   /* as requested by called system with
+                                 GIVE ME PRIO */
+          giveme_prio   = 4   /* as announced by called system with
+                                 SEND PRIO    */
+    
+    If there is no PRIO information in EMSI block received, sender system
+    doesn't change send_prio and giveme_prio chosen in init phase.
+
+
+ 5. In the session following, both sides send stuff of send_prio (and higher
+    priorities) *ONLY*.
+
+    
+
+4. CONCRETE APPLICATION EXAMPLE
+-------------------------------
+
+ This could be a typical setup for your outbound priorities and events.
+ It's only an example, of course you can do it different if you wish to.
+ 
+ This sample assumes you are system X and system Y is a caller of your system.
+
+ You (X) are a feed of some high-traffic file net, Y polls your system to get
+ these files.
+
+ Further, you (X) are also fidonet hub and echomail feed, Y polls your system
+ to get fidonet netmail and echomail.
+ 
+ Also, you feed some special-interest low-traffic echomail areas for Y.
+
+ Further, you (X) have some netmail for Y which is of "high" importance for
+ YOU.
+
+
+4.1. FLAVOUR SEMANTICS EXAMPLE
+
+ Flavour  importance/priority for X (you)  importance/priority for Y (caller)
+ =============================================================================
+ 0        extremely low                    extremely low
+ 1        extremely low                    very low
+ 2        extremely low                    low
+ 3        extremely low                    medium
+ 4        extremely low                    high
+ 5        very low                         extremely high
+ 6        low                              extremely high 
+ 7        medium                           extremely high 
+ 8        high                             extremely high 
+ 9        extremely high                   extremely high 
+
+
+4.2. EVENTs of X and Y
+
+ Daytime       Tariff      CALL PRIO  SEND PRIO  GIVE ME PRIO  GIVE HIM PRIO
+ 08:00..18:00  High Price  9          8          4             4
+ 18:00..00:00  Medium      7          6          2             2
+ 00:00..05:00  Cheap       5          5          0             0
+ 05:00..08:00  Medium      7          6          2             2 
+ 
+
+4.3. FLAVOURS in OUTBOUND of X
+ 
+ You send stuff to Y with following priority flavours:
+
+ stuff                     priority
+ =======================================
+ high-traffic file nets    1
+ fidonet echomail          2
+ special-interest echomail 3
+ netmail                   4
+
+ As you can see above, this is all "extremely low priority for X (you)", so
+ your system will never call Y to send this stuff (it's HIS stuff, he shall
+ poll for it!). But for Y, it is of quite different priority.
+ 
+ 
+4.4. POLLS of Y
+
+ Assume Y polls your system three times a day:
+ - at 13:00 (high price)
+ - at 20:00 (medium)
+ - at 03:00 (cheap)
+
+ Y won't be very happy if he receives tons of files and fidonet echomail with
+ his 13:00 poll (he does this poll only to get his latest netmails and echomail
+ in the special-interest area really fast).
+ For this reason, he configured a quite high GIVE ME PRIO (4) in his event for
+ this daytime.
+
+ At medium and low price tariff, Y has lower GIVE ME priorities to fetch the
+ remaining stuff.
+ 
+
+4.5. CRASHMAIL to Y
+ 
+ We didn't handle flavour for your very high importance netmail to Y yet, you
+ would use this:
+ 
+ stuff                     priority
+ =======================================
+ your urgent netmail to Y  9
+ 
+ This will make your system CALL Y (as soon) as your event setup allows it.
+ In this case, this would be in ANY tariff.
+ 
+ If it would be less urgent, you could use priority 8 to get it done in any
+ tariff except high price tariff.
+ 
+
+Written by:
+
+Michael Reinsch, 2:2474/14
+Thomas Waldmann, 2:2474/400
+
+If you have comments or questions, please contact us.

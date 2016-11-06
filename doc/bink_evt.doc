@@ -1,0 +1,48 @@
+
+Before actually sending binkley will check the cost frame (except if a
+'H' event). If the costs are too high or too many bad calls: no send.
+The 'H' event will dial as often as needed to deliver the mail, even if
+10.000 bad connects have been made!
+
+           with C-Mail           without C-Mail
+Event      H C M K R             H C M K R
+CM-Node    0 0 0 0 0 send        0 0 0 0 0 send
+           0 0 0 0 1 no send     0 0 0 0 1 no send
+           0 0 0 1 0 no send     0 0 0 1 0 no send
+           0 0 0 1 1 no send     0 0 0 1 1 no send
+           0 0 1 0 0 send        0 0 1 0 0 send
+           0 0 1 0 1 no send     0 0 1 0 1 no send
+           0 0 1 1 0 no send     0 0 1 1 0 no send
+           0 0 1 1 1 no send     0 0 1 1 1 no send
+           0 1 0 0 0 send        0 1 0 0 0 no send
+           0 1 0 0 1 no send     0 1 0 0 1 no send
+           0 1 0 1 0 no send     0 1 0 1 0 no send
+           0 1 0 1 1 no send     0 1 0 1 1 no send
+           0 1 1 0 0 send        0 1 1 0 0 no send
+           0 1 1 0 1 no send     0 1 1 0 1 no send
+           0 1 1 1 0 no send     0 1 1 1 0 no send
+           0 1 1 1 1 no send     0 1 1 1 1 no send
+           1 x x x x send        1 x x x x no send
+
+           with C-Mail           without C-Mail
+Event      H C M K R             H C M K R
+No CM-Node 0 0 0 0 0 no send     0 0 0 0 0 no send
+           0 0 0 0 1 no send     0 0 0 0 1 no send
+           0 0 0 1 0 no send     0 0 0 1 0 no send
+           0 0 0 1 1 no send     0 0 0 1 1 no send
+           0 0 1 0 0 send        0 0 1 0 0 send
+           0 0 1 0 1 no send     0 0 1 0 1 no send
+           0 0 1 1 0 send        0 0 1 1 0 send
+           0 0 1 1 1 no send     0 0 1 1 1 no send
+           0 1 0 0 0 no send     0 1 0 0 0 no send
+           0 1 0 0 1 no send     0 1 0 0 1 no send
+           0 1 0 1 0 no send     0 1 0 1 0 no send
+           0 1 0 1 1 no send     0 1 0 1 1 no send
+           0 1 1 0 0 send        0 1 1 0 0 no send
+           0 1 1 0 1 no send     0 1 1 0 1 no send
+           0 1 1 1 0 send        0 1 1 1 0 no send
+           0 1 1 1 1 no send     0 1 1 1 1 no send
+           1 x 0 x x no send     1 x 0 x x no send
+           1 x 1 x x send        1 x 1 x x no send
+
+

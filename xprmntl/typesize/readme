@@ -1,0 +1,27 @@
+
+this is an attempt to somewhat reduce problems by unifying
+compiler dependend type sizes.
+
+-   typesize.h: to be dropped into .\include and included in
+                .\include\includes.h for compiler specific
+                type/size definitions. please use the common
+                definitions in it for the future.
+
+-   typesize.c: small program to determine the typesizes of your
+                specific compiler. please add this compiler to
+                typesize.h if not already present there.
+
+tom
+
+Comment of TJW:
+
+At first, please change these files misc\* ONLY - do NOT change BT-XE source
+code itself.
+
+Later, we should do this mega-change in BT-XE source within one diff - with
+no other changes - so that we can locate errors easily.
+
+While doing this change, there should be no other development activity because
+after this "type" diff all other diffs based on older source are very probably
+rejected by patch.exe, because of the lots of changes done ...
+

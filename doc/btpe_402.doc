@@ -1,0 +1,212 @@
+BTPE402 (Binkley Term hacked by Paul Edwards)
+
+This source code is Binkleyterm 2.60 as modified by Paul Edwards,
+Fidonet 3:711/934, to make it compile under the Watcom, Borland
+CSET and GNU/EMX compilers under OS/2.  Also, it compiles under 
+Watcom 10.0b (DOS) and Borland C++ 3.1 for DOS.
+
+Please read the license agreement, written by Bit Bucket Software.
+To get all the original files, look for BSRC_260.ZIP somewhere
+near you (you can FREQ them from 3:711/934 if you want to).
+
+Any changes I have made are Public Domain.
+
+The makefile called "makefile.wat" is set up to use Watcom 10.0b
+The makefile called "makefile.bcc" is set up to use BCOS2 1.5
+The makefile called "makefile.ibm" is set up to use CSET++/2 2.0
+The makefile called "makefile.emx" is set up to use EMX 0.9b
+The makefile called "makefile.w16" is set up to use Watcom 10.0b for DOS
+The makefile called "makefile.bcd" is set up to use BC++ 3.1 for DOS
+
+The executables provided here have been compiled with watcom with
+optimization on.
+
+The main features of BTPE cf Binkley 2.60 are:
+A few new compiler configurations supported
+1/100 second resolution in logs.  
+AT commands get printed out
+Responses aren't case-changed.  
+Case-sensitive comparison of "ERROR" etc so as to not get a match on 
+  Netcomm's "Error Correction" string, also more stringent matching on 
+  the string, so as to not match on Netcomm's debug info "OK, trying xxx".  
+Fixed bug in Wazoo session with product >255 causing trap.  
+Protect against control characters in the log.  
+Added "Afterconnect" (same syntax as Aftercall)
+Ability to debug every character going to or from the modem by setting
+  environment variable BINKDBG to some file (OS/2 only)
+32-bit OS/2 comms routines, required by EMX, and used in the others too
+Most compiler warnings flushed
+
+
+Compiling:
+
+First of all, you need a utility called "patch".  This is an
+INVALUABLE utility, you MUST GET IT!!!  You won't be disappointed
+in it, it is worth the hassle of finding and installing.  It will
+be a hassle to find and install it though, most likely.  Look for
+an archive called "GNUPATCH.*" somewhere near you.  Failing that,
+I have modified and recompiled it myself, and you can freq "PATCH.*"
+from 3:711/934 to get it.  However, you will still need to stuff
+around and get a copy of EMX 0.9b to get the proper runtime DLL,
+or RSX.EXE for DOS/Windows, or EMX.EXE for DOS.
+
+The source is distributed as changes to Binkley 2.60.  The file
+PATCH.400 is what you need.
+
+You then need to have the original Binkley 2.60 source code extracted
+into directories as such:
+c:\scratch\binkley\include
+                  \src
+
+It is important that the name "binkley" and "include" and "src" are
+as above, but the first bit of the directory name (e.g. c:\scratch)
+can be anything.
+
+Now go into c:\scratch and do the following:
+
+patch <patch.400
+
+This will patch all the source code with the BTPE changes.
+
+Then, go into the "src" directory, and choose one of the makefiles.
+You may want to use "compile.cmd" or "compile.bat".
+
+
+
+History:
+
+Version 4.02,  1996-05-12
+
+Hydra was not working, under Watcom or EMX.  I didn't use Hydra
+so I didn't ever know about that.  Anyway, that is because it
+uses a couple of routines, ComOutSpace (through ComTxBlockTimeout)
+and ComTxRemain.  These were new to Binkley 2.60, so I wasn't able 
+to use the BTPE 3.06 code to implement them.  I had provided dummy 
+functions for those two routines, but had never actually used them, 
+because I'd never used Hydra!  Anyway, I have now, and the dummy 
+routines worked for my test.  There is still a task to implement 
+those routines properly.
+
+
+Version 4.01,  1996-05-05
+
+The EMX port reportedly didn't work.  I had only done minimal
+local testing of it.  More testing showed that it failed to
+read the nodelist, which I remembered from an older version was
+to do with structures not being packed.  I brought that code
+change across too, and ran it live on my system to make sure it
+worked.  Also, I added "+FCON" as a fax string, because of the
+way I changed the operation of the response strings, "+FCON"
+no longer matches "+FCO".
+
+
+Version 4.00,  1996-04-27
+
+Binkley 2.60 was released, so I switched to using that, and 
+merged most of my changes in.  Changed Afterconn to Afterconnect.
+BTW, I discovered that the delay that I had thought was due to an 
+MNP modem delaying a character transmit was in fact Binkley flushing 
+the comm line straight after a connect.  Binkley 2.60 stopped doing 
+that, and hey presto!  Used the spawn.asm from msged/sq (ie the one
+modified by Matthew Parker), which enabled me to use Watcom to compile 
+for DOS (no need for masm anymore - yippee!).
+
+
+Version 3.06,  1996-03-31
+
+A variety of changes.  Improved negotiation when communicating
+with brain-dead systems, made afterconn more robust, made the
+search for "CONNECT" etc case-sensitive to avoid conflict with
+modems that put out debug info such as "Error correction".
+
+
+Version 3.05,  1995-11-04
+
+Very minor changes.  I made the log messages start at the same
+offset of the original Binkley, by adding a couple of spaces.
+I also made the debugging mildly faster. 
+
+
+Version 3.04,  1995-08-18
+
+I added the "Afterconn" keyword, so that after you connect, you
+can (e.g.) take the modem offhook with "+++", issue a command
+to check the line conditions, then reconnect.  Also, the 
+"Aftercall" keyword is working fine.  The delay thought to be
+in 3.03 seems like it was simply a case of MNP compression
+delaying a single character on one modem, and V42 got rid of
+that.
+
+
+Version 3.03,  1995-06-24
+
+Due to a bug in EMX 0.9a, I worked around some code in 3.02.  In
+this version, I backed out that workaround, so it is imperative
+you use EMX 0.9a with FIX03 (or later) if you want to compile
+using this compiler.  I also added the "Aftercall" keyword, but 
+it doesn't seem to work.  Also, I got rid of the unnecessary 
+delays during session negotiation, although there still seems
+to be one left under some circumstances, and it's proving very
+elusive to find out what's causing it.  
+
+
+Version 3.02,  1995-03-20
+
+Added support for using EMX 0.9a.  Also made sure it compiled 
+under Borland C++ 3.1 for DOS.  Also allowed a facility to
+allow debugging of every character sent to/from the modem.
+Also fixed support for the CSET compiler.
+
+
+Version 3.01,  1995-03-11
+
+Fixed a problem with it not recognizing the outbound mail because
+it was being case-sensitive.
+
+
+Version 3.00,  1995-03-05
+
+Made it use the same binkley.lng, binkley.scd and binkley.day as
+normal Binkley 2.50.  Because of this major change in external
+interface, I increased the version by such an extravagant amount,
+despite the fact that 2.0 was only released a short time ago!
+
+
+Version 2.00,  1995-03-04
+
+Made it actually work (I managed to FREQ a file from another BBS).
+
+
+Version 1.03,  1995-01-31
+
+Made the dummy functions actually compile in properly!
+
+
+Version 1.02,  1995-01-30
+
+Changed the dummy functions to make them call Dos16SemWait etc
+so it might actually be technically correct.
+
+
+Version 1.01,  1993-11-15
+
+Got it to link by creating dummy functions for the missing Dos* functions.
+Got it to read the nodelist and other things by changing various ints to 
+shorts.  Note that this is still bad practice.  It should have been done 
+properly with chars only, and not assuming how big an int etc is.  I 
+haven't bothered.  It does start and finish, but doesn't recognize the
+outbound mail (haven't figured out why yet).  Also haven't figured out how
+to make Borland link from a response file yet, so kludged up the makefile
+instead!
+
+
+Version 1.00,  1993-11-09
+
+Compiles on both BCOS2 and CSET++/2.  However, I'm not sure what to replace
+functions DosSemClear, DosSemWait, DosSemRequest, DosAsync with, so it 
+doesn't actually link.  I thought I might get a bit of help if I made the
+code available now.  Also, I haven't figured out how to incorporate the
+changes into the make file, so you have to modify the makefile for Borland
+or IBM yourself.  As it is, it compiles for Borland.
+
+

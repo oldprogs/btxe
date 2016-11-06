@@ -1,0 +1,146 @@
+/*
+
+Programming guidelines:
+
+1. prefer const and inline instead of #define
+
+2. prefer iostream.h instead of stdio.h
+
+3. use new and delete instead of malloc and free
+
+4. use C++ comments (//)
+
+5. use the same kind of corresponding new and delete calls:
+   new ...[...]       ->  delete [] ...
+   new ...            ->  delete ...
+   
+6. call delete in destructor for all pointer elements
+
+7. check the result of new
+
+8. follow the convention with own versions of "new"
+
+9. avoid covering / hiding of the global "new"
+
+10. for a new "new" do also write a new "delete"
+
+11. for any class with dynamically allocated memory do define a copy
+    constructor and a assignment operator
+    
+12. prefer initialization instead of assignment in constructors
+
+13. list the elements of the initializer list in the sequence of their
+    declaration
+    
+14. C++ base classsy must have a virtual destructor.
+
+15. operator= has to return a reference to *this
+
+16. assign to all data elements in operator=
+
+17. check for self-assignment in operator=
+
+18. use complete AND minimal interfaces
+
+19. differentiate between member functions, global functions and friend
+    functions
+    
+20. avoid public data members, prefer public access functions
+
+21. use const whereever possible
+
+22. hand over objects via reference
+
+23. avoid reference function return values
+
+24. choose carefully amongst overloading and default arguments
+
+25. avoid overloading of a parameter with a pointer and a numerical type
+
+26. beware of potential ambiguity
+
+27. disallow explicitely the automatically generated member functions, if
+    you do not want them
+
+    if automaticly defined operator= is not appropriate, then explicitely
+    declare, but do not define it.
+    
+28. use structs for dividing global namespace
+  
+29. take care of constant member functions not delivering handles of internal
+    objects
+    
+30. avoid member functions delivering pointers or references to members of
+    higher protection
+    
+
+31. never deliver a reference to a local object or a dereferenced pointer to
+    an object, that is generated in a function with new
+    
+32. use enums for class constants
+
+33. consciously use "inline"
+
+34. minimize dependencies between files
+
+35. public inheritance means "is a"
+
+36. differentiate between inheritance of interfaces and of implementations
+
+37. never overwrite an inherited non-virtual function
+
+38. do not redefine an inherited default parameter
+
+39. do not downcast in class hierarchy
+
+40. "has a" and "is implemented with" should be modelled with layering
+
+41. use private inheritance with care
+    private inheritance means "is implemented with"
+    
+42. differentiate between inheritance and templates
+
+43. use multiple inheritance with care
+
+44. say what you mean, understand what you say.
+    ...
+    
+45. always remember which functions C++ automagically creates for you:
+    copy constructor, operator=, address-of operator
+    
+46. prefer syntax errors over runtime errors
+
+47. take care of global objects being initialized before first use
+
+48. take care of compiler warnings
+
+49. make your plans with an eye on coming C++ language extensions
+
+50. read the ARM
+
+These are the short rules, for the long version see the book: 
+
+Effektiv C++ programmieren
+Scott Meyers
+Addison-Wesley
+ISBN: 3-89319-539-4
+
+(there is maybe also an english version)
+  
+
+Some more rules:
+
+51. public interface function / variable names use upper/lowercase names like
+    Hydra() or Transfer() or BeginTransfer(CHAR *TxFilename)
+  
+52. private functions / variables use lowercase names
+
+53. DO NOT USE "int" or "short/long" anywhere !!!
+
+    If sizeof(int) doesn't care, then use INT (will be mapped to the most
+    efficient int type of the machine / OS).
+
+    If sizeof(int) does matter, then use INT16 or INT32 !
+    
+*/
+

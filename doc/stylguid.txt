@@ -1,0 +1,82 @@
+
+                     BinkleyTerm XE Source Styleguide
+
+
+Layout: 
+
+ - Please use GNU indent 1.9.1 or higher.
+
+ - All *.c and *.h files in a directory containing a GNU indent profile
+   (.indent.pro) are checked.
+
+ - Hint: Use "diff -c source.c~ source.c" to see if indent worked nicely. It
+         has some flaws, i.e. when using special kind of block comments or
+         '//'. Please work around those flaws and iterate the indent / diff
+         process until everything looks fine.
+
+
+Some additional rules:
+
+ - Don't use TABs!
+
+ - Only use printable ASCII codes (32 - 126).
+
+ - Comments:
+
+    - Use /* */ and not // as indent has some problems with //.
+
+    - No "} /* end<whatever> */" comments as they are useless. If you think
+      you need them because it's getting confusing, consider rewriting /
+      splitting!
+
+ - Size:
+
+    - Keep methodes / functions as small and compact as possible, i.e. not
+      longer then 100 lines.
+
+    - Create simple, specific, small c / cpp files.
+
+ - Statement Grouping:
+
+    - Group statements together that belong logically together. Use single
+      empty lines to create those groups.
+
+    - After a closing brace } leave an empty line; exception: if the following
+      statement belongs to the block, i.e.:
+
+        do
+        {
+          i = dosomething (i);
+        }
+        while (i != 0);
+
+        if (j == 0)
+          dosomethingelse (i);
+
+        while (i > 0)
+        {
+          i = dosomething (i);
+        }
+
+        if (j == 0)
+          dosomethingelse (i);
+
+ - Other rules:
+
+    - No assignments in boolean expressions, i.e.
+      if ((fp = fopen(...)) != NULL) shoud NOT be used!
+
+    - Avoid "goto"s where ever possible
+
+    - Put OS specific routines in seperate files to avoid #ifdefs.
+
+    - Don't use #defines for macros or constants.
+
+    - Use fopen() instead of open() and use mode parameters defined in
+      include/file_all.h.
+
+
+That's it. Please follow these rules to make the source code easier to read.
+If you're not happy with these rules, feel free to contact me (mr@uue.org) and
+tell me, what you don't like. If you find typos or other bugs, tell me also.
+

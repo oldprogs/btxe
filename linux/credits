@@ -1,0 +1,23 @@
+Big parts of the modules vfos_lnx.c and asyn_lnx.c were taken
+from a Binkley 2.50 ported to Unix/Atari/and others by
+Ben Stuyts and Louis Lagendijk.
+
+The Copyright-Notice in their release reads:
+The changes from the original BinkleyTerm version are
+copyright (c) 1992, 1993 by Ben Stuyts. You are free to do
+with these changes as you like, provided that you give me
+credit. The original licensing agreement of Bit Bucket
+Software still applies. As is common in the unix
+environment, you should distribute this package including
+full sources. Patches for Linux are (c) 1993 by Louis
+Lagendijk.
+
+========================================================
+
+- Paul Edwards and Tobias Ernst provided a nice example
+  how to read the keyboard in MsgEd TE.
+
+- Martin van Beilen (2:500/143.26) fixed a bug in
+  in MDM_DISABLE which caused btxe to abort after an
+  ErrLevelShell.
+

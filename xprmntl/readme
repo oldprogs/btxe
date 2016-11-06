@@ -1,0 +1,9 @@
+This directory contains some ideas formulated in (more or less) C++.
+
+Please check them ...
+
+Also, please have a look at cpp_rule.doc for some important rules about C++
+programming.
+
+BTW: of course the class declarations later will be in *.hpp and the
+     implementation will be in *.cpp

@@ -1,0 +1,184 @@
+function, parameters                           saved as
+---------------------------------------------------------------------------------------------------------------
+goto <label>                                   00 06 <jump-address>
+ifstr <str> <char> <str> <label> ...           01
+                                                  = equal
+                                                  ~ equal, dont care about case
+                                                  : unequal, dont care about case
+                                                  ! unequal
+                                                  i <val1> included in <val2>
+
+ifstr <str> <char> <str> <label> ...           02
+                                                  = equal
+                                                  < smaller
+                                                  > larger
+                                                  ] larger or equal
+                                                  [ smaller or equal
+
+event <event> [<g|c> <label>]                  03
+loadtranslation                                04 03 <translation>
+logfile "<string>"                             05 xx <string*> 00
+
+setvar <var> <string*>                         06 xx <strvar> <string*>
+
+addtohistory <sssnnnnnnn>                      07 0B <sssnnnnnnn>
+ <name> <handle> <city>
+ <calls> <filesup> <filesdn> <kbup> <kbdn>
+ <read> <posted>
+
+print "<string>"                               08 xx <string*#> 00
+
+getkey <var>                                   09 02 <num>
+getkeysysop <var>                              0A 02 <num>
+getkeymodem <var>                              0B 02 <num>
+
+getstr <var> [length] [LSDAPHU]                0C xx <var-num> <len> <settings> 00
+                                                     L: draw line of underscores ('_')
+                                                     S: space allowed
+                                                     D: ditigts allowed
+                                                     A: alphabetic char
+                                                     P: printable
+                                                     H: hidden (output only '*')
+                                                     U: uppercase all input-chars
+parse <numvar> <string-var>                    0D xx <numvar (bit 7 not set)> <num of string-var>
+
+fileopen <string*>                             0E xx <string*>
+fileclose                                      0F 02
+fileposition <numvar>                          10 03 <var-num>
+filegoto <numvar>                              11 03 <var-num>
+filetruncate                                   12 02
+filelineread <stringvar>                       13 03 <var-num>
+filelineinsert <string*>                       14 xx <string*>
+filelinereplace <string*>                      15 xx <string*>
+filelineremove <num>                           16 06 <numerical value>
+
+fullscreen                                     17 00
+unattended                                     18 00
+
+timesetonkey <num>                             19 02 <number>
+
+abort                                          1A 00
+
+emulation <type>                               1B 02 <emulation-type: none, ansi>
+
+dropcarrier                                    1C 02
+ifcarrier <label>                              1D 06 <address>
+
+call <label>                                   1E 06 <address>
+return                                         1F 02
+
+releasetime                                    20 02
+waitforallsent                                 21 02
+
+getfileinfo <nv> <sv> <nv> <nv> <nv> <str*>    22 xx <var-num> <var-num> <num-var> <num-var> <num-var> <string>
+getfileinfotext <string-var>                   23 02
+getfileinfosearch <string-var>                 24 02
+
+setvardate <num-var> <str-var> <str*>          25 xx <var-num> <var-num> <string*>
+
+sendfile <nv><nv><sv><sv>                      26 06 <vn><vn><sv><vn>
+sendfilelist <nv><nv><sv><sv>                  27 06 <vn><vn><sv><vn>
+receivefile <nv><nv><sv><sv><str*>             28 xx <vn><vn><sv><vn><str>
+deletefile <str*>                              29 xx
+
+/* the following are the functions from b_script.c. maybe they could be executed */
+/* from the new script in some future version                                    */
+
+download <protocol>                            xx 03 <char(uppercase)>
+upload <protocl> <filename>                    xx xx <char(uppercase)> <filename> 00
+baud <value>                                   xx 06 <long>
+xmit <string>                                  xx xx <string>
+rawxmit <string>                               xx xx <string>
+dial                                           xx 02
+areacode                                       xx 02
+phone                                          xx 02
+carrier                                        xx 02
+session                                        xx 02
+timer <value>                                  xx 06 <long>
+      <t-num> <value>                          xx 07 <t-num> <long>
+speed                                          xx 01
+break <value>                                  xx 05 <long>
+comm <bits> <parity> <stopbits>                xx 0A <long> <char> <long>
+dos <string>                                   xx xx <string*> 00
+abort <xx:xx xx:xx>                            xx 01
+                                               xx 11 <long> <long> <long> <long>
+port <value>                                   xx 02 <char=value-1>
+nowazoo                                        xx 01
+noemsi                                         xx 01
+
+/*
+ * "wait" and "pattern" can be replaced by something like:
+ *
+ * set %2 ""
+ * timer t1 300
+ * :AGAIN
+ * readkey %1
+ * set %2 "%2%1"
+ * if "abc" i "%2" goto abc
+ * if $1 ! 0 goto again
+ *
+ */
+
+"<string*>"
+-----------
+
+   - {variable-name:len}                       <\374> <var-num> <fill2len>
+
+"<string*#>"
+------------
+
+   #00 xx    : ascii-char xx
+   #01 xx yy : display variable xx with filling to length xx with char yy
+   'c' xx    : change color to xx
+   'n'       : goto new line
+   'x'       : clearscreen
+   's'       : save cursor position/color
+   'r'       : restore cursro postition/color
+   'm' xx yy : goto <line xx> <row yy>
+   '<' xx    : move left xx chars
+   '>' xx    : move right xx chars
+   '!' xx    : move down xx chars
+   '^' xx    : move up xx chars
+
+   - {0} to {255}: ascii-char
+   - {c00} to {cFF}: change color              <\375> <color>
+   - {n}: new line                             <\375> <n> <number of new lines>
+   - {x}: clearscreen                          <\375> <x>
+   - {s}: save cursor position/color           <\375> <s>
+   - {r}: restore last cursor position/color   <\375> <r>
+   - {m<line>,<row>} move curso                <\375> <m> <line> <row>
+   - {'<'<num>} '>','^','!'                    <\375> <<>^!> <number of moves>
+   - {<\374>}                                  <\375> <\374>
+   - {<\375>}                                  <\375> <\375>
+
+string-variables:
+-----------------
+!sysop                   /* 0: Sysop name (config: Sysop)       */
+!address                 /* 1: main address (config: address)   */
+!system                  /* 2: system name (config: System)     */
+!location                /* 3: location (config: MyLocation)    */
+!phone                   /* 4: phone (config: MyPhone)          */
+!binkversion             /* 6: "BT/2 2.60XE/..."                */
+!task                    /* 7: tasknumber ("001" etc.)          */
+
+variables:
+----------
+
+variable-numbers have the following format:
+
+bits: 5 to 0 contain the variables number
+bits: 7 and 6 define the type of the variable:
+               00: numerical variable (%xxx)
+               01: timer variable (&xxx)
+               10: pre-defined string (!xxx)
+               11: user-string ($xxx)
+
+event-names:
+------------
+ "nocarrier",  /* 0 */
+ "carrier",    /* 1 */
+ "fileerror",  /* 2 */
+ "internalerror", /* 3, ... */
+ "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10",
+Timer-Variables (01000000b to 01111111b) may also be used as events.
+

@@ -1,0 +1,99 @@
+Remark: this file will be replaced by an even better idea soon ...
+
+Problem:
+
+  File nets or other high traffic stuff of somewhat "lower" importance should
+  be sent on your own costs only in specific events (to keep costs low) or if
+  remote caller wishes to pickup them (his costs, his decision).
+         
+Solution:
+
+  Binkley style outbound flow types:
+
+    FLO / OUT = normal
+    DLO / DUT = direct
+    HLO / HUT = hold
+    CLO / CUT = crash
+
+  Binkley XE style outbound flow types for low priority (LP) stuff:
+
+    KLO / KUT = Keep low priority stuff (like "hold", but EMSI flag driven)
+    LLO / LUT = normal Low priority stuff (like "direct", but EMSI flag driven)
+                          
+  EMSI flag extension:
+
+    PUL = Pick-Up Low Priority stuff
+          This flag has to be specified ADDITIONALLY to other *Pickup* flags
+          to request to get / announce to send LP stuff additionally AFTER
+          "normal" stuff. It does NOT replace other flags.
+
+    NPL = No-Pick-Up Low Priority stuff
+          This flag has to be specified ADDITIONALLY to other *Pickup* flags
+          to tell that you do NOT wish to get and you will NOT send LP stuff.
+          It does NOT replace other flags.
+
+    A system supporting PUL/NPL flags does send exactly ONE of these two flags.
+    Systems not yet supporting this do not send any of these two flags:
+
+    <none> = if a system does not specify NPL or PUL, behaviour concerning
+             LP stuff should be like following:
+             If remote system does not specify NPL (meaning that it either
+             says "PUL" or says just nothing), then enable a "PUL simulation
+             for callers". This "simulation" can be either continuously on,
+             so that LP flavours are equivalent to direct/hold flavours or
+             can be driven by an event flag that is switched on in a low-tariff
+             event, so that they get their files cheap, too (what's cheap is
+             in this case defined by CALLED system because CALLER's system is
+             obviously unable to decide).
+             
+    PUL / NPL flag is chosen e.g. on an event driven basis or manually.
+    
+  System behaviour:
+
+    Inbound call:
+    
+      If PUL flag is presented in EMSI handshake by CALLING system, CALLER
+      requests to enable LP flow file processing on the CALLED system and wants
+      to get all stuff of this flavour after all other stuff of other flavours
+      (if any). Also, it announces sending his own LP stuff.
+      
+      There might be reasons for the called system NOT to satisfy a PUL
+      request made by the caller, e.g. because it is itself doing anything
+      important and does not want to be busy with inbound callers for a longer
+      time now (this has to be coordinated among the sysops). In this case,
+      CALLED system sends back a NPL flag, telling the caller that his
+      PUL request will NOT be satisfied and that caller shall NOT send his
+      LP stuff, too (at least not if this would make the session last longer).
+      If PUL will be satisfied, CALLED system sends back a PUL flag.
+  
+      If NPL flag is presented in EMSI handshake by CALLING system, CALLED
+      system will ignore (= keep) any LP flavour stuff and also send back a
+      NPL flag. CALLING system won't send any LP stuff, too.
+      
+
+    Outbound call:
+      
+      If PUL is active, it is sent in EMSI handshake packet by the CALLER
+      to the CALLED system, announcing that CALLER
+        a) will send LP stuff (if any) to CALLED system except if CALLED
+           system answers with a NPL flag.
+        b) wants to get LP stuff from CALLED system
+        
+      If NPL is active, it is sent in EMSI handshake packet by the CALLER 
+      to the CALLED system, announcing that CALLER
+        a) will NOT send LP stuff to CALLED system
+        b) does NOT want to get LP stuff from CALLED system
+      
+
+Problem:
+
+  You want to get out some stuff IMMEDIATELY overriding any cost restrictions.
+  
+Solution:
+
+  Extended Binkley XE style outbound flow types:
+
+    ILO / IUT = immediate (similar to "crash", but no cost restriction)
+    
+
+  

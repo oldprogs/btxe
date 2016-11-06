@@ -1,0 +1,846 @@
+
+// ===========================================================================
+ULONG APIENTRY ExceptionHandler (PEXCEPTIONREPORTRECORD       pERepRec,
+                                 PEXCEPTIONREGISTRATIONRECORD pERegRec,
+                                 PCONTEXTRECORD               pCtxRec,
+                                 PSZ                          Ausloeser)
+// ===========================================================================
+{
+  HFILE   hTrap = HF_STDOUT;
+  PUSHORT ValidStackBottom;
+  PUCHAR  TestStackBottom;
+  ULONG   Size,Attr;
+  HMODULE hMod;
+  APIRET rc;
+  PTIB   ptib;
+  PPIB   ppib;
+  USHORT BigSeg;
+  ULONG  ObjNum;
+  ULONG  Offset;
+  ULONG  Nest,egal;
+  static CHAR  TrapFile[20];
+  static CHAR  Buffer[CCHMAXPATH];
+  static CHAR  Name[CCHMAXPATH];
+  static ULONG NumFH;
+  static LONG  ReqFH = 1;
+  TID    excTID;
+  BOOL   Fatal = FALSE;
+
+static CHAR  t[100],a[100];
+ULONG info0 = pERepRec->ExceptionInfo[0];
+ULONG info1 = pERepRec->ExceptionInfo[1];
+
+// ------------------------------------------------------------------------
+   fAlreadyTrapped = TRUE;
+   if (StopAll) return (XCPT_CONTINUE_EXECUTION);
+// ------------------------------------------------------------------------
+   DosBeep(1000,100);
+   DosEnterMustComplete(&Nest);
+
+   rc=DosGetInfoBlocks(&ptib,&ppib);
+
+   if (rc==NO_ERROR)
+        sprintf(TrapFile,"ISDN%04x.TRP",ptib->tib_ptib2->tib2_ultid);
+   else sprintf(TrapFile,"POSTMORT.LOG");
+
+   Winprintf("Exception %8.8lX\n",pERepRec->ExceptionNum);
+   Winprintf("Creating  %s\n",TrapFile);
+   Winprintf("Source    %s\n",Ausloeser);
+
+   rc=DosSetRelMaxFH(&ReqFH,&NumFH);
+   Append(&hTrap,TrapFile);
+   if (hTrap==NULLHANDLE) {
+       Winprintf("hTrap NULL\n");
+       hTrap=(HFILE) HF_STDOUT;
+   }
+   DosSetFilePtr(hTrap,0,FILE_END,&egal);
+
+// ------------------------------------------------------------------------
+   switch(pERepRec->ExceptionNum)
+   {
+     case XCPT_GUARD_PAGE_VIOLATION:  sprintf(a,"Guard Page [Art:");
+     switch(info0)
+     {
+       case XCPT_READ_ACCESS:   strcat(a,"Lesen]"); break;
+       case XCPT_WRITE_ACCESS:  strcat(a,"Schreiben]"); break;
+       default: strcat(a,"????]"); break;
+     }
+     sprintf(t,"%s Data:%08x",a,info1);
+     break;
+
+// ------------------------------------------------------------------------
+   case XCPT_ACCESS_VIOLATION:      sprintf(a,"Ungltiger Zugriff [Art: ");
+   switch(info0)
+   {
+     case XCPT_UNKNOWN_ACCESS:strcat(a,"unbekannt "); break;
+     case XCPT_READ_ACCESS:   strcat(a,"Lesen von");     break;
+     case XCPT_WRITE_ACCESS:  strcat(a,"Schreiben nach"); break;
+     case XCPT_EXECUTE_ACCESS:strcat(a,"Ausfhrung an");break;
+     case XCPT_LIMIT_ACCESS:  strcat(a,"Limit]");     break;
+     case XCPT_SPACE_ACCESS:  sprintf(Buffer,
+                                    "Space]: Invalid Selector: %8.8p",
+                                     pERepRec->ExceptionInfo[1] ?
+                                     pERepRec->ExceptionInfo[1] + 1 : 0);
+                              strcat(a,Buffer);
+                              break;
+
+     default: strcat(a,"????]"); break;
+   }
+   sprintf(t,"%s Data:%08x",a,info1);
+   break;
+
+// ------------------------------------------------------------------------
+   case XCPT_UNABLE_TO_GROW_STACK:  sprintf(t,"Stack-Grenze"); break;
+   case XCPT_IN_PAGE_ERROR:         sprintf(t,"in page error");break;
+   case XCPT_INTEGER_DIVIDE_BY_ZERO:sprintf(t,"IDiv/0"); break;
+   case XCPT_FLOAT_DIVIDE_BY_ZERO:  sprintf(t,"FDiv/0"); break;
+   case XCPT_FLOAT_INVALID_OPERATION:sprintf(t,"Float inval"); break;
+   case XCPT_ILLEGAL_INSTRUCTION:   sprintf(t,"Invalid Instruction"); break;
+   case XCPT_PRIVILEGED_INSTRUCTION:sprintf(t,"IOPL reicht nicht"); break;
+   case XCPT_INTEGER_OVERFLOW:      sprintf(t,"Int overflow"); break;
+   case XCPT_FLOAT_OVERFLOW:        sprintf(t,"Float overflow"); break;
+   case XCPT_FLOAT_UNDERFLOW:       sprintf(t,"Float underflow"); break;
+   case XCPT_FLOAT_DENORMAL_OPERAND:sprintf(t,"Denormaler Operand"); break;
+   case XCPT_FLOAT_INEXACT_RESULT:  sprintf(t,"Float result nicht exakt"); break;
+   case XCPT_FLOAT_STACK_CHECK:     sprintf(t,"Stack check"); break;
+   case XCPT_DATATYPE_MISALIGNMENT: sprintf(t,"data misalignment"); break;
+   case XCPT_BREAKPOINT:            sprintf(t,"Breakpoint"); break;
+   case XCPT_SINGLE_STEP:           sprintf(t,"Single step"); break;
+   case XCPT_INVALID_LOCK_SEQUENCE: sprintf(t,"inval. lock sequ"); break;
+   case XCPT_ARRAY_BOUNDS_EXCEEDED: sprintf(t,"array-grenzen berschritten"); break;
+   case XCPT_UNWIND:                sprintf(t,"unwind"); break;
+   case XCPT_SIGNAL:                sprintf(t,"signal exception"); break;
+
+   // non-continue exeptions:
+   case XCPT_PROCESS_TERMINATE:     sprintf(t,"process terminated"); break;
+   case XCPT_ASYNC_PROCESS_TERMINATE:sprintf(t,"async process terminate"); break;
+   case XCPT_NONCONTINUABLE_EXCEPTION:sprintf(t,"Exception #4711"); break;
+   case XCPT_INVALID_DISPOSITION:   sprintf(t,"invalid disposition"); break;
+   case XCPT_BAD_STACK:             sprintf(t,"bad stack"); break;
+   case XCPT_INVALID_UNWIND_TARGET: sprintf(t,"invalid unwind target"); break;
+  }
+// ------------------------------------------------------------------------
+
+  print(hTrap,"\n-------------------------------------\n");
+  print(hTrap,"%s %s\n",_strdate(a),_strtime(Buffer));
+  print(hTrap,"Exception   : %08x\n",pERepRec->ExceptionNum);
+  print(hTrap,"an Adresse  : %08x\n",pERepRec->ExceptionAddress);
+  print(hTrap,"Information : %08x, %08x\n",pERepRec->ExceptionInfo[0],
+                                           pERepRec->ExceptionInfo[1]);
+// ------------------------------------------------------------------------
+   rc = DosQuerySysInfo(QSV_VERSION_MAJOR,QSV_VERSION_MINOR,
+                             Version,sizeof(Version));
+   if ((rc==0)&& (Version[0]>=20) &&
+                 (Version[1]>=10) )
+   {
+     /* version must be over 2.1 for DOSQUERYMODFROMEIP */
+     print(hTrap,"OS/2 Version %d.%d\n",Version[0]/10,Version[1]);
+     rc=DOSQUERYMODFROMEIP( &hMod, &ObjNum, CCHMAXPATH,
+                             Name, &Offset, pERepRec->ExceptionAddress);
+     if (rc==0) {
+        print(hTrap,"Fehler in Code Modul (interner Name): %s\n",Name);
+        rc=DosQueryModuleName(hMod,CCHMAXPATH, Name);
+        print(hTrap,"Fehler in Code Modul (Dateinname)   : %s\n",Name);
+        print(hTrap,"Fehler in Code Object # %d an Offset %x \n",ObjNum+1,Offset);
+        print(hTrap,"\n");
+     } else
+       print(hTrap,"Invalid execution address\n");
+   }
+// ------------------------------------------------------------------------
+   print(hTrap,"Klartext    : %s\n",t);
+   print(hTrap,"-------------------------------------\n");
+// ------------------------------------------------------------------------
+// Fatale Exception?
+// ------------------------------------------------------------------------
+   if ((pERepRec->ExceptionNum&XCPT_SEVERITY_CODE)==XCPT_FATAL_EXCEPTION)
+        Fatal = TRUE;
+// ------------------------------------------------------------------------
+// Termination Exception?
+// ------------------------------------------------------------------------
+   if ((pERepRec->ExceptionNum!=XCPT_UNWIND)                  &&
+       (pERepRec->ExceptionNum!=XCPT_PROCESS_TERMINATE)       &&
+       (pERepRec->ExceptionNum!=XCPT_ASYNC_PROCESS_TERMINATE) &&
+       (pERepRec->ExceptionNum!=XCPT_SIGNAL)
+      )
+   {
+     if (hTrap!=HF_STDOUT)  DosClose(hTrap);
+     DosExitMustComplete(&Nest);
+     DosUnsetExceptionHandler(pERegRec);
+     fAlreadyTrapped = FALSE;
+     return (XCPT_CONTINUE_SEARCH);
+   }
+
+// ======================================================================
+// ======================================================================
+   if (pERepRec->ExceptionNum     == XCPT_ACCESS_VIOLATION &&
+       pERepRec->ExceptionAddress != (PVOID) XCPT_DATA_UNKNOWN)
+   {
+     if ((pERepRec->ExceptionInfo[0] == XCPT_READ_ACCESS ||
+          pERepRec->ExceptionInfo[0] == XCPT_WRITE_ACCESS) &&
+          pERepRec->ExceptionInfo[1] != XCPT_DATA_UNKNOWN)
+     {
+       print(hTrap,"\nPage Fault\n");
+
+       if (TryToCommit(hTrap,(PVOID)pERepRec->ExceptionInfo[1]))
+       {
+         if (hTrap!=HF_STDOUT)  DosClose(hTrap);
+         DosExitMustComplete(&Nest);
+         fAlreadyTrapped = FALSE;
+         return (XCPT_CONTINUE_EXECUTION);
+       }
+     }
+   }
+// ------------------------------------------------------------------------
+   print(hTrap,"ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿\n");
+   if ( (pCtxRec->ContextFlags) & CONTEXT_SEGMENTS )
+   {
+     print(hTrap,"³ GS  : %4.4lX     ",pCtxRec->ctx_SegGs);
+     print(hTrap,"FS  : %4.4lX     ",pCtxRec->ctx_SegFs);
+     print(hTrap,"ES  : %4.4lX     ",pCtxRec->ctx_SegEs);
+     print(hTrap,"DS  : %4.4lX     ³\n",pCtxRec->ctx_SegDs);
+   }
+   if ( (pCtxRec->ContextFlags) & CONTEXT_INTEGER  )
+   {
+     print(hTrap,"³ EDI : %8.8lX ",pCtxRec->ctx_RegEdi  );
+     print(hTrap,"ESI : %8.8lX ",pCtxRec->ctx_RegEsi  );
+     print(hTrap,"EAX : %8.8lX ",pCtxRec->ctx_RegEax  );
+     print(hTrap,"EBX : %8.8lX ³\n",pCtxRec->ctx_RegEbx  );
+     print(hTrap,"³ ECX : %8.8lX ",pCtxRec->ctx_RegEcx  );
+     print(hTrap,"EDX : %8.8lX                               ³\n",
+                                pCtxRec->ctx_RegEdx  );
+   }
+// ------------------------------------------------------------------------
+// CONTEXT-CONTROL Section
+// ------------------------------------------------------------------------
+   if ( (pCtxRec->ContextFlags) & CONTEXT_CONTROL  )
+   {
+     print(hTrap,"³ EBP : %8.8lX ",pCtxRec->ctx_RegEbp  );
+     print(hTrap,"EIP : %8.8lX ",pCtxRec->ctx_RegEip  );
+     print(hTrap,"EFLG: %8.8lX ",pCtxRec->ctx_EFlags  );
+     print(hTrap,"ESP : %8.8lX ³\n",pCtxRec->ctx_RegEsp  );
+     print(hTrap,"³ CS  : %4.4lX     ",pCtxRec->ctx_SegCs   );
+     print(hTrap,"SS  : %4.4lX                                   ³",
+                                pCtxRec->ctx_SegSs   );
+     print(hTrap,"\nÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ\n");
+// ------------------------------------------------------------------------
+// Big-Seg-Section
+// ------------------------------------------------------------------------
+     BigSeg = ( (pCtxRec->ctx_RegEip)>0x00010000);
+
+     if (BigSeg) // == 32-Bit-Software
+     {
+       print(hTrap,"\n Failing 32-bit instruction at CS:EIP : %4.4X:%8.8X\n\n",
+                    pCtxRec->ctx_SegCs,
+                    pCtxRec->ctx_RegEip);
+
+       print(hTrap,"\nÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿\n");
+       print(hTrap,  "³ Register content analysis          ³\n");
+       print(hTrap,  "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´\n");
+       CheckMem( hTrap, (PVOID)pCtxRec->ctx_RegEax,"EAX");
+       CheckMem( hTrap, (PVOID)pCtxRec->ctx_RegEbx,"EBX");
+       CheckMem( hTrap, (PVOID)pCtxRec->ctx_RegEcx,"ECX");
+       CheckMem( hTrap, (PVOID)pCtxRec->ctx_RegEdx,"EDX");
+       CheckMem( hTrap, (PVOID)pCtxRec->ctx_RegEdi,"EDI");
+       CheckMem( hTrap, (PVOID)pCtxRec->ctx_RegEsi,"ESI");
+       print(hTrap,"ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ\n");
+     }
+     else
+     {
+       APIRET16 rc16;
+       print(hTrap,"\n Failing 16-bit instruction at CS:IP : %4.4X:%4.4X\n",
+                      pCtxRec->ctx_SegCs);
+
+       print(hTrap,"\nÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿\n");
+       print(hTrap,  "³ Source Destination registers pair analysis ³\n");
+       print(hTrap,  "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´\n");
+       rc16 =DOS16SIZESEG( (USHORT)pCtxRec->ctx_SegDs , &Size);
+       if (rc16==NO_ERROR)
+       {
+         if ((USHORT)Size<(USHORT)pCtxRec->ctx_RegEsi)
+              print(hTrap,"³ DS:SI points outside Data Segment          ³\n");
+         else print(hTrap,"³ DS:SI is a valid source                    ³\n");
+       }
+       else   print(hTrap,"³ DS (Data Segment) Is Invalid               ³\n");
+
+       rc16 =DOS16SIZESEG( (USHORT)pCtxRec->ctx_SegEs , &Size);
+       if (rc16==NO_ERROR)
+       {
+         if ((USHORT)Size<(USHORT)pCtxRec->ctx_RegEdi)
+              print(hTrap,"³ ES:DI points outside Extra Segment         ³\n");
+         else print(hTrap,"³ ES:DI is a valid destination               ³\n");
+       }
+       else   print(hTrap,"³ ES (Extra Segment) Is Invalid              ³\n");
+              print(hTrap,"ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ\n");
+     }
+// ------------------------------------------------------------------------
+// Ende der Big-Seg-Section
+// ------------------------------------------------------------------------
+   }
+// ------------------------------------------------------------------------
+// Ende CONTEXT-CONTROL Section
+// ------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------
+//  Thread-Section
+// ------------------------------------------------------------------------
+   rc=DosGetInfoBlocks(&ptib,&ppib);
+   if (rc==NO_ERROR)
+   {
+      static CHAR Format[10];
+      void * _Seg16 Ptr16;
+      print(hTrap,"------- ANALYSE ANHAND THREADINFO-BLOCK -------\n");
+      print(hTrap,"\nThread slot %lu , Id %lu , priority %p\n",
+                     ptib->tib_ordinal,
+                     ptib->tib_ptib2->tib2_ultid ,
+                     ptib->tib_ptib2->tib2_ulpri );
+
+      excTID = ptib->tib_ptib2->tib2_ultid;
+
+      Ptr16=ptib->tib_pstack;
+      sprintf(Format,"%8.8lX",Ptr16);
+      print(hTrap,"Stack Bottom : %8.8lX (%4.4s:%4.4s) \n",
+                   ptib->tib_pstack ,Format,Format+4);
+      Ptr16=ptib->tib_pstacklimit;
+      sprintf(Format,"%8.8lX",Ptr16);
+      print(hTrap,"Stack Top    : %8.8lX (%4.4s:%4.4s) \n",
+                   ptib->tib_pstacklimit,Format,Format+4);
+      print(hTrap,"Process Id   : %lu \n", ppib->pib_ulpid);
+
+      rc=DosQueryModuleName(ppib->pib_hmte,CCHMAXPATH, Name);
+      if (rc==NO_ERROR)
+                   print(hTrap,"filename     : %s\n",Name);
+      else
+                   print(hTrap,"filename     : ??????\n");
+
+// ------------------------------------------------------------------------
+//  Beginn der Stack-Section
+// ------------------------------------------------------------------------
+      print(hTrap,"Stack Top    : %p\n",ptib->tib_pstacklimit);
+      print(hTrap,"Stack Bottom : %p\n",ptib->tib_pstack);
+
+/* round to start of page to check first stack valid page        */
+/* Thanks to John Currier for pointing me the guard page problem */
+
+      Size=0x1000;
+      TestStackBottom =(PUCHAR)(((ULONG)ptib->tib_pstack) & 0xFFFFE000);
+      do
+      {
+        ValidStackBottom =(PUSHORT)TestStackBottom;
+        rc=DosQueryMem(TestStackBottom,&Size,&Attr);
+        print(hTrap,"Stack        : %p (rc=%d, Size=%d, Attr=%08x)\n",
+                     TestStackBottom,rc,Size,Attr);
+
+        if ((rc!=0) || ((Attr&PAG_COMMIT)==0x0U) || ((Attr&PAG_READ)==0x0U))
+        {
+          APIRET  rc1;
+          ULONG   Size1,Attr1;
+
+          TryToCommit(hTrap,TestStackBottom);
+          rc1 =DosQueryMem(TestStackBottom,&Size1,&Attr1);
+          print(hTrap,"Stack (new)  : %p (rc=%d, Size=%d, Attr=%08x)\n",
+                       TestStackBottom,rc1,Size1,Attr1);
+        }
+        TestStackBottom +=0x1000; /* One more page for next test */
+      } while (
+               ((rc!=0) || ((Attr&PAG_COMMIT)==0x0U)||((Attr&PAG_READ)==0x0U))
+               && (TestStackBottom <(PUCHAR)ptib->tib_pstacklimit)
+              );
+
+      if (Fatal)
+      {
+        ListModules(hTrap);
+        if ( (rc==0) && (Attr&PAG_COMMIT) && (Attr&PAG_READ) &&
+             (ValidStackBottom <(PUSHORT)ptib->tib_pstacklimit)
+           )
+          ShowStack(hTrap,ValidStackBottom,ptib);
+
+        WalkStack(hTrap,
+                 (PUSHORT)ptib->tib_pstack,
+                 (PUSHORT)ptib->tib_pstacklimit,
+                 (PCONTEXTRECORD)pCtxRec,
+                 (PUSHORT)pERepRec->ExceptionAddress);
+      }
+// ------------------------------------------------------------------------
+//  Ende der Stack-Section
+// ------------------------------------------------------------------------
+    }
+// ------------------------------------------------------------------------
+//  Ende der Thread-Section
+// ------------------------------------------------------------------------
+
+  if (hTrap!=HF_STDOUT)  DosClose(hTrap);
+
+  DosExitMustComplete(&Nest);
+  fAlreadyTrapped = FALSE;
+
+/*
+  if (pERepRec->ExceptionNum == XCPT_GUARD_PAGE_VIOLATION)
+      return (XCPT_CONTINUE_EXECUTION);
+*/
+  DosBeep( 400,500);
+  DosBeep(1000,500);
+  DosKillThread(excTID);
+  DosBeep( 400,500);
+  DosUnsetExceptionHandler(pERegRec);
+
+  if (pERepRec->fHandlerFlags & EH_NONCONTINUABLE)
+    return (XCPT_CONTINUE_SEARCH);
+
+  return (XCPT_CONTINUE_EXECUTION);
+}
+
+// ===========================================================================
+BOOL TryToCommit(HFILE hTrap,PVOID address)
+// ===========================================================================
+{
+ULONG   ulMemSize, flMemAttrs;
+APIRET  rc;
+
+  /* query the memory to find out why we faulted. */
+  ulMemSize = 1;
+
+  DosQueryMem((PVOID)address,&ulMemSize, &flMemAttrs);
+
+   /* If the memory is free or committed, */
+   /* we have some other problem.         */
+   /* If it is not free or not committed, commit it. */
+
+  if (!(flMemAttrs & (PAG_FREE | PAG_COMMIT)))
+  {
+    if (hTrap != NULLHANDLE)
+         print(hTrap,"\ntry to commit uncommitted memory\n");
+
+    rc = DosSetMem((PVOID)address,4096, PAG_DEFAULT | PAG_COMMIT);
+    if (rc==0)
+       return (TRUE);
+
+    if (hTrap != NULLHANDLE)
+        print(hTrap,"\nerror committing\n");
+  }
+  return (FALSE);
+}
+// ===========================================================================
+VOID ShowStack(HFILE  hTrap,PUSHORT ValidStackBottom,PTIB   ptib)
+// ===========================================================================
+{
+USHORT  Count = 0;
+UCHAR   Translate[20];
+PUSHORT StackPtr;
+PUCHAR  cStackPtr;
+
+  Translate[0] = 0;
+
+  print(hTrap,"VALID Bottom : %p\n",ValidStackBottom);
+
+return; // Das werden sehr leicht ein paar hundert KB!
+
+  for (StackPtr=ValidStackBottom;
+       StackPtr<(PUSHORT)ptib->tib_pstacklimit;
+       StackPtr++)
+  {
+    if (Count==0)
+    {
+      print(hTrap,"  %s\n %8.8X :",Translate,StackPtr);
+      Translate[0]=0;
+    }
+    print(hTrap,"%4.4hX ",*StackPtr >> 8 | *StackPtr << 8);
+
+    cStackPtr=(PUCHAR)StackPtr;
+
+    if ((isprint(*cStackPtr)) && (*cStackPtr>=0x20) )
+                           Translate[2*Count]=*cStackPtr;
+    else                   Translate[2*Count]='.';
+
+    cStackPtr++;
+    if ((isprint(*cStackPtr) )&& ( *cStackPtr >=0x20) )
+                           Translate[2*Count+1]=*cStackPtr;
+    else                   Translate[2*Count+1]='.';
+
+    Count++;
+    Translate[2*Count]=0x00;
+    if (Count==8) Count=0;
+  }
+}
+
+// ===========================================================================
+VOID ListModules(HFILE hTrap) {
+// ===========================================================================
+  APIRET   rc;
+  APIRET16 rc16;
+  PVOID    BaseAddress = (PVOID)0x10000;
+  ULONG    RegionSize  = 0x3FFFFFFF;
+  ULONG    AllocationFlags;
+  ULONG    ObjNum;
+  ULONG    Offset;
+  HMODULE  hMod;
+  HMODULE  LastModule = 0;
+  static   UCHAR Name[256];
+  ULONG    Size;
+
+  print(hTrap,"ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿\n");
+  print(hTrap,"³ List of currently accessed modules (DLLs) object addresses              ³");
+
+  rc=DosQueryMem(BaseAddress,&RegionSize,&AllocationFlags);
+
+  while (rc==NO_ERROR) {
+     if ((AllocationFlags&PAG_EXECUTE)&&
+         (AllocationFlags&PAG_BASE))
+     {
+//------------------------------------------
+//==========================================
+        rc=DOSQUERYMODFROMEIP( &hMod, &ObjNum, CCHMAXPATH,
+                                Name, &Offset, BaseAddress);
+        if (rc==0) {
+            if (hMod!=LastModule) {
+               memset(&Name,0,sizeof(Name));
+               rc=DosQueryModuleName(hMod,sizeof(Name),Name);
+
+               print(hTrap,"\nÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´");
+               print(hTrap,"\n³ Module %48.48s Handle %08d ³",Name,hMod);
+//==========================================
+//------------------------------------------
+               print(hTrap,"\n³ Object Number    Address    Length     Flags      Type                  ³");
+               LastModule=hMod;
+            }
+            print(hTrap,"\n³      %8.8lX    %8.8lX   %8.8lX   %8.8lX ",ObjNum,
+                      BaseAddress, RegionSize, AllocationFlags);
+
+            rc16 =DOS16SIZESEG( SELECTOROF(BaseAddress), &Size);
+            if (rc16==0) {
+               print(hTrap," - 16:16  Selector %4.4hX ³",SELECTOROF((PVOID)BaseAddress));
+            } else {
+               print(hTrap," - 32 Bits              ³");
+            } /* endif */
+        }
+     }
+     if (AllocationFlags&PAG_FREE) RegionSize = 0x10000;
+     RegionSize +=0x0FFF;
+     RegionSize &=0xFFFFF000;
+     BaseAddress=(PVOID)(((PCHAR)BaseAddress)+RegionSize);
+     RegionSize=((PCHAR)0x3FFFFFFF)-(PCHAR)BaseAddress;
+     rc=DosQueryMem(BaseAddress,&RegionSize,&AllocationFlags);
+
+     while ((rc==ERROR_INVALID_ADDRESS)||
+            (rc==ERROR_NO_OBJECT))
+     {
+         BaseAddress=(PVOID)(((PCHAR)BaseAddress)+0x10000);
+
+         if (BaseAddress>(PVOID)0x3FFFFFFF)
+            break;
+
+         RegionSize=((PCHAR)0x3FFFFFFF)-(PCHAR)BaseAddress;
+         rc=DosQueryMem(BaseAddress,&RegionSize,&AllocationFlags);
+     }
+     if (BaseAddress>(PVOID)0x3FFFFFFF)
+         break;
+  }
+  print(hTrap,"\nÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ\n");
+}
+// ===========================================================================
+void    CheckMem(HFILE hTrap, PVOID Ptr,PSZ MemoryName) {
+// ===========================================================================
+   APIRET rc;
+   ULONG Size,Attr;
+   Size=1;
+   rc=DosQueryMem(Ptr,&Size,&Attr);
+
+   if (rc!=NO_ERROR)
+   {
+      print(hTrap,   "³ %3.3s does not point to valid memory ³\n",MemoryName);
+   }
+   else
+   {
+      if (Attr&PAG_FREE)
+      {
+         print(hTrap,   "³ %3.3s points to unallocated memory   ³\n",MemoryName);
+      }
+      else
+      {
+         if ((Attr&PAG_COMMIT)==0x0U) {
+            print(hTrap,"³ %3.3s points to uncommited  memory   ³\n",MemoryName);
+         }
+         if ((Attr&PAG_WRITE)==0x0U) {
+            print(hTrap,"³ %3.3s points to unwritable  memory   ³\n",MemoryName);
+         }
+         if ((Attr&PAG_READ)==0x0U) {
+            print(hTrap,"³ %3.3s points to unreadable  memory   ³\n",MemoryName);
+         }
+      }
+   }
+}
+// ===========================================================================
+/* Better New WalkStack From John Currier */
+static void WalkStack(HFILE    hTrap,
+                      PUSHORT  StackBottom,
+                      PUSHORT  StackTop,
+                      PCONTEXTRECORD pCtxRec,
+                      PUSHORT  ExceptionAddress)
+// ===========================================================================
+{
+   BOOL     f32bit;
+   PUSHORT  RetAddr;
+   APIRET   rc;
+   ULONG    Size,Attr;
+   PULONG   LastEbp,Ebp;
+   USHORT   Cs,Ip,Bp,Sp;
+   char     Name[CCHMAXPATH];
+   HMODULE  hMod;
+   ULONG    ObjNum;
+   ULONG    Offset;
+   BOOL     fExceptionAddress = TRUE;  // Use Exception Addr 1st time thru
+   USHORT   count = 0;
+
+   StackTop = StackTop;
+
+   // man muss doch nur auf dem stack nach cs:eip suchen,
+   // um den stack-anfang zu bekommen?!?
+
+   // Note: we can't handle stacks bigger than 64K for now...
+
+   Sp  =  (USHORT)(((ULONG)StackBottom) >> 16);
+   Bp  =  (USHORT) pCtxRec->ctx_RegEbp;
+   Ebp =  (PULONG) pCtxRec->ctx_RegEbp;
+   RetAddr = ExceptionAddress;
+
+   print(hTrap,"\nCall Stack:\n");
+
+   print(hTrap,"                                        Source    Line      Nearest\n");
+   print(hTrap,"      EBP      Address    Module  Obj#      File     Numbr  Public Symbol\n");
+   print(hTrap,"    ÄÄÄÄÄÄÄÄ  ÄÄÄÄÄÄÄÄÄ  ÄÄÄÄÄÄÄÄ ÄÄÄÄ  ÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄÄÄÄ  ÄÄÄÄÄÄÄÄÄÄÄÄÄ\n");
+
+   do
+   {
+      count++;
+      print(hTrap,"%3d",count);
+      Size = 10;
+      rc = DosQueryMem((PVOID)(Ebp+2), &Size, &Attr);
+      if (rc != NO_ERROR || !(Attr & PAG_COMMIT) || Size<10)
+      {
+         print(hTrap,"Invalid EBP: %8.8p\n",Ebp);
+         break;
+      }
+
+      if (RetAddr == (PUSHORT)0x00000053)
+      {
+// versuch, thunking (und deren stackframe) zu fixen
+         Ebp += 22;
+         RetAddr = (PUSHORT)(*((PULONG)(Ebp+2)));
+      }
+
+      // Get the (possibly) 16bit CS and IP
+      if (fExceptionAddress)
+      {
+         Cs = (USHORT)(((ULONG)ExceptionAddress) >> 16);
+         Ip = (USHORT)(ULONG)ExceptionAddress;
+      }
+      else
+      {
+         Cs = *(Ebp+2);
+         Ip = *(Ebp+1);
+      }
+
+      // if the return address points to the stack then it's really just
+      // a pointer to the return address (UGH!).
+
+      if ((USHORT)(((ULONG)RetAddr) >> 16) == Sp)
+           RetAddr = (PUSHORT)(*((PULONG)RetAddr));
+
+      if (Ip == 0 && *Ebp == 0)
+      {
+         // End of the stack so these are both shifted by 2 bytes:
+         Cs = *(Ebp+3);
+         Ip = *(Ebp+2);
+      }
+
+      // 16bit programs have on the stack:
+      //   BP:IP:CS
+      //   where CS may be thunked
+      //
+      //         in dump                 swapped
+      //    BP        IP   CS          BP   CS   IP
+      //   4677      53B5 F7D0        7746 D0F7 B553
+      //
+      // 32bit programs have:
+      //   EBP:EIP
+      // and you'd have something like this (with SP added) (not
+      // accurate values)
+      //
+      //         in dump               swapped
+      //      EBP       EIP         EBP       EIP
+      //   4677 2900 53B5 F7D0   0029 7746 D0F7 B553
+      //
+      // So the basic difference is that 32bit programs have a 32bit
+      // EBP and we can attempt to determine whether we have a 32bit
+      // EBP by checking to see if its 'selector' is the same as SP.
+      // Note that this technique limits us to checking stacks < 64K.
+      //
+      // Soooo, if IP (which maps into the same USHORT as the swapped
+      // stack page in EBP) doesn't point to the stack (i.e. it could
+      // be a 16bit IP) then see if CS is valid (as is or thunked).
+      //
+      // Note that there's the possibility of a 16bit return address
+      // that has an offset that's the same as SP so we'll think it's
+      // a 32bit return address and won't be able to successfully resolve
+      // its details.
+
+      f32bit = TRUE;
+
+      if (!fExceptionAddress)
+      if (Ip != Sp)
+      {
+         if (DOS16SIZESEG(Cs, &Size) == NO_ERROR)
+         {
+            RetAddr = (USHORT * _Seg16)MAKEULONG(Ip, Cs);
+            f32bit = FALSE;
+         }
+         else if (DOS16SIZESEG((Cs << 3) + 7, &Size) == NO_ERROR)
+         {
+            Cs = (Cs << 3) + 7;
+            RetAddr = (USHORT * _Seg16)MAKEULONG(Ip, Cs);
+            f32bit = FALSE;
+         }
+      }
+
+      if (fExceptionAddress) print(hTrap," Trap  ->");
+      else                   print(hTrap," %8.8p", Ebp);
+
+      if (f32bit)            print(hTrap,"   %8.8p", RetAddr);
+      else                   print(hTrap," %04.04X:%04.04X", Cs, Ip);
+
+      if (Version[0] >= 20 && Version[1] >= 10)
+      {
+         // Make a 'tick' sound to let the user know we're still alive
+         DosBeep(2000, 1);
+
+         rc = DosQueryMem((PVOID)RetAddr, &Size, &Attr);
+         if (rc != NO_ERROR || !(Attr & PAG_COMMIT) || Size < 10)
+         {
+            print(hTrap," Invalid RetAddr: %8.8p\n",RetAddr);
+            print(hTrap," DosQueryMem returned: rc=%08x, Size=%08x, Attr= %08x\n",
+                          rc,Size,Attr);
+            break; /* avoid infinite loops */
+
+         } else {
+            rc = DOSQUERYMODFROMEIP(&hMod, &ObjNum, sizeof(Name),
+                                    Name, &Offset, (PVOID)RetAddr);
+            if (rc == NO_ERROR && ObjNum != -1)
+            {
+               static char szJunk[_MAX_FNAME];
+               static char szName[_MAX_FNAME];
+
+               DosQueryModuleName(hMod, sizeof(Name), Name);
+               _splitpath(Name, szJunk, szJunk, szName, szJunk);
+               print(hTrap,"  %-8s %04X", szName, ObjNum+1);
+             }
+             else
+               print(hTrap,"  *Unknown*");
+         }
+      }
+
+      print(hTrap,"\n");
+
+      Bp = (USHORT)*Ebp;
+      if (Bp == 0 && (*Ebp+1) == 0)
+         break;
+
+      if (!fExceptionAddress)
+      {
+         LastEbp = Ebp;
+         Ebp = (PULONG)MAKEULONG(Bp, Sp);
+
+         if (Ebp < LastEbp)
+         {
+            print(hTrap,"Lost Stack chain - new EBP below previous\n");
+            break;
+         }
+      }
+      else
+         fExceptionAddress = FALSE;
+
+      Size = 4;
+      rc = DosQueryMem((PVOID)Ebp, &Size, &Attr);
+      if ((rc != NO_ERROR) || (Size <4) )
+      {
+         print(hTrap,"Lost Stack chain - invalid EBP: %8.8p\n", Ebp);
+         break;
+      }
+
+     RetAddr = (PUSHORT)(*((PULONG)(Ebp+2)));
+   } while (TRUE);
+
+   print(hTrap,"End of Call Stack\n\n");
+}
+/* ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ */
+
+// ===========================================================================
+void APIENTRY ForceExit() {
+// ===========================================================================
+PCHAR  Trap;
+    Winprintf("Exiting by exception\n");
+    InForceExit =TRUE;
+    DosError(FERR_DISABLEEXCEPTION | FERR_DISABLEHARDERR );
+    DosEnterCritSec();
+    WakeThreads();
+    Trap=NULL;
+    DosSetPriority(PRTYS_THREAD,PRTYC_FOREGROUNDSERVER,PRTYD_MAXIMUM,0);
+    DosExitCritSec();
+    *Trap=0x00;
+}
+// ===========================================================================
+VOID WakeThreads() {
+// ===========================================================================
+  APIRET16   rc16;
+  USHORT     Selector;
+  ULONG      * pBuf;
+  qsPtrRec_t * pRec;
+  qsPrec_t   * pProc;
+  qsTrec_t   * pThread;
+  ULONG      ListedThreads=0;
+  PTIB       ptib;
+  PPIB       ppib;
+
+
+  DosGetInfoBlocks(&ptib,&ppib);
+  /**ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ***/
+  rc16=DOS16ALLOCSEG( 0xFFFF , &Selector , 0);
+  if (rc16==0) {
+     pBuf=MAKEP(Selector,0);
+     rc16=DOSQPROCSTATUS(pBuf, 0xFFFF );
+     if (rc16==0) {
+        /*****************************/
+        pRec=(qsPtrRec_t *) pBuf;
+        pProc =(qsPrec_t *)(pRec->pProcRec);
+        ListedThreads=0;
+        while (ListedThreads<pRec->pGlobalRec->cThrds) {
+           int Tid;
+           if (pProc->pThrdRec==NULL) break;
+           ListedThreads+= pProc->cTCB;
+           if (ppib->pib_ulpid==pProc->pid) {
+              for (Tid=0;Tid<pProc->cTCB;Tid++ ) {
+                 pThread =pProc->pThrdRec+Tid;
+                 if (pThread->state==0x09) {
+                    Winprintf("Resuming Thread %d\n",(TID)pThread->tid);
+                    DosResumeThread((TID)pThread->tid);
+                 }
+              } /* endfor */
+              break;
+           } /* endif  */
+           pProc =(qsPrec_t *)( ((PUCHAR)pProc)
+                                 +sizeof(qsPrec_t)
+                                 +sizeof(USHORT)*(pProc->c16Sem+
+                                                  pProc->cLib+
+                                                  pProc->cShrMem)
+                                 +(pProc->cTCB)*sizeof(qsTrec_t));
+
+        } /* endwhile */
+     } else {
+        Winprintf("DosQProcStatus Failed %hd\n",rc16);
+     } /* endif */
+  } else {
+     Winprintf("DosAllocSeg Failed %hd\n",rc16);
+  } /* endif */
+}
+// ===========================================================================
+// ---------------------------------------------------------------
+// ---------------------------------------------------------------
+

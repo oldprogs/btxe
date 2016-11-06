@@ -1,0 +1,55 @@
+
+DOCs:
+=====
+
+See doc\ directory. If you're searching for "full" docs:
+
+- English: Please be patient and request BDOC_260.ZIP until translation
+           of BT-XE manuals to English is completed
+
+- German:  Please frequest magic BTXE_DOK to get the *.HTML/*.INF/*.DOC full
+           docs of BT-XE.
+
+
+BinkleyTerm:
+============
+
+overlay\*    overlayed BT exe
+common\*     stuff needed for bink - copy these files to the Binkley
+             directory, too
+doc\*        for Documentation and other Information about Binkley
+
+bt*.exe      BT-XE mailer exe
+bt*.sym      BT-XE symbol information - put this into the same directory
+             as the *.EXE file
+language.txt BT-XE mixed language text: English, StarTrek, German, Swedish
+
+
+BinkleyTerm Utils:
+==================
+
+See common\ directory.
+
+btutil*.exe  BT-XE utility (replaces btctl* and btlng* and also contains
+             history importer for some back end applications)
+xr5toxr6.exe BT-XE DOS history converter: XR5 to XR6 history
+
+
+CONFIGs:
+========
+
+See thomas\ directory for configs of Thomas Waldmann.
+
+
+COST TABLES FOR GERMANY:
+========================
+
+Not included (they are very large). If you want the complete collection of
+inner germany cost tables, then frequest magic BTXE_CST ...
+
+
+FOR SOFTWARE DEVELOPERS:
+========================
+
+developr\*   stuff interesting for software developers
+

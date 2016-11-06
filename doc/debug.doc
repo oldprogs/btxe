@@ -1,0 +1,15 @@
+Using debug.c and debug.h for file and memory debugging:
+
+You need to compile with DEBUG #defined for bt's files except btutil's files
+(this is a bit difficult as common.c is part of both programs).
+
+Also you have to have debug.c/h in your makefile, of course.
+
+Then you'll find dbgalloc.lxx and dbgfiles.lxx in current directory (attention,
+these files grow FAST!!!) giving you some overview over:
+
+dbgalloc.lxx : calls to malloc, calloc, free
+
+dbgfiles.lxx : calls to fopen, share_fopen, fclose
+
+TJW

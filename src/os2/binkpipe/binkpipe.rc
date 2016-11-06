@@ -1,0 +1,10 @@
+
+#define INCL_WIN
+#include <os2.h>
+#include "binkpipe.h"
+
+rcinclude binkpipe.dlg
+
+ICON IDR_EXEICON      "bt32.ico"
+
+

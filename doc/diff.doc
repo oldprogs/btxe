@@ -1,0 +1,91 @@
+
+"How to diff" / "How to patch"
+==============================
+
+This file doesn't replace diff's documentation - please read that, too.
+
+We're just trying to give some rules, what to do best (and what better not to
+do) if one wants to get easy-to-patch diff files.
+
+
+
+1. DOCUMENT what you are doing
+==============================
+
+Please supply a *.doc to ANY *.DIF you are publishing.
+
+A diff is more or less useless (or at least hard to use) if it is not known
+on what it is based and what it does include and how the source level after
+applying is referenced in future.
+
+See xy1_xyz1.doc for a diff documentation template. Please Remove all "..."
+and comments in braces (), they are only a reminder for you to some very
+important things you must not forget.
+
+Simply copy this file to a new filename. The first part of it (xy1) is
+representing the source tree version (i.e. XH2) you've changed, the second
+part (xyz1) is your ID, you're using in the documentation and a number that
+is increased for every diff you submit (i.e. MR3 would be my third diff).
+
+Name your *.dif the same as the *.doc and create an archive (zip or rar) of
+those two files that - guess what - has the same name as the *.doc.
+
+
+
+2. READ through your diff
+=========================
+
+Often you will find programming errors or other mistakes if you simpley read
+through your diff.
+
+Your diff is usually very short, so it's easy to find bugs if there are any.
+
+But if your changes are patched into a much bigger source code, maybe the
+bugs (if there are any in your diff) are NEVER found again...
+
+
+
+3. Use CORRECT diff/patch parameters
+====================================
+
+a) Do NOT use diff's -b or -B parameters (used to ignore changes of amount of
+   "white space") or valuable information may be LOST.
+   Relating to that, it is very important that your editor does NOT "compress"
+   multiple spaces (hex 20) to tab characters (hex 09).
+
+b) Use correct directory structure (nesting level is important for easy to
+   use diffs).
+
+
+Sample for diff usage:
+
+ diff -p -r -N -X \BinkXR4\makediff.exc \BinkXR4 \BinkXG1 >XR4toXG1.dif
+
+ \BinkXR4\makediff.exc is an exclude file that keeps "trash" out of your diffs
+ \BinkXR4\ contains the "base version".
+ \BinkXG1\ contains a version modified by you.
+
+ XR4toXG1.dif (context diff made by this call) will afterwards contain all
+ changes needed to patch a XR4 version to XG1 level.
+
+ If you're using OS/2, you can also use the included makediff.cmd (see
+ os2/utils/). Please read makediff.txt first.
+
+
+Sample for patch usage:
+
+ You have XR4 version and want to patch it to XG1 version using XR4toXG1.dif.
+ First copy all files contained in \BinkXR4\ to a new directory named
+ \BinkXG1\ - keeping the same directory structure.
+
+ Then change into directory \BinkXG1\ directory and invoke patch:
+
+  patch -p2 <XR4toXG1.dif
+
+ Parameter -p2 tells patch to strip off 2 slash levels - you are already in
+ directory \BinkXG1\ so you don't need this path, but must remove it from path
+ entries contained in the diff file.
+
+
+
+[to be continued]

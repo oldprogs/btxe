@@ -1,0 +1,28 @@
+Hi,
+
+the BinkleyTerm XE developers team is pleased to announce the sixth Gamma
+release of BT-XE, which is mainly a huge bugfix for Gamma-5. It also comes
+with many improvements. To name only a few:
+
+-   Yet another EMSI bug has been fixed.
+
+-   More reliable async version for OS/2.
+
+-   Improved History and Stats screen.
+
+-   BinkPipe was updated to reflect current screen layout.
+
+-   Search function for recent activity window (still experimental).
+
+-   Win32 version now also works under Win95.
+
+-   Many, many, many bugfixes... (see knwnbugs.xr5)
+
+Instead of posting the whole quite long list here, we suggest to grab a
+copy of the distribution archives and have a look for yourself.
+
+We like to thank all users, beta testers and the documentation team, who
+all helped us with their bug reports, suggestions and work.
+
+    Enjoy! :-)
+

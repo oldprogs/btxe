@@ -1,0 +1,352 @@
+A script is a simple "program" which as to be compiled to a special form before
+Binkley can use it. This is done with compile.exe.
+
+A script may contain any of the following commands, exept from special lines.
+(see below):
+
+goto <label>                           continues processing at the given label
+                                       [also see below: call/return]
+
+ifstr <str1> <char>
+      <str2> <command>                 if <str1> has <char>-relation to <str2>
+                                       <command> is executed, otherwise skipped.
+                                       <str1> and <str2> may be any string*.
+                                       <char> may be
+                                          "=" equal, case sensitive
+                                          "~" equal, case insensitive
+                                          ":" different, case insensitive
+                                              "ABC" : "abc" is false
+                                          "!" different
+                                              "ABC" ! "abc" is true
+                                          "i" <val1> included in <val2>
+                                          "I" <val1> included in <val2>,
+                                              case insensitive
+
+ifnum <str1> <char>
+      <str2> <command>                 if <str1> has <char>-relation to <str2>
+                                       <command> is executed, otherwise skipped.
+                                       <str1> and <str2> may be any string*
+                                       convertable to numerical value.
+                                       <char> may be
+                                          "=" equal
+                                          "!" not equal
+                                          "<" smaller
+                                          ">" larger
+                                          "[" smaller or equal
+                                          "]" larger or equal
+                                       If one of the values cound not be
+                                       converted to a number, none of the
+                                       relations is true.
+
+event <eventname> [<g|c><label>]       the following events may happen:
+                                       - any timer-variable (if it becomes
+                                         zero, the event will be executed)
+                                       - nocarrier: if carrier is lost
+                                       - carrier: if carrier is detected
+                                       - f1..f10: if f1..f10 is pressed
+                                       - fileerror: if a file-error occurs
+                                       - internalerror: if an internal error
+                                                        occurs (call-failures
+                                                        etc.)
+
+                                       In of these cases the script will be
+                                       continued at the given <label>. If
+                                       an event occurs but is not defined,
+                                       the execution will continue normally
+                                       (or in case of an error: stop).
+                                       If "c" (call) is given, the jump to the
+                                       label will be done like "call" (you
+                                       will return to the old position with
+                                       "return"), "g" indicates goto.
+
+loadtranslation                         not implemented yet. This will load
+                                        a character-translation table in some
+                                        future version
+
+logfile "<string>"                      writes <string*> to logfile
+
+setvar <var> <string*>                  sets <stringvar> to <string*>
+                                        if <var> is numerical (or timer),
+                                        string will be converted. if conversion
+                                        is not possible <var> will be set to 0.
+                                        It is possible to do small calculations
+                                        with this command. The term will be
+                                        evaluated from left to right and only
+                                        +-*/ are allowed.
+
+addtohistory                            adds the call to the history file
+   <name> <handle> <city>               all of the parameters are variables,
+   <calls> <filesup> <filesdn>          <name>, <handle> and <city> are strings
+   <kbup> <kbdn> <read> <posted>        all others numerical.
+                                        If you dont want to save all that
+                                        information just pass a dummy-variable.
+
+print "<string>"                        prints to modem and (if fullscreen) to
+                                        screen
+
+getkey <var>                            reads a key from both modem and keyboard
+                                        but does not wait for a key. The read
+                                        character is apended to <var>
+         
+getkeysysop <var>                       reads only from keyboard
+getkeymodem <var>                       reads only from modem
+
+getstr <var> <char> <length> [special]  reads a line with length <legnth> from
+                                        modem/keyboard to <str-var>. The input-line
+                                        will be filled with <char> for unused
+                                        chars. the special-paramter allows the
+                                        following:
+                                        allow input chars:
+                                        D : digits ("0..9")
+                                        A : alphabetic chars ("a..z")
+                                        P : printable chars("!$%&...")
+                                        +x: allows char "x"
+                                        Hx: hidden (output 'x' only)
+                                        U: uppercase all input-chars
+                                        L: lowercase all input-chars
+                                        Be careful: The compiler does not
+                                        check the special-string for
+                                        correctness.
+
+parse <numvar> <string-var>             will read the first numerical value
+                                        from the given string. the string will
+                                        be cut after the numerical value parsed.
+                                        (example: "abc 123xyz123abc" will set
+                                        <numvar> to 123 and <string> to "xyz123abc")
+                                        If no number could be found <numvar>
+                                        will be set to zero and string to "".
+
+fileopen <string*>                      opens file <name>
+fileclose                               closes file
+fileposition <numvar>                   writes file-pointer into <numvar>
+filegoto <numvar>                       moves file-pointer to position in <numvar>
+filetruncate                            truncates file at current position
+filelineread <stringvar>                reads one line from file in <svar>
+filelineinsert <string*>                writes <string*> to file
+filelinereplace <string*>               writes <string*> to file
+filelineremove <num>                    removes <num> lines at current position
+
+fullscreen                              switches Binkley to a fullscreenmode
+                                        (similar to terminal-mode) to let the
+                                        sysop see, what the user is doing.
+
+unattended                              switches back to normal unattended
+                                        screen
+
+timesetonkey <tim> <number>             sets the timervariable to <number> if
+                                        a key is pressed or char received
+                                        from modem via getkey,
+                                        getkeymodem, getkeysysop, getline,...
+                                        Only works for one timer.
+
+abort                                   aborts the execution (dont forget it at
+                                        the end of the script, or you will run
+                                        into trouble!)
+
+emulation <type>                        sets emulation for print and others to
+                                        "none", "ascii" or "ansi" (in future:
+                                        "avatar")
+
+dropcarrier                             drops the carrier
+ifcarrier <label>                       if carrier is detected, the execution
+                                        will continue at <label>
+
+call <label>                            will continue at <label>
+return                                  will continue at the position directly
+                                        after the last "call".
+                                        Make sure you always use the same number
+                                        of calls and returns. You may use a
+                                        maximum of 5 levels of call.
+
+releasetime                             Releases cpu-time under multitasking
+                                        environements. Use this in loops in which
+                                        you just wait for keys (getkey).
+                                        Getstr releases cpu-time for itself.
+
+waitforallsent                          Waits until the outbound-queue is empty.
+                                        use this before you drop carrier if you
+                                        want everything to be transmitted before
+                                        you drop it.
+
+getfileinfo <num-var> <str-var>         searches files.bbs (if <str-var> contains
+            <num-var> <num-var>         more than "" <str-var> will be searched
+            <num-var> <str-var>         instead of files.bbs in the path of the
+                                        file passed as <str*>) for the file passed
+                                        in the last string-var. The number of lines
+                                        of the description will be returned in
+                                        <num-var>.
+                                        The last three num-vars are set to the
+                                        filesize / the filedate (print it with
+                                        setvardate) and the download-counter.
+                                        The path will be cut from the passed
+                                        filename.
+getfileinfotext <string-var>            <string-var> will be set to one line of
+                                        the description of the last file passed
+                                        to getfileinfo.
+getfileinfosearch <string-var>          searches file-description for the text
+                                        passed in <string-var> (not case-sensitive).
+                                        if found, <string-var> will be set to the
+                                        line containing the found text, otherwise
+                                        to "" (empty string).
+
+setvardate <num-var> <str-var> <str*>   <str-var> will be set to the date passed
+                                        in <num-var>. str defines the layout:
+                                        d,D: day (two chars)
+                                        m,M: month (two chars)
+                                        y: year, two chars (eg: "97")
+                                        Y: year, four chars (eg: "1997")
+                                        h,H: hour (two chars)
+                                        i,I: minutes (two chars)
+                                        s,S: seconds (two chars)
+                                        All other chars will be copied
+                                        litterally.
+
+sendfile <nv><nv><sv prot><str*>        Sends file <str*> using <protocol>
+                                        (is string-var). <protocol> can
+                                        contain the letters for the
+                                        internal protcols (XHZST) or
+                                        external ones as in the terminal.
+                                        1st <nv> will be incremented by the
+                                        number of files sent, 2nd <nv> by
+                                        the number of bytes.
+
+sendfilelist [not implemented yet]      works like sendfile, except that it
+                                        does not send the passed filename,
+                                        but reads it as a text-file and
+                                        sends all files listed in it.
+
+receivefile <nv><nv><sv prot><sv><str*> Receives file <sv> (if protocol
+                                        requires filename) using <protocol>
+                                        (string-var) into directory <str*>.
+                                        1st <nv> will be incremented by the
+                                        number of files received, 2nd <nv>
+                                        by the number of bytes.
+
+Be careful: at least sendfile crashs binkley at the end of a bbs-session.
+
+deletefile <str*>                       deletes the file with name passed
+                                        as <str*>
+
+!$%& Variables
+--------------
+the following variables are available:
+
+pre-defined String-variables (read-only):
+
+!sysop                   /* Sysop name (config: Sysop)       */
+!address                 /* main address (config: address)   */
+!system                  /* system name (config: System)     */
+!location                /* location (config: MyLocation)    */
+!phone                   /* phone (config: MyPhone)          */
+!binkversion             /* "BT/2 2.60XE/..."                */
+!task                    /* tasknumber ("001" etc.)          */
+
+You may define three types of variables:
+$) Strings
+%) Numerical variables
+&) timers (will be decremented every second down to zero)
+Variable-Names may be 18 characters long.
+
+To define variables just write (for example):
+
+$teststring
+&timer_x
+etc.
+
+You may undefine variables by adding a '-'. example:
+-$teststring
+
+Make sure you do not undefine variables that are still
+in use (clear timer-events before undefining timer
+variables, etc...)
+
+; Comments
+----------
+Lines staring with a ";" are ignored.
+
+: Labels
+--------
+A line starting with an ":" is a label (you can jump there with
+goto/call/event).
+
+# Include files
+---------------
+The string after a "#" will be opend as a file and treated as
+if its content were directly in the compiled file.
+Example:
+testfunc.bs contains:
+   :testfunc
+   print "test!"
+   return
+In your main script you could write:
+#testfunc.bs (somewhere at the beginning)
+call testfunc (later in the script)
+Please note that included-files may not contain other includes.
+
+<string> and <string*> and <string*#>
+-------------------------------------
+
+<string>
+is some usual text-string or similar
+
+<string*>
+may contain some special things:
+- {0} to {255}: will be converted to the according ascii-char
+- {<num-var>[:x]} replaces it by the contents of the variable.
+                  If x is given, it will be filled from the left with spaces
+                  up to x chars total length. (If it is longer it will not
+                  be truncated!)
+- {<str-var>[:x]} replaces it by the contents of the variable.
+                  If x is given, it will be filled from the right with spaces
+                  up to x chars total length. (If it is longer it will not
+                  be truncated!)
+
+<string*#>
+may contain some even more special things:
+- {c00} to {cFF}: change color. The first char is the background-color, the
+                  second fore-ground. Colors are as follows (standard 16 PC
+                  colors. Please not that they may not correspond 100% to
+                  ansi-colors and that bright background-colors may blink):
+                  0/8: black/gray
+                  1/9: blue/light blue
+                  2/A: red/light red
+                  3/B: green/light green
+                  4/C: cyan/light cyan
+                  5/D: mangenta/light mangenta
+                  6/E: brown/yellow
+                  7/F: white/light white
+- {n}:            new line: moves the cursor to beginning of the next line.
+                  (if ansi is enabled, "fullscreen" is required)
+- {x}:            clearscreen
+- {s}:            save cursor position/color ("fullscreen" required)
+- {r}:            restore last cursor position/color ("fullscreen" required)
+- {m<line>,<row>} move cursor to x,y (upper left is (1,1))
+- {'<'<num>}
+- {'>'<num>}
+- {'^'<num>}
+- {'!'<num>}      move cursor left, right, up, down ("fullscreen"/ansi req.)
+
+ifs
+---
+
+You may write ifs (ifnum/ifstr) in two ways:
+a) You put the command, that will be executed on true in the same line
+   directly after the equation.
+   example:  ifstr "Binkley" ~ "$system" print "Very good!"
+b) You add a label after the equation. If false is the result, the script
+   will be continued at that position. Example:
+   ifstr "Binkley" ~ "$system" :endthisif
+      print "very good!"
+      print "really!"
+   :endthisif
+   A method to execute a block if the equation is false is not implemented
+   directly, but you can easily do this on your own. Expample:
+   ifstr "Binkley" ~ "$system" :elsethisif
+      print "very good!"
+      print "really!"
+      goto endthisif
+   :elsethisif
+      print "get Binkley!"
+   :endthisif
+
+

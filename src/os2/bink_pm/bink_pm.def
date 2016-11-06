@@ -1,0 +1,21 @@
+
+;-------------------------------------------------------
+; Module definition file for the Bink_PM.DLL / VAC 3.00
+;-------------------------------------------------------
+
+LIBRARY        BINK_PM INITGLOBAL TERMGLOBAL
+PROTMODE
+stacksize      32768
+
+description
+'
+зддддддддддддддддддддддддддд©
+Ё Binkley OS/2 PM functions Ё
+юддддддддддддддддддддддддддды'
+EXPORTS
+
+               IsPipeRunning   @1
+               SetWindowTitle  @2
+
+               GetVersion      @255
+

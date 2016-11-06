@@ -1,0 +1,112 @@
+Contents of Gamma 6 distribution archives:
+
+- BOS2_XR6.ZIP (OS/2 archive)
+  - File_Id.Diz
+  - readme.os2
+
+  - maxcom\         maxcomm version
+    - bt32.exe      Mailer (VAC++, maxcomm version, 386)
+    - maxcomm.dll   communications DLL
+    - bt32.sym      symbol file
+
+  - async\          aync version
+    - bt32.exe      Mailer (Watcom, async version, 386)
+    - bt32.sym      symbol file
+
+  - common\         for both, async and maxcomm
+    - bink_pm.dll   PM code (VAC++, 386) - only useful if you're running PM
+    - bink_pm.sym   symbol file
+    - binkpipe.exe  PM "front end" for BT-XE
+    - bt32.ico      Icon for BT
+    - btutil32.exe  Mailer Utility (VAC++, 386) - includes history importers
+    - language.txt  English/Startrek/German/Swedish language file
+    - mcp32.dll     MCP DLL
+    - toss.exe      event semaphore driven program spawner (VAC++, 386)
+
+  - doc\            documentation
+    - xe_user.doc   XE User document
+    - btpe_402.doc  docu
+    - bug_rprt.doc  bug report form
+    - license.260   BT 2.60 license terms
+    - knwnbugs.xr5  Known Bugs in XR5 (aka list of fixed bugs)
+    - knwnbugs.xr6  Known Bugs in XR6 (aka list of unfixed bugs)
+    - tz_ibm.doc    some notes about TZ environment variable for VAC++ exes
+    - tz_watc.doc   some notes about TZ environment variable for Watcom exes
+
+  - developr\       information for developer
+    - join.us       how to join the XE Team
+    - v7plus.doc    doc about V7+
+    - version7.c    as sample code for v7plus.doc
+
+  - thomas\*        sample configs
+
+
+- BDOS_XR6.ZIP (DOS archive)
+  - File_Id.Diz
+  - readme.dos
+
+  - overlay\
+    - bt.exe        Mailer (Watcom overlayed version)
+    - bt.sym        symbol file
+
+  - common\
+    - btutil.exe    Mailer Utility (Watcom) - includes history importers
+    - language.txt  English/Startrek/German/Swedish language file
+    - video fossil  ?
+    - xr5toxr6.exe  DOS history converter: XR5 to XR6 history
+
+  - doc\            documentation
+    - xe_user.doc   XE User document
+    - btpe_402.doc  docu
+    - bug_rprt.doc  bug report form
+    - license.260   BT 2.60 license terms
+    - knwnbugs.xr5  Known Bugs in XR5 (aka list of fixed bugs)
+    - knwnbugs.xr6  Known Bugs in XR6 (aka list of unfixed bugs)
+    - tz_watc.doc   some notes about TZ environment variable for Watcom exes
+
+  - developr\       information for developer
+    - join.us       how to join the XE Team
+    - v7plus.doc    doc about V7+
+    - version7.c    as sample code for v7plus.doc
+
+
+- BW32_XR6.ZIP (Win32 archive)
+  - File_Id.Diz
+  - readme.w32
+
+  - ntcomm\
+    - bt32.exe      mailer (Bcc++, ntcomm version, 386)
+    - ntcomm.dll    communications DLL
+    - bt32.map      map file
+
+  - winfos\
+    - bt32.exe      mailer (Bcc++, winfossil version, 386)
+    - bt32.map      map file
+
+  - common\         for both, async and maxcomm
+    - bt32.ico      Icon for BT
+    - btutil32.exe  Mailer Utility (Bcc++, 386) - includes history importers
+    - language.txt  English/Startrek/German/Swedish language file
+    - semwait.exe   Event semaphore driven program spawner (Bcc++, 386)
+  
+  - doc\            documentation
+    - xe_user.doc   XE User document
+    - btpe_402.doc  docu
+    - bug_rprt.doc  bug report form
+    - license.260   BT 2.60 license terms
+    - knwnbugs.xr5  Known Bugs in XR5 (aka list of fixed bugs)
+    - knwnbugs.xr6  Known Bugs in XR6 (aka list of unfixed bugs)
+    - tz_borla.doc  some notes about TZ environment variable for Borland exes
+
+  - developr\       information for developer
+    - join.us       how to join the XE Team
+    - v7plus.doc    doc about V7+
+    - version7.c    as sample code for v7plus.doc
+
+  - henk-jan\*      sample configs
+
+
+- BDOK_XR6.ZIP (manuals archive, german)
+  xe_g5_gr.inf
+  xe_g5_gr.doc
+

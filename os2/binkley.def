@@ -1,0 +1,11 @@
+
+Name      BT32    WindowCompat
+
+
+PROTMODE
+
+stacksize 32768
+heapsize  65536
+
+description 'BinkleyTerm for OS/2 (eXtended Edition)'
+

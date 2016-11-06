@@ -1,0 +1,13 @@
+
+Please do not modify them and then simply add them to your diff; your changes
+then might be overwritten! Instead, please send me a seperate diff or the
+sources you've changed.
+
+They should compile with Watcom 1.6 (OS/2 and DOS?). If you want to port them
+to another OS (BTW: DOS isn't finished yet), simply have a look at scrndos.h.
+Only the 4 Vio* functions need to be ported. Create a scrn<OS>.h and include it
+like scrndos.h in screen.h. That's it!
+
+BTW: The list template will be replaced, TJW is writting a better one; mine was
+a 5 minutes very quick and dirty hack ;)
+

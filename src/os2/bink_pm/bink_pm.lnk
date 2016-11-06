@@ -1,0 +1,20 @@
+######################################################
+# Linker input file for Watcom 10.0 to create
+# bink_pm.dll
+######################################################
+
+system  os2v2 dll initinstance
+
+name    ..\os2\bink_pm.dll
+file    bink_pm.obj
+option  modname=BINK_PM
+option  description ' Binkley OS/2 PM routines '
+option  stack=32768
+option  protmode
+option  CaseExact
+segment class 'code' loadoncall
+
+export  IsPipeRunning
+export  SetWindowTitle
+export  GetVersion
+

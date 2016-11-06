@@ -1,0 +1,134 @@
+Watcom C/C++ 10.x TZ setting
+============================
+
+Example for Germany:
+
+TZ=CET-1CST,M3.5.0/02:00:00,M10.5.0/03:00:00
+     Example for Germany (should be valid in the whole EU). Daylight saving
+     time starts on the last (5) Sunday (0) of March (4) at 2:00 and ends on
+     the last (5) Sunday (0) of October (10) at 3:00.
+
+Tip: If you're running other apps that need TZ, too, but use the other format
+     (i.e. VAC++ apps) and if you don't care about the exact time between last
+     Sunday of March and first Sunday of April, only use TZ=CET-1CST.
+
+
+The TZ environment variable is used to establish the local time zone. The
+value of the variable is used by various time functions to compute times
+relative to Coordinated Universal Time (UTC) (formerly known as Greenwich Mean
+Time (GMT)).
+
+The time on the computer should be set to the local time. Use the DOS time
+command and the DOS date command if the time is not automatically maintained
+by the computer hardware.
+
+The TZ environment variable can be set (before the program is executed) by
+using the DOS set command as follows:
+
+          SET TZ=PST8PDT
+
+The value of the TZ environment variable should be set as follows (spaces are
+for clarity only):
+
+  std offset dst offset , rule
+
+
+The expanded format is as follows:
+
+  stdoffset[dst[offset][,start[/time],end[/time]]]
+
+
+std, dst
+     three or more letters that are the designation for the standard (std) or
+     summer (dst) time zone. Only std is required. If dst is omitted, then
+     summer time does not apply in this locale. Upper- and lowercase letters
+     are allowed. Any characters except for a leading colon (:), digits, comma
+     (,), minus (-), plus (+), and ASCII NUL (\0) are allowed.
+
+
+offset
+     indicates the value one must add to the local time to arrive at
+     Coordinated Universal Time (UTC). The  offset has the form:
+
+     hh[:mm[:ss]]
+
+     The minutes (mm) and seconds (ss) are optional. The hour (hh) is required
+     and may be a single digit. The offset following std is required. If no
+     offset follows dst, summer time is assumed to be one hour ahead of
+     standard time. One or more digits may be used; the value is always
+     interpreted as a decimal number. The hour may be between 0 and 24, and the
+     minutes (and seconds) - if present - between 0 and 59. If preceded by a
+     "-", the time zone will be east of the Prime Meridian; otherwise it will
+     be west (which may be indicated by an optional preceding "+").
+
+rule
+     indicates when to change to and back from summer time.  The rule has the
+     form:
+
+     date/time,date/time
+
+     where the first date describes when the change from standard to summer
+     time occurs and the second date describes when the change back happens.
+     Each time field describes when, in current local time, the change to the
+     other time is made.
+
+     The format of date may be one of the following:
+
+     Jn
+               The Julian day n (1 <= n <= 365). Leap days are not counted.
+               That is, in all years - including leap years - February 28 is
+               day 59 and March 1 is day 60. It is impossible to explicitly
+               refer to the occasional February 29.
+
+     n
+               The zero-based Julian day (0 <= n <= 365). Leap years are
+               counted, and it is possible to refer to February 29.
+
+     Mm.n.d
+               The d'th day (0 <= d <= 6) of week n of month m of the year
+               (1 <= n <= 5, 1 <= m <= 12, where week 5 means "the last d day
+               in month m" which may occur in the fourth or fifth week). Week 1
+               is the first week in which the d'th day occurs. Day zero is
+               Sunday.
+
+     The time has the same format as offset except that no leading sign ("+" or
+     "-") is allowed. The default, if time is omitted, is 02:00:00.
+
+Some examples are:
+
+TZ=EST5EDT
+     Eastern Standard Time is 5 hours earlier than Coordinated Universal Time
+     (UTC). Standard time and daylight saving time both apply to this locale.
+     By default, Eastern Daylight Time (EDT) is one hour ahead of standard time
+     (i.e., EDT4). Since it is not specified, daylight saving time starts on
+     the first Sunday of April at 2:00 A.M. and ends on the last Sunday of
+     October at 2:00 A.M. This is the default when the TZ variable is not set.
+
+TZ=EST5EDT4,M4.1.0/02:00:00,M10.5.0/02:00:00
+     This is the full specification for the default when the TZ variable is not
+     set. Eastern Standard Time is 5 hours earlier than Coordinated Universal
+     Time (UTC). Standard time and daylight saving time both apply to this
+     locale. Eastern Daylight Time (EDT) is one hour ahead of standard time.
+     Daylight saving time starts on the first (1) Sunday (0) of April (4) at
+     2:00 A.M. and ends on the last (5) Sunday (0) of October (10) at 2:00 A.M.
+
+TZ=PST8PDT
+     Pacific Standard Time is 8 hours earlier than Coordinated Universal Time
+     (UTC). Standard time and daylight saving time both apply to this locale.
+     By default, Pacific Daylight Time is one hour ahead of standard time
+     (i.e., PDT7). Since it is not specified, daylight saving time starts on
+     the first Sunday of April at 2:00 A.M. and ends on the last Sunday of
+     October at 2:00 A.M.
+
+TZ=NST3:30NDT1:30
+     Newfoundland Standard Time is 3 and 1/2 hours earlier than Coordinated
+     Universal Time (UTC). Standard time and daylight saving time both apply
+     to this locale. Newfoundland Daylight Time is 1 and 1/2 hours earlier than
+     Coordinated Universal Time (UTC).
+
+TZ=Central Europe Time-2:00
+     Central European Time is 2 hours later than Coordinated Universal Time
+     (UTC). Daylight saving time does not apply in this locale.
+
+(above text taken from the Watcom C Library Reference v10.6)
+

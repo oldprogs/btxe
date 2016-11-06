@@ -1,0 +1,18 @@
+Programmer's hints for BT-XE:
+
+Functions making life easier:
+=============================
+
+char *strntcpy(char *destination, char *source, size_t count) [misc.c]
+
+Please use this function as it is safer than strcpy (it will only copy
+count characters) and more comfortable/safe than strncpy (it will terminate
+destination string at destination[count-1] with '\0').
+Just give char array size as count parameter.
+
+time_t age_seconds(time_t timestamp) [misc.c]
+
+Please use this function for age calculations with unix timestamps.
+Underflow (happens if you want to know how old future is) is catched and gives
+result==0.
+

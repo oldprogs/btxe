@@ -1,0 +1,11 @@
+Things to do before next beta release:
+
+! outbound ages are only correct after first rescan and then always 0 (MR)
+! Memory display gets negative (MR)
+
+
+^
+|
++- ! = not yet done; entry added by (<ID>)
+   - = done; add: "(<ID> <date>)"
+

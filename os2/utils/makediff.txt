@@ -1,0 +1,30 @@
+
+This is version 1.7 of the BT-XE Diff Generator.
+
+Features:
+ - creates diffs ;)
+ - only one cmdline parameter that specifies the source level to update to
+ - checks diff for unwanted chars like EOF and TAB
+ - creats diff doc template if no diff doc could be found
+ - packs and hatches the diff if you're ready
+
+Restrictions:
+ - creates only diffs beta -> next beta and gamma -> next gamma
+ - only allows two chars for programmer's short name
+
+Requirements:
+ - REXX
+ - RXROBI.DLL
+
+Naming Convention:
+ - you must stick to this naming convention of the directories holding the
+   different versions of the BT-XE source tree:
+    - \XGx_ORG - original beta               e.g. \XGR_ORG
+    - \XGx_PRE - next not yet released beta  e.g. \XGS_PRE
+    - \XGx_yyz - beta modified by yy, no. z  e.g. \XGR_MR1'
+
+Call makediff.cmd without parameter or with /? or -? to get some help.
+
+If you have problems and/or suggestions, contact Michael Reinsch (2:2474/141 or
+mr@cc86.org).
+

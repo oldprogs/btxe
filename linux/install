@@ -1,0 +1,63 @@
+
+0. Convert the makefile from LFCR- to LF-terminated lines:
+   cat Makefile|tr -d "\r">makefile
+
+1. Setup Makefile:
+   - Adjust BINDIR (binaries), MANDIR (man-page) and CONFDIR (binkley.lng)
+   - If you don't use husky/fidoconfig (free fidonet software for linux, see
+     http://fidosoft.sar-gmbh.com/) or don't want Binkley to use part of its
+     config, disable USE_FIDOCONFIG. If the path with Binks sources is not
+     located in the same directory as husky, you have to adjust the paths
+     to fidoconfig and smapi (unless you copied their header-files to
+     /usr/local/bin/ or similar).
+   - Enable USE_ALTCHAR, if you want to (to change this later, you only need
+     to remove vfos_lnx.o and start make again). This makes btxe use an
+     alternative ("system-native") charset on the console.
+
+2. run make (ncurses required, curses may also work (but are not tested), if
+   neccessary remove the "n" from the makefile)
+
+3. become root and run make install, if you want the language-file to be
+   installed automatically, make installlng
+
+4. write config-file. There are very few differences to BTXEs for other OSs:
+   - TimeSync is disabled at the moment
+   - MaxPort is disabled
+   - Port has to be used like: Port /dev/ttyS1
+   - external language file is loaded from the same path as the
+     config-file, when its name is passed via command-line with path,
+     otherwise from binkley.lng in the current path
+     if you use fidoconfig, the default-path is the path where your config
+     for fidoconfig is.
+   - default config-filename is binkley.cfg (in current path), or, if you
+     are using fidoconfig, binkley (loaded from the same path as your
+     fidoconfig).
+   - default event-filename is binkley.evt (in current path, or, if your are
+     using fidoconfig, form the same path as your fidoconfig).
+   - If you use fidoconfig, you don't have to (but you may to add information)
+     use these keywords in binkley.cfg:
+     System, Sysop, Location, Address, Outbound/Hold, Inbound,
+     ProtInbound, KnownInbound, Nodelist, StatusLog and NetMail.
+
+   I recommend the following for a system-wide installation of binkley:
+
+   If you are NOT using fidoconfig:
+   - Put binkley.cfg, binkley.evt and binkley.lng into /etc/fido/
+   - Add EventFile /etc/fido/binkley.evt to your configuration
+   - start binkley with
+     btxe config /etc/fido/binkley.cfg task=1 binkley=/var/spool/fido/binkley/
+
+   If you are using fidoconfig:
+   - Name your config binkley (without .cfg), and put it and binkley.evt and
+     binkley.lng in the same directory where your config for fidoconfig is
+   - start binkley with
+     btxe task=1 binkley=/var/spool/fido/binkley/
+
+   some other differences, that have nothing to do with the config-file, but
+   should be listed somewhere:
+   - You may use alt-cursor to scroll in the recent activity (if ctrl-cursor
+     does not work; alt-cursor probably won't work, neither). If other keys
+     work depends on your terminal, too.
+   - "dos"shell (alt-j) is broken
+
+5. Please report any bug you find (see doc/team.lst for contact adresses).

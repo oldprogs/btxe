@@ -1,0 +1,20 @@
+Hints on compiling Binkley-XE/2 with Watcom 11.0
+------------------------------------------------
+
+Binkley will compile (and run) using watcom10.* under Watcom 11.0 if you
+are aware of a few things I have discovered over the last 3 weeks:
+
+You need to disable outbound caching (line 311 in watcom10.mif) in order
+for binkley to load.  If not, it will crash before displaying the WFC
+screen.
+
+I have only succesfully compiled and ran the 386 version using maxcomm.
+The 486 version crashes before displaying the WFC.
+
+If you are using playing wave (sound) files for events (bbs user, fax,
+etc), they will crash binkley when play (I don't not know why yet).
+
+the DOS version won't compile overlays because it seems that wlink does not
+support overlays? :-/
+
+Other than that, it works great.

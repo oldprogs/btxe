@@ -1,0 +1,14 @@
+- Test transfer protocols. Hydra and ZedZap seem to be ok now.
+- not implemented yet: timesync (misc.c)
+- files are opened from the outbound using a filename with fix upper/lower
+  characters. all of them should be lowered, this seems to be used for
+  binkley outbounds under linux. (most of them should be lowercase now)
+- Function-Keys with shift and cursor keys with control do not work
+  probably the whole get_key (asyn_lnx.c) should be rewritten.
+- No bold background colors available. All color combinations < 128 should
+  work. (will wait for the new screen-class before spending any further
+  thoughts on this).
+- Find out, whether nodelist-files are upper or lowercase. Currently
+  they are read lowercase.
+- Make other imporant structures portable
+- Fix or disable DosShell (alt-j)

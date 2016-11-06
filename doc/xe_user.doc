@@ -1,0 +1,4640 @@
+
+                 User documentation for BinkleyTerm 2.60 XE
+                ============================================
+
+
+BinkleyTerm 2.60 eXtended Edition is based on BinkleyTerm 2.60 (c) by Vince
+Perriello. It contains modifications done by many people (see team.lst).
+
+BinkleyTerm 2.60 original version and 2.60XE are available from 2:2474/400,
+2:2474/100 and many other nodes as well as from our homepage (see below).
+
+
+STANDARD DISCLAIMER:
+
+               !! regard this as ALPHA/BETA/GAMMA software !!
+
+            We can NOT guarantee that this software has no bugs
+                 (but we use it ourselves on our own risk).
+
+              So if you use it, use it on YOUR own risk, too.
+
+
+If you have any problem with BT-XE, please ask in the fido echos BINKLEY or
+BINKLEY.GER or contact us (see team.lst)! Please don't forget to include the
+version string of your copy. To get this version string of this modified
+version of Binkley, simply call it with the option "info" and the environment
+variable "task" unset.
+
+If you are a programmer and doing source code modifications / enhancements /
+bugfixes / ... to Binkley, too, please contact us (see team.lst) and work
+together with us on this great project!
+
+If you like, visit our homepage in the Internet at http://btxe.uue.org/.
+
+
+
+Please read this:
+
+Traps & Pitfalls when switching from older / other Binkley versions
+===================================================================
+
+- Please delete your BINKLEY.S?? files (in Binkley or TaskDir directory) before
+  installing a new version of BT-XE. If necessary, please also delete
+  BINKLEY.A?? and BINKLEY.D??.
+  Further, please delete the shared outbound dump of older versions:
+  BTRESCAN.DMP
+
+- Binkley now uses the TZ environment variable to determine your time zone so
+  make sure that it is set correctly (see tz_*.doc).
+
+- You must set the read only attribute for the DOS overlayed executables.
+
+- If you want to have nodelist access to behave as ever, then please add
+  'SysopNDX' to your config file.
+
+- Modem responses are parsed cAsE-sensitive now, so "Ring" in your Binkley.Cfg
+  will NOT match any longer a "RING" sent by the modem !!!
+  Make sure to have your ModemConnect (and all other Modem... response
+  settings) / NoFilter statements EXACTLY, case-sensitively matching your
+  modem's responses
+
+- If you have 'ModemIgnore RINGING' in your config file then please change it
+  to 'ModemRing RINGING'.
+
+- If you have 'ModemFailure OK' in your config file then please change it to
+  'ModemIgnore OK'.
+
+- You have either to do a FULL domain setup (Domain, DomainKludge, Address
+  z:n/n.p@domain) OR do not use domains AT ALL (no Domain, no DomainKludge,
+  only Address z:n/n.p). If you don't REALLY need domains, I advise you NOT to
+  use domains at all (it will look nicer and you will have less trouble).
+
+- You should NOT run different BT-XE versions at the same time because of the
+  data format of the (shared outbound) file BTRESCAN.DMP has changed.
+
+- You maybe will see quite some transmission errors (resending, trouble, ...)
+  in the log now. This is not because BT got worse, but because they ARE logged
+  now. With older versions, they only appeared on the screen and vanished
+  shortly afterwards, but they were NOT logged. So the logging of errors is a
+  feature, not a bug.
+
+- You should run 80x50 video mode to get the most out of BT-XE - for terminal
+  mode and chatting this is almost a "must" ...
+
+
+
+
+Tip from Hauke Hagenhoff, 2:2453/470
+====================================
+
+COM.SYS:
+
+When using the original serial-port-driver for OS/2, COM.SYS, you will need to
+configure the port using the MODE command for having BinkleyTerm work all
+right.
+
+The following setting is recommended:
+
+MODE COMx:yyyyy,N,8,1,,TO=ON,XON=OFF,IDSR=OFF,ODSR=OFF,OCTS=ON,
+     DTR=HS,RTS=HS,BUFFER=ON
+
+ (you need to enter this as ONE line!)
+
+Where x is the COMx:-port to set and yyyyy the desired port speed.
+
+Most important are the IDSR and ODSR-settings, if they are wrong, BT won't work
+properly. BUFFER=ON is to switch the FIFO-buffer on.
+
+
+
+
+Tip from Steffen Motzer, 2:2471/1071.3
+=======================================
+
+You can pass the com-port from Bink-XE/2 to a DOS-BBS without using SIO:
+
+ - If your version uses the internal async module, then put 'shareport' in
+   binkley.cfg - otherwise use siocomm.dll or the patched maxcomm.dll .
+
+ - Use a fossil-driver that opens the com-port in OPEN_SHARE_DENYNONE mode:
+
+    - Virtual Fossil Driver (COM):
+        ftp://ftp.leo.org/pub/comp/os/os2/leo/drivers/com/vfd055b.zip
+
+    - vcfos (ISDN):
+        ftp://ftp.cfos.com/pub/cfos/
+
+The DOS-BBS will be able to share the com-port with Bink-XE/2
+
+Recommended mode command for OS/2 version with internal async routines:
+
+  MODE com%TASK%:38400,n,8,1,to=on,xon=off,octs=on,dtr=on,rts=hs,buffer=on
+
+No 'siomode' in binkley.cfg.
+
+
+
+
+History
+=======
+
+Attention: Please read this section completely and thoroughly or you will run
+           into problems!!!
+
+
+
+BT 2.60XE/Gamma-XR1
+=-=-=-=-=-=-=-=-=-=
+
+Bug fixes
+---------
+
+HR: No system crash at requests of PW-protected files without password.
+
+
+MMP: fixed: buffer for screen not flushed
+
+  I don't think the distributed version of Binkley had this bug, as IBMC was
+  treated specially. But Watcom had the same problem as IBMC. The number of
+  minutes left is written to the screen through a file which is buffered. This
+  fucks up the display, if the buffer is not flushed because the other status
+  information was written directly to the display bypassing the buffer. Now the
+  buffer is flushed for both the IBMC and the Watcom versions.
+
+
+MMP: Fix for ISDN caller ID using ZyXEL 2864I
+
+  When RING was seen and Binkley was about to send the answer string, it would
+  wait until the modem became silent for a fraction of a second. In this delay,
+  Binkley would read characters from the modem, and silently throw them away.
+  The caller ID on ISDN lines was lost in this way! This is fixed, and input
+  from modem in this period, is now logged as usual. Setting RingWait to 2,
+  would also have solved this particular problem, but there is no need to wait.
+
+
+MMP: Changed config file parser
+
+  The parser used to identify keywords would recognize "CostLogThingy" as
+  "CostLog"; i.e. allowing the input word to be longer than the keyword. This
+  may sound okay, but it means that you cannot have two keywords where the
+  first is a prefix of the other. Also, you cannot define variables on the
+  command line where the name matches a keyword. This is changed now, and the
+  parser requires the words to be of equal length.
+
+
+MMP: Source code fixes important to Watcom C only
+
+  1. Watcom C uses buffered output as IBMC does, and this caused problems with
+     display updates while transferring files in terminal mode. The real
+     problem is that buffered writes are mixed with unbuffered display output.
+     The work-around for the IBM compiler has been adopted for Watcom (flushing
+     buffers).
+
+  2. The signal stuff used to handle Ctrl-C/Break didn't work with Watcom. This
+     seems to be a Watcom problem; signal(SIGBREAK,SIG_IGN) is broken. The
+     solution is to use signal(SIGBREAK,handler) instead, letting handler()
+     reinstall itself on SIGBREAK and do nothing else.
+
+
+TJW: Fixed Hydra buffer management bug
+
+  This caused memory corruption in original BT 2.60 release. In OS/2 on my
+  system this bug showed as funny attributes on the upper "windows" of BT
+  screen. But the effects may have varied widely depending on compiler and
+  system ...
+
+
+TJW: Error message for "COM0?.SYS" changed to "COM.SYS"
+
+
+TJW: Wrong HPFS file timestamp used
+
+  Fixed bug caused by using wrong HPFS file timestamp in SCD/EVT and file
+  update request handling. Now, the "last file modification" timestamp is used.
+  Before, "last file access" timestamp was used - which was definitely WRONG
+  for HPFS. This caused problems on HPFS only, because FAT file system does not
+  have multiple different file timestamps like HPFS (file creation, last file
+  access, last file modification).
+
+
+TJW: Zoomed outbound view "Age" bug fixed
+
+  Weird ages of some thousand days were displayed - fixed!
+
+
+TJW: Fixed cosmetical problem with password failure msg
+
+  "Trash" at end of PW: "His='', Ours='XXXXXXXX<trash>'
+
+
+TJW: FREQ response packet fixes:
+
+  - time string had incorrect printf format
+  - time string had incorrect FTS format (should be 2 blanks in the mid!)
+  - put in session password into freq response packet as packet password (well,
+    this isn't correct in every case, but better than no password at all).
+  - put in destination NODE address, too. This was forgotten ...
+
+
+
+New features
+------------
+
+CE: AKAs
+
+  Maximum number of AKAs raised from original 25 to BT-XE value of 100 AKAs.
+
+
+CE: New function "ConditionalPoll"
+
+  Multi-AKA and boolean operation support implemented by Thomas Waldmann.
+
+  ConditionalPoll (also known as "FreePoll" from Arjen G. Lentz, who invented
+  this in his mailer XENIA) allows an Uplink (you) to reject a call from a
+  Downlink, if there is less mail for him than the configured minimum.
+
+  The syntax for this keyword:
+
+    ConditionalPoll { and | or } <aka> <minsize> <maxdeltatime> [<callerid>]
+
+  This function will only work with ISDN or a modem that reports the caller ID.
+  You'll also need to configure ModemCID (to tell Binkley where to find the
+  caller ID) and CallerID for each AKA you specify (to tell Binkley the node's
+  caller ID) (see below). Alternativly you can also add the number as the last
+  parameter in ConditionalPoll. If you need more than one CallerID for one
+  node, DO NOT use multiple ConditionalPoll keywords but multiple CallerID
+  keywords.
+
+  You can list as many ConditionalPoll entries as fit into memory.
+
+  How it does work: the downlink will call you, Binkley gets the caller-ID (eg.
+  "57313340"), searches ALL ConditionalPoll entries for matching addresses and
+  checks if the condition (minimum outbound size for this AKA) says "reject
+  call" or "accept call" for each AKA.
+
+  The exact condition is: if outbound size <= <minsize> * 1024 then reject.
+  <minsize> = 0 rejects a call only if there is really NOTHING (0 bytes) on
+  hold.
+
+  Each result (accept=TRUE or accept=FALSE) is evaluated (together with the
+  result of previous calculation for this number) with the according boolean
+  operation "AND" or "OR" to calculate the total result.
+
+  The boolean operation listed with the first configured ConditionalPoll entry
+  matching a specific number does not care, you can use "or" or "and" - it
+  makes no difference.
+
+  If total result is TRUE, call will be accepted. If total result is FALSE,
+  call will be rejected.
+
+  To reject a call Binkley sends the string configured with "Reject" to the
+  modem. To accept a call, Binkley sends the answer string (normal behaviour).
+
+  For downlinks who want to make a file request or send an important crash mail
+  immediately, Binkley builds a zero byte size file in the outbound called
+  "*.TRX" for each user. If the downlink gets a "call reject", he/she can call
+  again within MaxDeltaT seconds and the call will be handled normally.
+
+  To configure the function use:
+
+  Accept call of 2:2474/405 if size for 2:2474/405>=100KB or 2nd call within 30
+  seconds:
+
+                    Or/And AKA [3..5D]  MinSize[KB]  MaxDeltaT[s]
+  ConditionalPoll   Or     2:2474/405   100          30
+
+  Accept call of 2:2474/405 if (size for 2:2474/403>=20KB or 2nd call within 30
+  seconds) *AND* (size for 21:492/4003 >= 10KB or 2nd call within 20s):
+
+                    Or/And AKA [3..5D]  MinSize[KB]  MaxDeltaT[s]
+  ConditionalPoll   Or     2:2474/403    20          30
+  ConditionalPoll   And    21:492/4003   10          20
+
+  Accept call of 2:2474/403 if (size for 2:2474/403>=100KB or 2nd call within
+  30 seconds) *OR* (size for 21:492/4003 >= 50KB or 2nd call within 20s):
+
+                    Or/And AKA [3..5D]  MinSize[KB]  MaxDeltaT[s]
+  ConditionalPoll   Or     2:2474/403   100          30
+  ConditionalPoll   Or     21:492/4003   50          20
+
+  To reject a call, define once:
+
+        Reject <Modem command string|>
+
+  For a ZyXEL Elite 2864I use:
+
+        Reject ATH1|ATH0|
+
+  For ELINK 310 use:
+
+        Reject AT\\K|
+        ATS21.2=    (shows caller number after RING - tested with EPROM 1.36)
+
+  For ELINK 301 use:
+
+        Reject AT\\K|     (since EPROM version 2.20 of 11.5.94)
+        AT\O5            (show caller number after RING, since v2.12)
+
+  Restriction for ELINKs: until a ROM is released which supports a "Call
+  rejected" response code, you will only be able to reject incoming calls, but
+  not to treat being rejected yourself (you will just receive "NO CARRIER" if
+  you are rejected). You may configure a very LOW MaxDeltaT value to handle
+  this (not nice, but possible) - see also binkley event file A= parameter. But
+  your links should be aware that they will flag you undialable if they dial
+  too often without getting a connection.
+
+
+CE: New keyword "ModemReject" to identify a rejection response from the modem.
+CE: New keyword "AfterCallOut" to send an AT???-command to get a cause value
+    from ISDN adapters like ZyXEL 2864I.
+
+  There are two different ways to see if a call is rejected:
+   1) The ISDN adapter sends "Busy/Cause=34Be" in one line.
+   2) You send an AT??? command and get an answer like "Cause = Call reject".
+
+  For 1) you need only "ModemReject <Rejectstring>", for 2) you need the
+  Rejectstring and "AfterCallOut <Lines> <AT command>".
+
+  AfterCallOut needs a number of lines (of output caused by AT command) and an
+  AT command which leads to a report with the cause value.
+
+  After a rejected outbound call, all mail to this AKA will change to NORMAL
+  flavour. Now you have an easy way to ping your Uplink, if he knows the
+  feature of Freepoll<tm>/ConditionalPoll.
+
+  ModemReject will only work with automatic call not with manual calls!
+
+  For ZyXEL 2864I i use "AfterCallOut 9 ATI3|" and "ModemReject Call reject".
+  For CFOS you need only "ModemReject /Cause=34Be". For ELINK, there is no such
+  possibility until now.
+
+
+MT: New config verb "ReInitTime"
+
+  This lets you specify the time between modem initializations.
+
+  ReInitTime 10 -> init the modem every 10 minutes. Valid range for this
+  setting is 1 .. 10 only.
+
+  If you specify 0, you will get 1 minute. If you specify >10, you will get 10
+  minutes. This is due to a restriction in BT's timer routine and may be
+  removed in a later version of BT-XE.
+
+
+MT: New config verb "ReadHoldTime"
+
+  This lets you specify the time between automatic outbound rescans.
+  ReadHoldTime 10 -> rescan outbound 10 minutes. Valid range is 1...
+
+
+CEH: New config verb "ReadFlagTime"
+
+  This lets you change the minimal time between scans for the flags
+  forcexit, btexit, btfreeze and btrescan in seconds.
+  (ranging from 1...)
+
+MT: Support for external request processors (ERPs) with SRIF
+
+  To use this, specify in Binkley.Cfg:
+
+    SRIF e:\maxfrq\maxfreq $s
+
+  The $s parameter will be replaced by the SRIF filename by BT-XE. The SRIF
+  file will be called "SRIF.Txx", xx=TaskNumber in Hex.
+
+  Known limitations:
+
+  The external SRIF erp is only invoked in an EMSI/WaZOO session. Also when
+  JANUS is used, the SRIF ERP is not invoked.
+
+  The generated SRIF is compatible with the SRIF 1.02 Standard. But not all of
+  the optional statements are included.
+
+
+HR: New config verb "ShowAlive"
+
+  Generates a file I_ALIVE.xx (xx=Tasknumber) in the "Flags" directory. If the
+  file exists, nothing is done except checking it for existance. If it does not
+  exist, it will be created by BT-XE.
+
+  Check for existance is done each minute. So external programs can check if
+  BT-XE is alive by deleting this flag file and waiting if it is re-created in
+  a minute. If BT-XE terminates, it deletes the flag file itself.
+
+
+HR: Enhanced user dialogue with Alt-G (get file[s])
+
+  BT-XE will show destination system name after you entered dest address.
+
+
+HR: Enhanced user dialogue with Alt-S (send file[s])
+
+  BT-XE will show destination system name after you entered dest address. If
+  you enter a wildcard filename, it will use the first matching file. If no
+  (matching) file is found, Alt-S remains in filename input mode and you can
+  try again. No unrecognized typos any longer!
+
+  With Win32 version of BT-XE, "\" works with german Windows NT, too.
+
+
+HR: Enhanced user dialogue with Alt-S/Alt-G
+
+  After asking "More requests"/"More sends", the same address is used again if
+  you answer "y". To specify a new address, enter "o" for (o)ther node.
+
+
+HR: Enhanced user dialogue with Alt-S (send file[s])
+
+  Support filename expansion like 4OS2/4DOS using TAB for expansion.
+
+  Example: type on my machine: c:\d<TAB>\bi<TAB>\HR<TAB><TAB>
+            get on my machine: c:\dowork\binkley\HR0418021.DOC
+
+
+MMP: Implemented support for environment variables
+
+  If a sequence of letters, digits, and underscores are enclosed between %'s,
+  it is no longer handled as a comment, but as an environment variable.
+
+  Otherwise, % is still handled as a comment. Also, the configuration file
+  parser now allows configuration verbs to be indented. (TJW had implemented
+  support for environment variables, too).
+
+
+MMP: Conditional inclusion of lines based on the task number
+
+  If a line begins with a decimal number, it is compared with the task number
+  as set by the TASK environment variable (e.g. TASK=n on command line). This
+  somehow offers the same functionality as [Common] and [Task n], but is
+  simpler to use for single line differences.
+
+  Example: 1 Init  |AT&FZ|
+           3 Init  ATZ|~~ATH0S27=17|
+
+
+MMP: Added new keyword "PutEnv"
+
+  If this is used, there string following it is put into the environment.
+  Variables set in this way will be visible to Binkley itself, and by programs
+  spawned by it; e.g. SPAWNBBS.CMD.
+
+  Example: PutEnv          BBSHOME=f:\bbs
+           PutEnv          PATH=%BBSHOME%;%BBSHOME%\bin;%PATH%
+           StatusLog       %BBSHOME%\bt\bt%TASK%.log
+           CostLog         %BBSHOME%\bt\costlog%TASK%.log
+
+
+MMP: "SpawnInit" keyword
+
+  This keyword specifies a command that should be executed as part of the
+  first-time initialization.
+
+  Example: SpawnInit su %PORT% lock %BAUD%
+
+  The command is executed only once, in the moment when the command is
+  encountered in the configuration file. Binkley does not even store the
+  command in memory. This keyword can save you for a batchfile, and can use
+  environment variables set in the configuration file.
+
+  You may use multiple SpawnInit commands to start multiple commands.
+
+  Attention: Do *NOT* use SpawnInit to directly run processes which stay
+             resident - this can cause file handle inheritance problems.
+             See also options of OS/2's "start" command.
+
+
+MMP: "MailFlag" keyword
+
+  If this is specified in the configuration file (no arguments), and "Flags" is
+  also specified, Binkley will create a file called "BTMAIL.IN" in the flags
+  directory when mail has been received.
+
+
+MMP: "TimeSync" keyword
+
+  Followed by an address and a MaxDeltaTSeconds value, it specifies that the
+  clock should be set to after an EMSI session (without password error) with
+  the node specified (using TRX) - if the time difference is not more than
+  MaxDeltaTSeconds seconds.
+
+  Example: TimeSync 2:238/28 60
+
+  So time will get synced to time of 2:238/28, but only if difference is within
+  60 seconds to our own time.
+
+  Tip: setting MaxDeltaTSeconds to e.g. 3700 (more than 1 hour) lets you do
+       summer / winter time zone switching automatically.
+
+
+MMP: "LocalLog" keyword
+
+  If this keyword is specified (no arguments), Binkley will write its log
+  information (both the normal log, and the cost log) to a log file in the same
+  directory as BINKLEY.Dxx etc. When Binkley exits, and at the end of a
+  session, Binkley will move the contents of the local file to the file
+  specified in the configuration file, but only if it is able to. The log file
+  specified in the configuration file will no longer be continiously opened by
+  Binkley, and can safely be accessed by other programs. If Binkley is not able
+  to write to the specified log file, the log entries just stays put in the
+  local file until Binkley is able to move it. The local log files are called
+  (xx is the task number):
+
+         BINKLEY.Cxx     (Local Cost Log)
+         BINKLEY.Lxx     (Local Status Log)
+
+
+MMP: "Respawn" command line argument
+
+  If this is specified, Binkley is automatically respawned in the unexpected
+  event that Binkley would trap (memory access violations etc). This wan't work
+  on DOS, but does under OS/2, and may work with other real operating systems
+  too.
+
+  The way this is accomplished is quite simple: We now have two processes
+  running for each Binkley. The first Binkley process spawns the other, the
+  normal Binkley, and monitors if it exits regularly. If so, the first Binkley
+  terminates itself with the errorlevel of the second Binkley. If not, it just
+  respawns the second Binkley.
+
+  The mechanism requires that the environment variable _BINKLEY_EXIT_ is _NOT_
+  set when Binkley is initially started. Binkley checks if this variable is
+  set, and if so, assumes it is the second (normal) Binkley. If it is not set,
+  Binkley will set it itself, and spawn the second Binkley. _BINKLEY_EXIT_ is
+  set to the filename BINKxxxx.XIT, where xxxx is the first Binkley's process
+  ID. The second Binkley creates this file on a normal exit, and the first
+  Binkley checks if it can delete it. If not, it didn't exist, and the normal
+  Binkley must have died irregularly.
+
+
+MMP: Environment variables on command line
+
+  Implemented TW's idea of setting environment variables on the command line.
+  If an argument contains a '=', it is put into the environment.
+
+  Example: bt32 TASK=3
+
+  Remark of TW: The TASK=n argument on BT32.EXE command line is a MUST HAVE in
+                this version of BT-XE ! Don't use TaskNumber in Binkley.Cfg!
+                You MUST change your BAT / CMD files !!!
+
+
+MMP: Built the language file into the EXE file
+
+  If there is no language file, Binkley now reads the language file from the
+  EXE itself. The language is simply appended to the EXE followed by the file
+  size (two bytes). BTLNG now can do this.
+
+  Example: btlng32 patch bt32.exe binkley.lng
+
+  Attention: You should NOT use an old *.LNG file nor an *.LNG file at all if
+             you want to have standard (english) messages - they are built-in
+             in the EXE now!
+
+
+MMP: "ShortCostLog" keyword
+
+  Binkley's costlog contains a log of useful information that easier to monitor
+  than the status log. However, this log is ment for human reading, and not
+  very easily handled with utilities like grep, awk, (REXX?) etc. So i have
+  invented a ShortCostLog keyword. If it is used, the CostLog will be written
+  in another format. The argument to ShortCostLog is a format string specifying
+  this format. The format string can contain literal characters and macros. A
+  macro is prefixed with '$', followed by an optional length, and ended with a
+  character specifying what kind of information to write. If the optional
+  length begins with '0', the information is zero-padded; otherwise it is
+  space-padded. The following macros are defined:
+
+         $#          TaskNumber
+         $$          The $ character
+         $<          Newline
+         $A          Node address
+         $B          Baud rate
+         $C          Size of biggest file sent or received
+         $D          Seconds used to transmit biggest file ($C)
+         $E          Total number of errors
+         $H          Hour
+         $I          Number of inbound files
+         $J          CPS of inbound files
+         $M          Minute
+         $O          Number of outbound files
+         $P          CPS of outbound files
+         $S          Second
+         $T          Total number of files
+         $U          Total CPS
+         $V          Size of biggest file received
+         $W          Seconds used to receive biggest file ($V)
+         $X          CPS of biggest file received ($V)
+         $Y          CPS of biggest file send or received ($C)
+         $b          Abbreviated month
+         $c          Cost
+         $d          Day of month
+         $f          Number of errors when receiving files
+         $g          Number of errors when transmitting files
+         $i          Size of inbound files
+         $j          Efficiency of inbound files
+         $m          Month
+         $o          Size of outbound files
+         $p          Efficiency of outbound files
+         $s          Seconds of session
+         $t          Total size of files
+         $u          Total efficiency
+         $v          Size of biggest file sent
+         $w          Seconds used to send biggest file ($v)
+         $x          CPS of biggest file sent ($v)
+         $y          Year without century
+
+  The format string can be left out in which case it defaults to:
+
+   $02y$02m$02d $02H$02M$02S $# $14A  $6B  $4s $4c $8i $8o $8C $4Y
+
+  Which produces log entries like: (removed unnecasary spaces)
+
+                                                            Biggest file
+   Date   Time   Task     Node Connect Sec Cost   In    Out   -size -cps
+   960328 132222 1     2:238/9  28800   29    0 6036   9903    9896 3298
+   960328 132539 1    2:238/54  28800  105    0    0 230517  223554 3287
+
+  You can also use ShortCostLog to produce comma separated files which can be
+  imported directly into a spreadsheet or a database.
+
+
+TJW: OS/2 only: Activated priority control
+
+  The originally released EXE didn't control priority, but worked EVER at
+  priority Normal/0. This is too low, if you have other "heavy" processes
+  running on your system. ISDN transfer rates dropped to below 5000 CPS in such
+  cases (normal: 7000..7800 CPS) on my system (P133,32MB).
+
+  I set the appropriate compiler switch and re-activated the priority control.
+  Also, I enhanced priority control via environment variables.
+
+  You may now influence priorities using these environment variables:
+
+  This is the default:                 This is as without priority control:
+    SET REGULARPRIORITY=R31              SET REGULARPRIORITY=R0
+    SET MODEMPRIORITY=F15                SET MODEMPRIORITY=R0
+    SET JANUSPRIORITY=F31                SET JANUSPRIORITY=R0
+    SET HYDRAPRIORITY=F31                SET HYDRAPRIORITY=R0
+
+  Syntax: ...PRIORITY=<class>[delta]
+
+    class:  R = Regular (2)
+            F = Foregroundserver (4)
+            T = TimeCritical (3)
+
+    delta:  0 = normal
+           ..
+           31 = high (default, if not specified)
+
+  Do experiments with these values! The defaults needn't to be the best values
+  for YOUR system and high priority needn't be better than low priority.
+
+
+TJW: The BINKLEY.DAY and .SCD are renamed to BINKLEY.Dxx and .Sxx
+     (xx=TaskNumber).
+
+
+TJW: Multiline configuration via single Binkley.Cfg and Binkley.Evt files!
+
+  [Common] and [Task x] in single Binkley.Cfg / .Evt make multiline operation
+  possible with one single Cfg and one single Evt file.
+
+  You needn't use this nice feature if you don't want to. Operation should be
+  possible with the same config / event files as in orig. BT 2.60 release
+  without usage of these "sections", because the implicit default section at
+  top of each config file read (or included) is "[Common]".
+
+  BUT: you MUST use TASK=n commandline argument in ANY case.
+
+  [Common]
+  ; settings in this section are read by all tasks.
+  ; ...
+  [Task 1]
+  ; settings in this section are read by Task 1 only.
+  ; all other tasks ignore these settings like if they were "blind" ...
+  [Task 2]
+  ; settings in this section are read by Task 2 only.
+  ; all other tasks ignore these settings like if they were "blind" ...
+  [Common]
+  ; settings in this section are read by all tasks.
+  ; ...
+
+  If you specify a setting first in [Common] and afterwards the same setting in
+  [Task x] (or vice versa), behaviour of BT-XE in Task x is the same as if you
+  specified these settings twice in this order using original BT 2.60.
+
+  If you include another config file using "Include" statement, state (read
+  settings or not) is treated locally to each file and restored after return
+  from reading that file.
+
+  E.g.:
+  [Common]
+  ; settings here are common for all tasks
+  Include Task1.Cfg         <- may have [Task x] and [Common] sections, too.
+  ; settings here are common for all tasks, regardless of Task1.Cfg contents.
+
+
+TJW: Using TaskNumber for BBS/EXT exits
+
+  This is now handled like in Binkley 2.60 release (again). Review your CMD /
+  BAT files if you used former BT-XE versions !!!
+
+  BBS exits:
+  %1      %2          %3        %4             %5
+  DTErate ConnectRate COMhandle Time2NextEvent Modem-String
+
+  EXT exits:
+  %1      %2          %3        %4             %5 %6
+  DTErate ConnectRate COMhandle Time2NextEvent n  Modem-String
+
+  This is NORMAL Binkley parameter layout again (no additional parameter as in
+  former betas of BT-XE). If you need the TaskNumber in this context, just get
+  it out of %TASK% environment variable (which is defined by BT-XE if you
+  invoke it with BT32.EXE TASK=n).
+
+
+TJW: "Hydra1st" config verb
+
+  Behaviour without Hydra1st: Standard - like until now. If a caller says to be
+                              able to do Janus, he will get Janus protocol -
+                              even if he could also do Hydra.
+
+  Behaviour with Hydra1st:    Hydra is preferred. If a caller says to be able
+                              to do Hydra, he will get Hydra protocol - even if
+                              he could also do Janus.
+
+
+TJW: Enhanced Screen Layout / Colours:
+
+  - Extended colour settings (like BT-EE now! ;-) There are 2 more colours
+    (configured after the normal 2.60 colours) now for windows frame title text
+    and frame colour. See sample configs ...
+  - TaskNumber in top left corner
+  - Port and Baud switched position
+  - broader Recent Activity and Hold Window
+  - with mail "Age" display in Hold Window
+  - one screen row more than before (there are 25, not 24). Therefore one row
+    more in Recent Activity window.
+
+
+TJW: Implemented "MakeDir" config verb
+
+  This creates outbound directories needed for BSY flags. Also, it removes
+  empty outbound directories.
+
+
+TJW: RecentyActivity-Buffer is saved to and restored from disk file
+     Binkley.Axx.
+
+
+
+
+BT 2.60XE/Gamma-XR2  (9606132330)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Bug fixes
+---------
+
+???: Fixed cosmetical problem with Elapsed: xx:yy:zz
+
+  A trailing blank overwrote the window frame
+
+
+???: Fixed cosmetical problems with Zoomed Outbound view
+
+  EE colours and headline
+
+
+???: Fixed SRIF extension (wrong) .Txx to (correct) .xx (xx=TaskNo/Hex)
+
+
+???: Fixed cursor position when shelling or entering terminal mode
+
+
+???: Added Hydra key to "native_protocols".
+
+  Until now, you were not able to select Hydra in terminal mode ...
+
+
+???: Fixed "main outbound removal" bug when using "MakeDir".
+
+  If there is an outbound without "." in its filename then just let it be -
+  even if it's empty.
+
+
+???: Fixed ShortCostLog $m
+
+
+???: Fixed cursor positioning to end of screen
+
+
+???: Fixed saving of recent activity window
+
+  It is now saved on all exits, not only on Alt-X exit
+
+
+TJW: fixed >2GB bug
+
+  Changed free space limitation from 2GB to 128GB (please test this! ;-)
+
+
+TE/TJW: Fixed % character
+
+  Usage of % character in modem commands is now possible (see below).
+
+
+???: OS/2 only: Priorities
+
+  Assured that answering and in/outbound sessions run at MODEMPRIORITY With
+  ZedZap, session were running at REGULARPRIORITY until yet. Now, session run
+  at least with MODEMPRIORITY (or with JANUS/HYDRAPRIORITY).
+
+
+???: Bugfixes to SRIF
+
+  SRIF now (finally!?) correctly states which system is listed and which is
+  protected.
+
+
+???: Bugfixes to FreePoll
+
+
+???: Fixes for dialtry's bug while using FreePoll
+
+
+TJW: Fixed *.REQ bug
+
+  If a session was aborted, *.Rxx files kept lying around and the next caller
+  got all the stuff he did not want. Especially long distance links were quite
+  unhappy with that, if the requested stuff was large.
+
+  Now BT-XE deletes the <inbound>\<address>.R<task> request files for ALL your
+  own addresses at the end of the session.
+
+
+???: Removed additional newline in Binkley.Log after SPAWN and ext. protocols.
+
+  Additional newline is only printed at start of BT. This was maybe only the
+  case in some internal betas ...
+
+
+???: Fixed bug that TimeSync was not executed if mail was received.
+
+  Moved call for TimeSync direct to end of session. Mail exits etc. will be
+  done *after* TimeSync now.
+
+
+???: Fixed SRIF response file naming (correct e.g.: outbound.zzz\NNNNnnnn.QLO)
+
+  Should work together with function request programs now.
+
+
+???: Fixed SRIF session data in Yoohoo / FTSC sessions
+
+  If you had a EMSI session and after that a Yoohoo session with a SRIF freq,
+  wrong data was put in the response packet (Sysop name, site, mailer).
+
+
+???: Fixed some bugs in ShortCostLog output routine
+
+
+TJW: fixed "NoPickup" bug
+
+  If you had NoPickup in your config and called a remote system using Bink 2.60
+  (XE or original, doesn't matter) to send some stuff, the remote Binkley
+  terminated the session immediately without even receiving your stuff.
+
+
+
+New features
+------------
+
+???: Enhanced CPS log entries (with lower .. upper CPS rate for each xfer)
+
+
+???: Debug messages for creating / removing outbound directories
+
+
+???: Added "Rescanning" status msg while outbound rescans
+
+
+???: Source code: replaced all TABs by SPACEs for easier DIFF/RCS/CVS handling
+
+
+???: Changed hydra crc table allocations from dynamic to STATIC
+
+
+???: Wrong config verbs
+
+  Added delay if wrong config verbs are read, also added filename and line
+  number to error message.
+
+
+???: SRIF
+
+  The SRIF file now also contains a "Password SECRET" (if SECRET is the actual
+  PW in protected sessions) line. This line is only present on PW protected
+  sessions.
+
+
+???: Log files
+
+  The logs are closed when spawning to allow other programs to include their
+  logs in the main log.
+
+
+TE: Support for a PROBOARD fileindex
+
+  Rather than scanning your whole hard disk for each file request, information
+  can now be taken directly from your Proboard configuration, so that a) you
+  don't have to set up a huge OKFile and b) file request is accelerated
+  considerably, allowing for filerequest from CDROM. Perform the following
+  steps to set up Proboard support (this works much like the configuration of a
+  Maximus fileindex):
+
+  Add the following lines to your Binkley.Cfg:
+
+    PBAreas <Proboard Fileareaconfig>
+
+      The Proboard Filearea configuration file is usually named "FILECFG.PRO"
+      and located in your Proboard system directory.
+
+      Example: PBAreas e:\mailer\pb\filecfg.pro
+
+    FileSec <level>
+    KnownSec <level>
+    ProtSec <level>
+
+      In Proboard, you use "levels" (numbers from 1 to 255) to set up which
+      users are allowed to access which files. In BinkleyTerm, calling systems
+      area classified as unknown (->FileSec), listed in your Nodelists
+      (->Knownsec), and those with a session password (->ProtSec). Here you can
+      set up the correspondence between the two security mechanisms. If you,
+      e.g., enter KnownSec 30, then every system which is listed in your
+      nodelist may freq from file areas with a security level of 30 or below.
+      You should always have a FileSec statement, while the two others are
+      optional.
+
+    OKFile <okfile>
+
+      You normally already have this statement, where <okfile> is the path and
+      name of a text file containing your magics and filearea paths.
+
+  Now edit your OK-File. Leave the magics there, but remove all normal
+  pathnames. Instead, enter the following line:
+
+    *<Proboard Fileindex>
+
+      The Proboard file index is usually named FILESIDX.PB and located in your
+      Proboard system directory.
+
+    Example for a OK-File with PB-support:
+
+      @FILES    e:\mailer\filebase\filelist\ALLFILES.ZIP
+      @UNISCHED e:\mailer\filebase\fidosoft\UNISWB05.LZH
+      @NODELIST e:\mailer\nodelist\nodelist.lzh
+      *e:\mailer\pb\filesidx.pb
+
+  Please note that you must not use MaxAreas and PBAreas at the same time! Only
+  one of these keywords should occur in your Binkey.Cfg. - Also note that you
+  should run PBUTIL FI at least once a day in order to keep your fileindex up
+  to date.
+
+  As the Proboard fileindex is not fully documented, this feature is
+  experimental. I have tested this with PB 2.12 and PB 2.15. If you have
+  problems with future Proboard releases, please contact me via netmail.
+
+
+TJW: Loglevels
+
+  Negative LogLevels do the same as positive ones, but only log to disk if
+  Carrier detect is true.
+
+
+TE/TJW: Changed config file parser (; and % character treatment)
+
+  '%' has a VERY ambiguous semantics:
+
+    - It can prefix a "rest of line"-comment (if it is at 1st non-white-space
+      column position in the config line).
+    - It can designate the start/end of an environment variable reference.
+    - It can be used simply as "%" character.
+
+    We resolve this the following way:
+
+    1. If first non-white-space char, it is a comment.
+       e.g.: "%comment" or "     %comment"
+
+    2. If there are some characters between 2 percent signs try to evaluate an
+       environment variable of this name.
+       e.g.: "%TASK%" or "%task%" or "%What_Ever!%%What_Else?"
+
+       If there are no characters between two "%" ( = "%%"), use it as a single
+       "%" character.
+       e.g.: "Init AT%%B%%C %%D" -> "Init AT%B%C %D"
+
+       If the environment variable is not defined, just copy the name of it.
+       e.g.: there is not variable "NOTDEF" defined. "%NOTDEF%" -> "NOTDEF"
+
+    4. If there is only a single "%" in the whole line, also use it as a single
+       "%" character.
+       e.g.: "Init AT %B" (no other % in this line) -> "Init AT %B"
+
+    BTW: %WHATEVER%%TASK% - this is valid and interpreted correctly
+         1        2A    B               (two environment variables).
+
+         This is no problem with the %% at pos 2 and pos A - because first
+         %WHATEVER% is evaluated (and consumes both % at pos 1 and pos 2).
+         Afterwards, %TASK% is evaluated ...
+
+  ';' is a bit WEIRD, too:
+
+    It can be a "rest-of-line"-comment or a literal character.
+
+    We resolve this the following way:
+
+    1. If first non-white-space char, it is a comment.
+       e.g.: ";comment" or "    ;comment"
+
+    2. If there is a sequence "<white space>;;", then don't begin a comment,
+       but just read it as "<white space>;".
+       e.g.: "AT ;;XY" -> "AT ;XY"
+
+    3. If there is a sequence "<white space>;" (and no ";" following), it is a
+       comment.
+       e.g.: "Init ATZ|      ; init the modem"
+
+    4. In any other case, just read it as ";" - no comment.
+       e.g.: "AT;XY" -> "AT;XY"
+
+
+CEH: Added '#' as comment-starting character (only if it is the first
+     non-whitespace character).
+
+
+TE: Workaround a problem when scrolling the Recent Activity window
+
+  The appropriate keystroke combinations Ctrl+UpArrow, Ctrl+DownArrow are
+  nonstandard and do not work in some DOS environments. You may now
+  alternatively use Ctrl+RightArrow and Ctrl+LeftArrow (which should work
+  everywhere).
+
+  Note:  If Scrolling continues refusing to work, increase the size of the
+  -----  backscroll buffer by using "RecentActivityLines 300". This should
+         only be a problem in the DOS version.
+
+
+TJW: OS/2 only: Priorities
+
+  Lowered default JANUSPRIORITY and HYDRAPRIORITY values to F31 (was T31 yet)
+  and default MODEMPRIORITY to F15 (was F31 yet). Added possibility to set Idle
+  priority (be careful with setting prio to low).
+
+  You may influence priorities using these environment variables:
+
+  This is the default:                 This is as without priority control:
+    SET REGULARPRIORITY=R31              SET REGULARPRIORITY=R0
+    SET MODEMPRIORITY=F15                SET MODEMPRIORITY=R0
+    SET JANUSPRIORITY=F31                SET JANUSPRIORITY=R0
+    SET HYDRAPRIORITY=F31                SET HYDRAPRIORITY=R0
+
+  Syntax: ...PRIORITY=<class>[delta]
+    class:
+      I = Idle (1)
+      R = Regular (2)
+      F = Foregroundserver (4)
+      T = TimeCritical (3)
+    delta:
+      0 = normal
+     ..
+     31 = high (default, if not specified)
+
+
+???: Changed M_BYTE_SUMMARY to show KB size instead of Byte size
+
+
+???: Changed update_status()
+
+  Changed janus/hydra update_status() to show min:sec instead of minutes for
+  time remaining until completion of file transfer (ETA).
+
+
+???: Cleaned up STATIC variables and made some dynamic - saves DOS memory ...
+
+
+CE: "ChangeMailTo <flavour>"
+
+  This is used for changing mail flavour to CRASH, DIRECT, NORMAL or HOLD after
+  an rejected outbound call. The default is the change to Normal flavour.
+
+
+TJW: Implemented xHydra / RH1 hydra
+
+  This modified Hydra (which identifies in EMSI with RH1 flag) does file
+  requests ONLY in the 1st transfer "batch". Mail packets and all flow file
+  attaches are sent in the 2nd batch - while you already get the requested
+  files from the other system!
+
+  Until now, this was only possible with Janus - now you can do this with
+  Hydra, too! So just send your filelist along with your filerequests if the
+  other system supports RH1 / xHydra, too.
+
+  Until now I know of these xHydra mailers: BT-XE ;-), Xenia and Maindoor If
+  xHydra is used, this is shown via "Session method: xHydra".
+
+
+???: Modified output of AKAs
+
+  Until now there were 3 AKAs per line. Now the AKA: lines are "filled up" with
+  AKAs as it fits on the screen (assuming 80 chars width).
+
+
+???: Added message
+
+  Added message "Rejecting human caller" if BBS caller tries while a MO event.
+
+
+???: Added message for FreePoll / ConditionalPoll
+
+  "Accepting <nodenr>. First call. ..." to avoid user confusion if a link calls
+  the very first time using Freepoll (no TRX file present in outbound).
+
+
+???: Removed warnings from BTLNG
+
+
+HR: Enhanced user dialogue with Alt-G (get file[s]).
+
+  BT-XE will now show destination address and system name after you entered
+  dest address. You can now enter up to 3 filenames password flavour before the
+  question "More Yes/No/Other" is asked.
+
+
+HR: Enhanced user dialogue with Alt-S (send file[s]).
+
+  BT-XE will now show destination address and system name after you entered
+  dest address.
+
+
+HR: ShowAlive
+
+  The file I_ALIVE.xx is now generated also at transfer via Hydra, XModem,
+  ZModem, Janus and Fax-Receive.
+
+
+???: Changed freepoll volume compare to use "reject if size <= MinSize*1024"
+
+  This means if you configure MinSize=0 only calls with really NOTHING on hold
+  will be rejected. Until now, configuring 0 made no sense (size < 0 ?).
+
+
+
+
+BT 2.60XE/Gamma-XR3  (9610090130)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Bug fixes:
+----------
+
+???: File privilege levels for FREQ
+
+  Changed file privilege levels from "(unsigned) word" to "(signed) short" for
+  file requests. So the "level problems" of XR2 should be history now.
+
+
+???: Last Call Display
+
+  If incoming call failed (connect and nothing more) and last call before was
+  e.g. FAX, "last: FAX" was shown. This should be "Inc-Fail" now. This is also
+  shown at begin of an incoming call as long as the session state is unknown.
+
+
+???: Fixed BTCTL/BTUTIL for use without PrivateNet (point fake net)
+
+
+???: BBSBATCH
+
+  Bugfix for all lines creating BBSBATCH.* at the same place. BBSBATCH.* is now
+  renamed to BBSBATxx.* (xx = Tasknumber in Hex)
+
+
+???: Fixed scheduler bug
+
+  Scheduler was not working correct with events on a specifiy day of (any)
+  month like with: Event All 00:00,0,1 00:00 F ...
+
+  But there are yet bugs left...
+
+
+???: Fixed minor bug in async_os.c ("in" and "out" were swapped in OS call)
+
+
+???: Fixed wrong month in ShortCostLog output
+
+
+???: Fixed (?) file sharing for IBM C++
+
+
+???: Dynamic Events
+
+  Fixed dynamic events - a forced rescan is now done before a dynamic event can
+  end - to ensure that there is really no more mail to send.
+
+
+???: Fix for DOS SpawnInit
+
+
+???: EMSI bugfix
+
+  If a system sent x:y/z.0 and x:y/z.p EMSI AKA dupe check did not work
+  correctly (point addr was not compared and so a "false dupe" was removed from
+  AKA list of remote system).
+
+
+???: Made internal FREQ processor OKFILE parsing more "robust"
+
+  If you had multiple blanks between filespec and password in your OKFile, like
+  in
+        c:\*.*  !SECRET
+
+  Binkley didn't process this as you intended it to do. Everybody could freq
+  out of c.\*.* without using a password.
+
+  This worked correctly:
+
+        c:\*.* !SECRET
+
+  Now Binkley doesn't care about AMOUNT of blanks between filespec and password
+  any more.
+
+  This parser part was completely rewritten - be careful and test this !
+
+
+???: Versions compiled for different CPUs show CPU type in announce string
+
+
+???: Misc. cosmetical fixes
+
+
+
+New features
+------------
+
+TJW: BE CAREFUL! Changed [section] statements. See [Expression].
+
+
+TJW: [Expression]
+
+  [%Task%==1]             use section if environment variable TASK equals 1
+  [%ENVVAR1%==%ENVVAR2%]  ...         if env. var. ENVVAR1 equals ENVVAR2
+  [%MODEM%==ZYXEL]        ...         if env. var. MODEM equals ZYXEL
+  [%PORT%!=2]             ...         if env. var. PORT is not equal to 2
+  [Common] or [True]      use section in any case
+  [Ignore] or [False]     ignore section
+
+  Obsolete style (not supported any longer): [Task 1]
+
+
+TJW: New and powerful cost calculation scheme.
+
+  See "CostCPS", "CostTimeCorrection" and "Cost Event" for details.
+
+  Adapt your Binkley.Evt ("L" flag) and your nodelist compiler setup or you
+  WILL run into problems !!!
+
+
+TJW: New keyword "CostCPS"
+
+  This sets the estimated CPS rate for cost calculations related to "L" event
+  flag. Default is 1024 CPS.
+
+    CostCPS 1500           ; could be used for lines connecting at 14400bps
+    CostCPS 3000           ; could be used for lines connecting at 28800bps
+    CostCPS 7000           ; could be used for ISDN X.75 lines with 64000bps
+
+  Additionally, the connect and session overhead is added for cost calculation.
+
+
+TJW: New keyword "CostTimeCorrection"
+
+  With this you can configure the time in seconds that your modem / adaptor
+  needs to connect and also session overhead for cost calculation.
+
+  First value is the time in s (costing money) before you get a "CONNECT".
+  Default is 5s. For ISDN you might want to configure a lower value. For very
+  bad lines you might want to configure a higher value.
+
+  Second value is the session handshake overhead in s used for calculations for
+  "L" event flag (before dialing out). Default is 5s, too. If you connect to
+  very fast or slow handshaking mailers, you might want to configure a
+  different value.
+
+  You should change the default values to typical ones for your system. The
+  defaults are just "better than nothing", but too low for analogue modems and
+  too high for ISDN adaptors.
+
+  E.g.: CostTimeCorrection 13 4
+
+        This gives a connect overhead of 13s and a session overhead of 4s
+        (analoge connect with V.32bis on good line, BT-XE to BT-XE).
+
+  E.g.: CostTimeCorrection 1 2
+
+        This gives a connect overhead of 1s and a session overhead of 2s (ISDN
+        connect with X.75, BT-XE to BT-XE).
+
+
+TJW: "Cost Event" - a new Event type with flag "!="
+
+  This new event type is used similar to normal "Event", but describes costs
+  involved with your outbound calls at different daytime, weekdays etc.
+
+  There can be ONLY such a cost definition in such an event, nothing else! Such
+  a "cost event" does NOT interfere with other event definitions.
+
+  The cost vector can include up to 16 comma separated entries, but there MUST
+  NOT be any blanks between them. You need not specify all 16 entries, you need
+  only to specify the ones you really use (c0,c1,c2 if you only use 3 cost
+  indices).
+
+  Event <days> <start time> [<end time>] !=<c1>,<c2>,..,<c16>
+        ^------------------------------^   ^----------------^
+         meaning as like in other events       cost vector
+
+  The cost index used for a connection is reported after connection as
+  "Seconds: ... Tariff: <cost index> ... System: ...".
+
+  Example 1 for Germany (used with EuroCost and CostUnit 12):
+
+    Event All 00:00,12,24 05:00 !=2400,0600,0360,0360,0600,0090,0090,0054
+
+    This means that on December 24. from 00:00 until 05:00 the "cost vector" is
+    2400, 600, ... (meaning that cost index 1 (city zone) has unit lengths of
+    240 seconds, cost index 2 (50km zone) has unit lengths of 60s etc.). You
+    have to compile the "cost index" into V7 nodelist index (cost field).
+    Binkley then uses this "cost index" as index into the "cost vector" of the
+    active CostEvent. "cost index" is 1-based (!), 0 means no/unknown cost!!!
+
+    You have to define the cost vector in 1/10 seconds (unit length). CostUnit
+    is the amount of money a unit costs (12 [Pf] in Germany).
+
+    So if you call somebody on Dec. 24 at 03:00 who has cost index 3 compiled
+    into the V7 cost field by your nodelist compiler, Binkley will calculate
+    with unit lengths of 36 seconds (360 * 0.1s).
+
+
+  Example 2 for US (NO "EuroCost" and NO "CostUnit"):
+
+    Event All 00:00 24:00 !=10,20,40,80,160
+
+    [Sorry, I don't have ANY information about US cost structure, so this is
+    just an example with not realistic numbers]
+
+    This means that on every day between 0:00 and 24:00 the "cost vector" is
+    10,20,...,160 (meaning that a minute shortest distance costs 10 [cents or
+    whatever] and a minute longest distance costs 160). You have to compile the
+    "cost index" (1 is nearest, 5 is farest in this example, up to 16 is
+    possible) into V7 nodelist index (cost field). Binkley then uses this "cost
+    index" as index into the "cost vector" of the active CostEvent. "cost
+    index" is 1-based (!), 0 means no/unknown cost!!!
+
+    So if you call somebody (on any day, any time) who has cost index 3
+    compiled into the V7 cost field by your nodelist compiler, Binkley will
+    calculate with costs of 40 [cents, whatever] per minute.
+
+  Here, for interested audience, the calculation method. If you aren't
+  interested, you can skip to next feature ...
+
+  Cost calculation algorithm for outbound calls (inbound: cost==0) :
+
+  StartTime = StartTime - CostTimeCorr_Connect   (the modems need some worthy
+                                                  time before CONNECT !)
+
+  get CostIndex (1..16) from V7 nodelist RealCost field
+  find CostEvent matching StartTime and get ActualCostVector
+  set return value Cost = ActualCostVector[CostIndex] !!!
+
+  EuroCost (unit based cost calculation) :
+
+    Time = StartTime                             set Time to StartTime
+    Ttimes10 = 0                                 set 1/10s timer to 0
+    TotalCost = 0                                set TotalCost to 0
+    while Time < EndTime                         do as long as connection was
+       TotalCost = TotalCost + CostUnit           spend one CostUnit
+       Ttimes10 = Ttimes10                        we get this time for
+                  + ActualCostVector[CostIndex]   one CostUnit
+       Time = StartTime + Ttimes10/10;            afterwards we have this time
+       find CostEvent matching Time and           get tariff information for
+       update ActualCostVector                    new Time
+
+    return TotalCost as total cost               this is what we spent
+
+  No EuroCost (minute based cost calculation) :
+
+    Time = StartTime                             set time to StartTime
+    TotalCost = 0                                set TotalCost to 0
+    while Time < EndTime                         do as long as connection was
+       TotalCost = TotalCost                       spend amount of money
+                   + ActualCostVector[CostIndex]   one minute costs
+       Time = Time + 60s                           we get 1 minute for it
+       find CostEvent matching Time                get tariff information for
+       and update ActualCostVector                 new Time
+
+    return TotalCost as total cost                this is what we spent
+
+  I hope this is the correct way to do it. If it is NOT correct like this,
+  please let me know !!!
+
+  Don't forget to adapt your "L" flags in Binkley.Evt !!!
+
+  With L flag, Binkley will calculate costs before calling out: It will assume
+  a 1KB/s transfer rate (default, you may modify this by specifying CostCPS,
+  see above) to estimate session length. Then it calculates real cost (in your
+  currency) for this session at this time and decides depending on L flag
+  condition if it should dial out or not.
+
+  You can use this to send short crash mails immediately and delay crash mails
+  with file attaches to some later event with cheaper costs.
+
+  For a cost saving setup in Germany you could use L<13 (meaning L<=12) on most
+  of your events - except event at cheapest time 02:00-05:00, for this event
+  you should NOT do cost restrictions or BT-XE will not dial out at all if
+  costs are too high even at cheapest time. This will cause BT-XE to delay a
+  crash mail until cost is <=12 ("Pfennige") or until event with no cost
+  restriction or "H" flag.
+
+
+  Added '$' as mail status char for mail not matching cost setup (L event flag)
+
+
+MMP: New format char for ShortCostLog: $r
+
+  $r gives "remote's costs" for inbound calls (like $c gives your own costs for
+  outbound calls).
+
+
+MMP: Changed default ShortCostLog format to include remote costs:
+
+   $02y$02m$02d $02H$02M$02S $# $14A $6B $4s $4c $4r $8i $8o $8C $4Y
+
+  This produces log entries like: (removed unnecasary spaces)
+                                                                Biggest file
+   Date   Time   Task    Node Connect Sec Cost RCst   In    Out   -size -cps
+   960328 132222 1    2:238/9  28800   29    0   24 6036   9903    9896 3298
+   960328 132539 1   2:238/54  28800  105    0   96    0 230517  223554 3287
+
+
+???: Added optional size parameter to *.REQ entries
+
+  old *.REQ format       new *.REQ format
+
+  file1                  file1 $12345
+  file2                  file2 $100000
+  file3                  file3 $1000000
+  ...                    ...
+
+  The value after $ is the size of the file to request in bytes. This is used
+  for cost calculation only, so an approx. value does the job, too. Size value
+  is optional, if no size is given, 1 is assumed. In the REQ file transmitted
+  to remote side, size information is filtered out, of course.
+
+
+HR: Changed Alt-G (get files) dialogue to make input of $size possible
+
+
+???: Changed "Tariff:" to show cost index
+
+
+???: New ShortCostLog format character $z for Cost Index
+
+    0 = no cost
+  1.. = cost index into cost event's cost vector
+
+
+TJW: Shared outbound
+
+  Files related to that (all located in FlagDir):
+
+  BTRESCAN.FLG
+
+    This global flag for all lines works different from BTRESCAN.nn: Each line
+    monitors this flag and if a line notices a change in the modification
+    timestamp of this file, the line initiates an outbound rescan. If the file
+    did not exist, but suddenly appears, a rescan is done, too. If there is no
+    change or the file does not exist, nothing happens. For users of XenObm:
+    This behaves very similar to XMRESCAN.FLG, so it should work pretty good
+    now with XenObm regarding rescan flag!
+
+  BTRESCAN.BSY
+
+    This global flag is generated at start of an outbound rescan / reread of
+    any line and deleted after the line finished rescanning / rereading
+    outbound. While this flag is present, no other line will begin an outbound
+    rescan/ reread, but a line attempting to begin an outbound rescan / reread
+    while this flag is already present will "remember" to do the rescan later
+    by creating BTRESCAN.## for itself. BTRESCAN.## will be deleted immediately
+    after creation of BTRESCAN.BSY.
+
+  This will lower system load (especially in networks and multiline systems) by
+  avoiding multiple lines rescanning / rereading simultaneously.
+
+  BTRESCAN.DMP
+
+    The first binkley task who decides to do a new rescan writes rescanned data
+    into BTRESCAN.DMP (saying "Rescanning"). If this file is not older than
+    "ReadHoldTime" minutes, the other lines will just read this dump file
+    (saying "Reading").
+
+
+TJW: Language.Txt
+
+  This is a mixed language file with English, Startrek and German language.
+  Lines with English text are prefixed by "E", lines with Startrek text are
+  prefixed by "S", German is prefixed by "G" and common lines are prefixed by
+  "*".
+
+
+TJW: BTUTIL
+
+  Integrated BTCTL and BTLNG into one new single tool named BTUTIL. This saves
+  about 53KB EXE size in total. Invoke BTUTIL without parameters to see usage.
+
+
+TJW: BTUTIL
+
+  Modified BTUTIL to accept mixed multiple-language language source files.
+
+  BTUTIL LNG key E language.txt english.lng
+  BTUTIL LNG key S language.txt startrek.lng
+  BTUTIL LNG key G language.txt german.lng
+
+  It is possible to use BTUTIL LNG without "key X" parameter to process old
+  language files.
+
+  Note: The language specifier is cAsE-sensitive!
+
+
+TJW: Language file
+
+  No support for external language file any more as this was a popular problem
+  source. You MUST patch your LNG into the EXE using BTLNG patch, if you want
+  to have something different as standard english language.
+
+
+TJW: Merged in BTPE 4.00, 4.01 and 4.02 diff of Paul Edwards
+
+  See btpe_402.txt for details.
+
+
+TS/TJW: misc. source fixes and cleanups
+
+
+???: Date and Time
+
+  Changed date / time display to 96/06/24 Mon 23:59 format. This is neither
+  european nor US format, but simply logical ;-)
+
+
+HR: made BT-XE compile for Win32 again using Visual C++
+
+  No hydra support and no timesync support yet.
+
+
+HR: First implementation of Lookup functions
+
+  Works with ALT-S (Send File), ALT-G (Get File), ALT-P (Poll Node) and ALT-M
+  (Manual Poll)
+
+  If you enter a sysopname and the sysop has more than one line, you see a node
+  entry select window now and you can choose the node to use for the selected
+  function.
+
+  Don't use wildcards as * and or ? - use only part of names - they are working
+  as wildcards.
+
+  So "R Heeb" will find "Rudolf Heeb or "Rudi Heeb".
+
+  You can also use the last name only. Waldmann finds all Waldmann, not only
+  Thomas. :-)
+
+  If you enter both (firstname AND lastname) lastname is nor interpreted as
+  wildcard. If you enter one name only, it is using it as wildcard for
+  lastname.
+
+  Examples: "R Heeb" finds Rudi Heeb, Rudolf Heeb, Renate Heeb.
+            "R Heeb" does NOT find Rudi Hee, Rudolf Heebermann.
+            "Hee" finds Rudi Heeb, Rudolf Heeb, Renate Heeb, Rudi Hee,
+                  Rudolf Heebermann, Elke Heess ...
+            "T Wald" does NOT find Thomas Waldmann
+            "T Waldmann" finds Thomas Waldmann
+
+  Be aware that if you use only one or two characters, there will be many
+  entries to be found. Many entrys -> much time and much memory needed! Please
+  try it, and report any errors and whishes to Rudolf Heeb.
+
+
+HR: Enhanced Alt-S (Send) and Alt-G (Get) Dialogs
+
+  Those dialoges now also take addresses not listed in nodelist. So you can put
+  files on hold for or do file requests from unlisted nodes/points
+  respectively.
+
+
+TS: Visual progress metering bars
+
+  Implemented visual progress metering bars for Janus/Hydra/Zmodem in
+  Wazoo/Emsi sessions.
+
+
+TS: Visual progress metering bars
+
+  Moved progress meters to new window overlapping outbound window while in
+  Wazoo/Emsi sessions.
+
+
+???: Added magic check for reading Binkley.Axx dump files.
+
+  Should help avoiding crashes with trashed dump files.
+
+
+???: Recenty Activity Scrolling
+
+  Maybe improved recenty activity scrolling performance a bit by aligning each
+  line on a 4 byte boundary for video modes with a column count that is a
+  multiple of 4, too (e.g. 80 or 132).
+
+
+???: Extended timesync to use EMSI addresses
+
+
+TJW: Hydra chat
+
+  If you have a hydra session, you might use chat mode now (if the other side
+  is capable of chat mode, too - some mailers tell you this with a message
+  displayed as "HCON: remote has chat capability (bell enabled/disabled)" or
+  similar).
+
+  To enter chat mode on your side, hit "Alt-C". Two windows "Local" and
+  "Remote" will appear, shrinking "Recent Activity" - I strongly(!) recommend
+  80*50 video mode for this (mode co80,50) - with 80*25 you will have only 2
+  lines as chat window(s).
+
+  At this moment, your side will transmit a string to the other side notifying
+  that you entered chat mode (and also two bell characters to wake up the
+  remote sysop).
+
+  If remote sysop is not awake yet, you may send some more bell characters
+  using Ctrl-G (the same is possible if remote sysops calls you for chatting
+  if you have enabled the chat sound with the "Gong" keyword in Binkley.Cfg).
+
+  To send text to remote side, simply type it in. All text entered on the
+  remote side will appear in your "Remote" window.
+
+  To leave chat mode hit Alt-C again. Chat mode will automatically be left at
+  end of the session if one side leaves chat mode (or even did not enter chat
+  mode). Also, there is an input timeout, so don't sleep while chatting.
+
+  Please report any problems or incompatibilities with chat mode, especially to
+  other mailers.
+
+
+TJW: new keyword "NoHydraChat"
+
+  You can disable Hydra Chat capabilities using this keyword.
+
+
+JL: Added "Sorted Outbound"
+
+  The 'Pending Outbound Mail' is sorted by Domain / Zone / Net / Node / Point.
+  Sendable mail is still on the top. Outbound on HPFS drives was already sorted
+  even without this feature - but FAT users [DOS] will now be happier, too.
+
+
+TJW: "Hydra1st" keyword dropped
+
+  This was dropped after XE2 release and is no longer a valid config verb. For
+  explanation see "ProtocolPreference" keyword.
+
+
+TJW: "ProtocolPreference" keyword
+
+  This made "Hydra1st" keyword obsolete.
+
+  Binkley 2.60, 2.60 XE1 and XE2 were NOT fully FSC-0056 (EMSI specification)
+  conform yet (well, it worked, though ;-).
+
+  Old / wrong behaviour:
+
+   1. Caller system sends all protocols (HYD,JAN,ZAP,ZMO) it can do.
+
+   2. Called system (BT) chooses a protocol with fixed preference order
+      JAN,HYD,ZAP,ZMO (BT 2.60 orig) or HYD,JAN,ZAP,ZMO (XE and Hydra1st) - no
+      matter in which sequence the protocols are transmitted (preferred) by
+      caller.
+
+  New and correct behaviour:
+
+   1. Caller system sends all protocols it can do in order of preference: It
+      sends e.g. HYD,JAN,ZAP,ZMO if it can do them all and prefers Hydra as 1st
+      choice, then Janus as 2nd choice, ZedZap as 3rd choice etc.
+
+   2. Called system chooses the FIRST protocol out of the transmitted protocol
+      preference string which it is itself capable of.
+
+      If ZAP,JAN,HYD,ZMO is received and it can do ZAP, it will choose ZAP,
+      doing the 1st choice protocol.
+
+      If JAN,HYD,ZAP,ZMO is received and it can't do JAN, but HYD, then HYD
+      will be done, doing the 2nd choice protocol.
+
+  With ProtocolPreference you can set what YOUR own Binkley will send in EMSI
+  if you call out to another system.
+
+  Default preference sequence (if you don't specify this keyword):
+
+  HYD,JAN,ZAP,ZMO       (if Hydra is implemented in your Binkley version)
+   or
+  JAN,ZAP,ZMO           (if no Hydra is implemented in your Binkley version)
+
+  With NoJanus, NoHydra, NoZedZap etc. the corresponding protocols will be left
+  out of the default ProtocolPreference string, of course.
+
+  If you specify "ProtocolPreference HYD,ZAP,ZMO" your Binkley will tell remote
+  side on outgoing calls that it prefers HYDRA as 1st choice, then ZedZap as
+  2nd choice and ZMO as last choice and that it can NOT do anything other.
+
+  ATTENTION: Be aware that the user defined ProtocolPreference string is
+  =========  nearly transmitted "as is", there are not many checks if it is
+             valid or if it does comply with your other settings!
+             So DON'T use this keyword if you don't know what you're doing.
+
+  If you call out and the other side does not answer with the first available
+  protocol in YOUR ProtocolPreference although remote side is capable of doing
+  it and also has not disabled it, the remote side is NOT fully FSC-0056
+  compliant and you should notice the software author of that.
+
+  This behaviour is overridden by the new statement "SmartBiDi" (see below).
+
+
+TS: DOS only: announcement of the fossil in use.
+
+
+TJW: new keyword "ReadLog"
+
+  If you spawn other programs from Binkley which generate a binkley style log,
+  you can read this log into Binkley's screen (and log). The log specified with
+  "ReadLog" is DELETED after it is read and incorporated into Binkley's log.
+
+  e.g.: ReadLog  c:\bt\1\bink_add.log
+                 ^ redirect all other bink style logs you want to include to
+                   that location
+
+
+MMP: "MaxBusyAge" keyword.
+
+  Followed by a number of minutes, it specifies that Binkley should ignore .BSY
+  files older than that. This can be used to automatically make a node dialable
+  even if he has an old .BSY file laying around. This can happen if Binkley for
+  some reason didn't clean up after a session; i.e. the system is rebooted. It
+  will also handle the situation where Binkley (god forbid) traps, and is
+  respawned using the "Respawn" command line argument.
+
+  Example: MaxBusyAge      240
+
+
+MMP: "SpawnNoOK" keyword
+
+  Followed by a command, it specified that the command should be executed if
+  the modem does not respond OK to the initialization string in unattended mode
+  within half a second. If your modem is too slow to respond OK, you can add a
+  number of tildes to the initialization string. This feature is useful for
+  detecting if a modem has hung itself, and notify the sysop, or with the right
+  software and hardware turn the modem off and on again.
+
+
+MMP: "Quick" modifier for "AfterMail" keyword
+
+  Using "AfterMail Quick <command>", Binkley does not spend unneccesary time on
+  modem initialization. This is useful if the AfterMail command is very
+  quickly. On my system i can run the aftermail in about the same time, as it
+  take Binkley to initialize the modem. Also, without "Quick" a caller can be
+  so unlucky, that the modem is reinitialized when he calls in.
+
+
+MMP: "CacheHold" keyword
+
+  This enables caching of the outbound, and speeds up rescanning. The usage is:
+  CacheHold <level> [Stat]. <level> specifies the amount of caching, and can
+  take the following values:
+
+    0  No caching and Binkley scans as usual.
+
+    1  Directories are cached. Using this, Binkley only need to read the
+       directories once when scanning the outbound.
+
+    2  Flow files are kept in memory. Using this, Binkley does not need to
+       reread flow files that has not been changed.
+
+  On my system CacheHold reduces the average rescan time from approximately
+  2.70 seconds to 1.30 using 29 KB cache. However, the memory requirements and
+  improvement in speed will differ from system to system.
+
+  Add "Stat" to the line, and it will be logged how the rescanning performs.
+  Use "CacheHold 0 Stat" to log the performance without caching.
+
+
+MMP: Added the ability to freeze Binkley.
+
+  When Binkley sees BTFREEZE.xx (xx is the hexadecimal task number) in the
+  flags directory, it deletes the file, and creates BTFROZEN.xx instead. Then
+  it lowers the DTR signal, and waits for BTFROZEN.xx to disappear. When it
+  disappears, the modem is reinitialized. This feature is useful for freezing
+  Binkley when compiling nodelists in the background.
+
+
+???: New keyword "EMSIbanner" for debugging purposes
+
+  If you put this in your Binkley.Cfg, Binkley will send a banner string (+
+  Address ... using ...) *before* sending **EMSI_INQ - this helps with some
+  remote COM I/O systems which fail within the first few received bytes.
+
+
+???: New commandline verb "Debug"
+
+  Does the same as "Debug" in config.
+
+
+???: Added mailstatus character to zoomed outbound view (-*x>$...).
+
+
+TJW: new keyword "IPC"
+
+  With this, you define the directory which Binkley will use to write Max 2.x
+  compatible IPCxx.BBS (xx = tasknumber in Hex) files into.
+
+  E.g: IPC h:\Max\IPC\
+
+  The IPC files will contain "BinkleyTerm 2.60XE" as user name and some
+  information about Binkley's state, e.g. "Waiting for Call or Event".
+
+  If you do not use IPC keyword, Binkley will NOT write IPC files.
+
+
+MB: Maximus 3.x MCP support (OS/2 version only).
+
+  (Thanks to Mike Burgett for writing and Bob Juge for sending, merged in by
+   TJW)
+
+  Just define the same path with MCPpipe statement of Binkley as in MCP
+  statement of Maximus, e.g.: MCPpipe \pipe\maximus\mcp If you do NOT want to
+  use MCP just do NOT define "MCPpipe" in your config!
+
+  Then use SM (session monitor of Max 3.x) to view line status.
+
+  MCP.EXE *MUST* be running on startup of BT-XE to use this feature. You must
+  also have MCP32.DLL in LIBPATH to run this version of BT-XE (even if you
+  don't use MCP).
+
+  Both is part of Maximus 3.xx package (but can also be used without having
+  Maximus installed).
+
+  Remark of TJW: Due to file handle inheritance problems, automatic start code
+                 for MCP.EXE was removed. So you have to start MCP.EXE before
+                 BT-XE or MCP will not work.
+
+  You must *NOT* start MCP using SpawnInit - this would cause problems.
+
+  Use this a SINGLE time in your CMD file (startup.cmd e.g.) before you invoke
+  any BT-XE task using MCP:
+
+                 MCP.EXE . <pipename> <number of tasks> server
+
+  e.g.:   detach MCP.EXE . \pipe\maximus\mcp 16 server
+
+  Be sure that you have set MAXIMUS environment variable before this command.
+
+  Directly after starting MCP it's a good idea to start SM.EXE to *use* MCP. Do
+  NOT start SM.EXE with SpawnInit.
+
+
+???: Changed janus.c to create JANUSREQ.R%02x in flagdir
+
+
+TJW: new keyword "TaskPath"
+
+  You can specify a separate directory for BINKLEY.?xx files with this to keep
+  your Binkley directory clean. Defaults to Binkley directory.
+
+  e.g.:  TaskPath c:\bt\task\
+
+
+TJW: Changed order of config file reading
+
+  old: binkley.scd -> binkley.evt -> binkley.cfg
+  new: binkley.cfg -> binkley.scd -> binkley.evt
+
+  This was necessary for TaskPath to be known before searching binkley.scd/sxx.
+
+
+???: Today at a glance
+
+  Changed "Today at a glance" to show Mail/BBS/Fax calls ("M/B/F") - also
+  changed alignment and moved it to language.txt
+
+
+???: Messages
+
+  changed message "File requests declined" to "Remote doesn't allow file
+  requests now"
+
+
+???: Fossil Annoncement
+
+  DOS only: makes fossil announcements configurable by using the language file.
+  this is way better than hardcoding them into the executable.
+
+  The language file is readily prepared to detect and announce the following
+  fossils:
+
+    ADF (AnDan), BNU, cFos, DrComm, FCI, Opus!Comm, VX00, X00
+
+  To add a new/other fossil, do the following:
+
+  Look in the language file (LANGUAGE.TXT) for a line which reads like this:
+
+    *LVX00:VX00,X00:X00,BNU:BNU,CFOS:cFos,OPUS:Opus!Comm[,...]
+
+  This line is composed of pairs of strings. each pair contains a search string
+  and an answer string separated by a colon, e.g.:
+
+    OPUS:Opus!Comm
+
+  Where `OPUS' is the string to look for in the internal fossil signature id
+  string, and `Opus!Comm' is the string that will be output to the screen and
+  logfiles.
+
+  You simply add the new/other fossil search/answer string pair at the end of
+  the line (preceeded by a `,'), but please mind that:
+
+   - The search string has to be in upper case, while the answer string may be
+     in upper/lower/mixed case.
+
+   - Search- and answer strings must not contain any of the characters: ` '
+     (blank/space), `,' and `:'.
+
+   - You have to use a search string which definitely designates a fossil you
+     look for. therefore the search string `VX00' has to come before search
+     string `X00', because the other way round (`X00' first, that is) the
+     answer string for `X00' would be output for both `X00' _and_ `VX00' ...
+
+
+???: Include keyword
+
+  Reduced stack space needed for "include", so you can do more "nested"
+  includes now.
+
+
+???: Worked HydraCom 1.09d changes into hydra / hydra chat source
+
+  Alt-C is now used for entering (and exiting) Hydra chat mode. Clearing "Today
+  at a glance" is done with Alt-D now.
+
+  Hydra protocol now also works with long fnames correctly (OS/2 only). Long
+  filenames are NOT supported in BT yet except in hydra protocol.
+
+
+TJW: Modem command character translation "." -> "," removed
+
+  So you can specify commands likw AT+FCLASS=2.0 now without having to "escape"
+  the dot. You MAY, of course, continue using AT+FCLASS=2\.0 ...
+
+  The only translations happening now are:
+
+    "|"  -> output CR character
+    "v^" -> lower/raise DTR
+    "~"  -> pause 1s
+    "`"  -> pause 0.1s
+    "-"  -> don't output anything
+
+  If you don't want them, prefix them by an "escape" character which is: "\".
+
+
+HR: ShowAlive
+
+  The file I_ALIVE.xx is now generated also in terminal mode while waiting for
+  key strokes and while transfering with XModem and ZModem (UPload/DOWNload).
+  Also, I_ALIVE.xx is generated while the user does an input (nodenumber,
+  systemname, filename and so on). Yes, there are people needing more than 1
+  minute to enter a nodenumber. :-)
+
+
+TJW: OS/2 only: Window Titles
+
+  BT-XE can set the window title of its own window to "BT-XE #<TaskNumber>:
+  <Action>" (default). "Action" is the same as in Maximus' session monitor (if
+  you use MCP).
+
+
+TJW: New keyword "WindowTitleFmt".
+
+  This is used for setting the format string of window titles.
+
+  Default is (if you specify WindowTitleFmt without parameters):
+
+    WindowTitleFmt BT-XE #%%d: %%s    (you have to specify %% to get the single
+                                       % as result or BT will crash)
+
+  Further, you HAVE TO use first %%d AND second %%s !
+
+
+???: IPC:
+
+  "Snoop"   defines the Snoop pipe - NOT the MCP pipe  (OS/2 only)
+  "MCPpipe" defines the Maximus MCP pipe               (OS/2 only)
+  "IPC"     defines the directory for IPCxx.BBS        (all platforms)
+
+  You can use ALL now, if you want.
+
+
+
+
+BT 2.60XE/Gamma-XR4  (9612240000)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+Bugfixes
+--------
+
+TJW: Language file
+
+  Binkley never used language file strings M_PRESS_ESCAPE and M_NO_BBS (but
+  hardcoded english text "Press escape to enter BBS" and "Doing mail only ..."
+  if you did not specify it in your Binkley.Cfg). Fixed.
+
+
+TJW: Removed $xxxxx size information on janus outbound requests
+
+
+TJW: Made BTRESCAN.BSY semaphore file more safe
+
+  This fixed sharing problems under DOS
+
+
+TJW: Rescan
+
+  Initial rescan with BTRESCAN.FLG touched before starting BT-XE should work
+  now.
+
+
+TJW: BTRESCAN.DMP
+
+  Further, btrescan.dmp's timestamp is set to the BEGIN time of the rescan.
+
+
+TJW: Added missing "/" into EMSI mailer / version / compiler info
+
+
+TJW: Bugfix for deleting old bsy files
+
+  There was a problem with networked PCs having slightly different times,
+  giving "negative" ages.
+
+
+TJW: Fixed dynamical events
+
+  A real rescan will be forced before a dynamic event can be terminated (and
+  now it will wait for it to *really* happen, even if outbound is temporarily
+  "locked" by btrescan.bsy).
+
+
+TS: (TS110409) fossil detection fixes / enhancements
+
+
+TJW: Bad Calls
+
+  Binkley stored an "int" into "bad call" files (2 bytes for DOS and 4 bytes
+  for OS/2) what may have lead to problems when mixing DOS and OS/2 versions
+  using the same outbound. Now 4 byte "long" values are used for both versions.
+
+
+TJW: Fixed cosmetical bug with missing blank in IPC file
+
+
+TJW: Fixed "powerdialing of a node"
+
+  BT-XE should honour now your A=xx event setting
+
+
+TJW: Fixed cost restriction bug with sized requests
+
+
+TS: 2 diffs with display stuff
+
+
+CFS: OS/2 only: Replaced DTR raise/lower code.
+
+  It now works with CFOS's -kx switch.
+
+
+TJW: Fixed bug in Send_WaZoo routine
+
+  That lead to problems with file request at FD/IM systems (or maybe also with
+  other ZedZap mailers) if the file request *.REQ file was sent without other
+  mails or files.
+
+
+TJW: Fixed EMSI capability bug
+
+  If there was no bidirectional session or no BiDi* or Janus* stuff in config,
+  Binkley said that it is able to do Hydra/Janus although it was NOT. Result:
+  "No common session protocol- fallback to FTS-1" on BT's side, Hydra or Janus
+  on other side.
+
+
+TS: DOS version only bugs fixed:
+
+  - if used without vfossil, Binkley/BT-XE always used only 25 screen rows,
+    regardless of the real number of screen rows available. now BT-XE is
+    able to determine and use the real number of available screen rows
+    without a vfossil being loaded.
+
+  - if used without a vfossil, the cursor could be seen even if the screen
+    was `blanked'. now the cursor is disabled/enabled exactly as a loaded
+    vfossil would do.
+
+  - if used without vfossil, only 23 rows where used under certain
+    conditions. hopefully ;-) fixed
+
+
+unknown / SIJO / TJW:
+
+  - there was a problem (access violation because of NULL pointer) if Hydra
+    received [and discarded] a too long packet. Should be fixed.
+
+
+
+New features
+------------
+
+CFS: MODEMCID string
+
+  string=last data coming from the modem before caller-id. If used, caller-id
+  is logged.
+
+  e.g.:                          MODEMCID ID=
+  for a connect string such as:  CONNECT 64000/ARQ/ID=3782005/EAZ0
+  BT-XE would log:               Got CID: 3782005
+
+  This keyword is required for the next one.
+
+
+CFS: BANNERCID phone banners
+
+  Sets a custom banner for caller-id calls. * is allowed as wildcard. First
+  match wins:
+
+  BANNERCID 07492226912951 Hi, Hauke!
+  BANNERCID 0749* Woa! A call from Germany...
+
+  If no match, the banner specified using BANNER (Tracing your call...) is
+  used.
+
+
+CFS: STRINGREP string replacement
+
+  Replaces a string for any other. Replacement only takes places at screen and
+  log writes. I've written this to change the cryptic cause numbers from CFOS
+  for more appropiate text.
+
+  e.g.: STRINGREP /CAUSE=34B9 /Out of order
+  so  : NO CARRIER/CAUSE=34B9 becomes NO CARRIER/Out of order
+
+
+CFS: New keyword NOHUNDREDTHS per request in the BINKLEY support echo.
+
+  If used, 1/100s of seconds won't be logged any more.
+
+
+TS: C replacement for DOS ASM stuff
+
+
+TJW: New, optional event "name" field:
+
+  You can now specify: Event "Event name up to 32 chars" All 20:00 ...
+  instead of:          Event All 20:00 ...
+
+  The string will be used in "next event" display and at start of event.
+
+
+TJW: Cost vector now may have 32 entries (thanks to german Telekom)
+
+
+TJW: Window Titles
+
+  Changed function for setting OS/2 window title to the more simple and maybe
+  also "more official" function Win16SetTitle
+
+
+MR: If a config file could not be found you will get an error message.
+
+
+MR: New makefile for Watcom C 10.x for the OS/2 and DOS versions.
+
+
+MR: Made some minor changes to be able to compile and use the Watcom exes.
+
+
+MR: Increased BINKLEY.BAN buffer to 2K for OS/2
+
+
+MR: new xe_user.doc layout
+
+
+TS: DOS only: new config statement `NoANSITrash'
+
+  Using this statement makes only sense with dos versions under certain
+  conditions (see below) and will be simply ignored by the os/2 version.
+
+  If you use the BT-XE dos version without a vfossil loaded AND without an
+  ansi-driver loaded AND do not intend to redirect screen output to
+  another com-port (e.g to drive an external ansi terminal additionally
+  hooked to your main machine) then you can use the `NoANSITrash' config
+  statement to suppress some some ansi escape sequences which typically
+  will show up on the last screen row and when exiting the mailer.
+
+  There is no reason to use this config statement if:
+   - you use OS/2
+   - you have either an ansi driver or a vfossil or both installed
+   - you intend to redirect screen output to an ansi terminal hooked to another
+     comport of your machine
+
+
+CFS: OS/2 only: new keyword "SIOmode"
+
+  Uses an alternate DTR raise/lower code that works with CFOS's -kx switch
+  (SIO emulation).
+
+  SIOmode    | Method to raise / drop DTR
+  -----------+-----------------------------------------------------
+  used       | DosDevIOCtl / ASYNC_SETMODEMCTRL / DTR_ON | DTR_OFF
+  not used   | MaxComm.DLL / ComSetDCB / MODE_DTR_CONTROL
+
+
+TS: updated FTSCPROD list in language.txt
+
+
+
+
+BT 2.60XE/Gamma-XR5
+=-=-=-=-=-=-=-=-=-=
+
+
+Bugfixes
+--------
+
+SM: fixed: while manually polling node, Binkley did not update 'Current
+    Settings' and WindowTitle (IPC_SetStatus).
+
+
+RH: fixed changing colour after "connected with <sysopname>"
+
+
+RH: fixed mistake in handling of (COM) device names.
+
+  Now values >9 are possible. Added code to async_os.c to allow use of "Port
+  COMx" statement.
+
+
+RH: fixed bug in language code (msgs.h).
+
+  Now the newsreader and the shells are displayed in unattended help window.
+
+
+RH: fixed a serious bug in my "Override" code.
+
+  The fields after "Nodenumber" are by definition not required and the
+  pointer(s) in my structure is (are) NULL if the field(s) in question is (are)
+  not defined.
+
+  I forgot to check for NULL in "GetAlt...()" in misc.c and had some exceptions
+  because of that.
+
+
+RH: Squish error (could not display pending netmails if squish base) fixed.
+
+
+RH: XR4 traps if no "binkley.evt" exists. Fixed.
+
+
+RH: hydra chat
+
+  If "noHydraChat" defined and ALT-C is pressed in hydra and other side has
+  hydra chat available, XR4 traps. Fixed.
+
+
+RH: EMSI
+
+  While implementing smart_bidi, I found and removed a bug in emsi.c that could
+  (and did) lead to that the called side told the caller "agree to zmodem", but
+  in fact switched to hydra. The error was that neither my_capabilities nor
+  remote_capabilities were not masked by the actual protocol but all
+  protocol-bits remained to be set.
+
+
+RH: fixed cosmetical bug with binkpipe
+
+  "Last:" field was wrong.
+
+
+RH: fixed cosmetical bug in pending outbound
+
+  Scroll down scrolled one line too much.
+
+
+RH: OS/2 only: moved all functions that need OS/2 PM to a separate DLL.
+
+  The new code is located in ..\os2_pm. I've made makefiles for VAC and WATCOM,
+  compiled with both and both versions run fine.
+
+  If you don't have OS/2 PM installed, don't install bink_pm.dll.
+  If you have OS/2 PM installed (standard), put bink_pm.dll in the same
+  directory as BT32.EXE.
+
+
+TJW: corrected range check for V7 cost field (solves potential 16Bit problem
+     with cost = -1 / 65535)
+
+
+TJW: removed blinking cursor after unfreeze
+
+
+TJW: fixed bug in Alt-S (if you gave no path/drive, first letter was
+     duplicated)
+
+
+TJW: "Resending ..." corrupted Transfer Status window
+
+  Omitted displaying this message and changed status log entry from > to !
+
+
+TJW: fixed bug in receive_exit
+
+  Any stuff to do IN binkley has to be done, before any errorlevel exit may
+  happen (mail flag, aftermail etc.).
+
+
+TJW: fixed misc. "cosmetical" bugs in Zmodem display routines
+
+
+TJW: fixed wrong blanks (instead of leading '0's) in cost.log
+
+
+SM: fixed "Are you sure ?"-bug in terminal (answer was case-sensitive)
+
+
+SM: fixed 'outbound reading bug' in mailovly.c
+
+
+SM: bink_pm.dll caused exception in _crt_term() when more than one instance of
+    binkleyterm was loaded and exited in the same order they were started.
+
+
+TS: misc fixes only of concearn for the emx compiler
+
+
+TJW: Made "ReadLog" feature more safe.
+
+  Shouldn't crash any more if input log format is invalid (e.g. if Maximus
+  crashed)
+
+
+TJW: sized requests were broken
+
+  fixed by removing mailovly.c::netsize() and adapting cache.c::netsize for
+  cached/uncached operation.
+
+
+TJW: fixed RC* <-> RC$ confusion
+
+
+TJW: if there is mail for a "Hold"-listed node, Binkley showed strange
+     behaviour ("NO DIALTONE ..."). Temporary fix.
+
+
+TJW: fixed EMSI.C::EncodeEmsiHeader (removed superfluous strtok call) this bug
+     caused outgoing calls NOT to do ZedZap (e.g.)
+
+
+MR: Bugfix: allocated memory for chat windows will now be freed
+
+
+TJW: hopefully fixed "freezing bug" of animation in top left corner
+
+
+TS: fixed `ErrLevelShell' bug present in DOS versions
+
+
+MR: fixed CacheHold bug
+
+
+TJW: fixed bug with dupe pkt names
+
+  This happened if multiple pkts are sent within the same second (happened
+  rarely, but happened ;-)
+
+
+TJW: fixed bug in EMSI.
+
+  As a consequence of this fix, password failure msgs are logged earlier in
+  EMSI processing (before System:, Aka:, Uses: etc. is logged).
+
+  Thanks to Stephan Jaensch and Philip Richter for discovering this bug.
+
+
+MR: Made answering more save.
+
+
+MR: Readdressing to same address could end in an endless loop, fixed.
+
+
+
+New features
+------------
+
+RH: "EMSILog <filename>"
+
+  Lets you log your sent and received EMSI string in a file. This is extremely
+  useful in case you have problems with EMSI. Assume you get a password
+  error: do you really KNOW wich password you ACTUALLY have sent? Log it, and
+  you'll see it. Assume you don't get a hydra connect: are you absolutely
+  sure that you told the other system about your capability and are you
+  absolutely sure, that the other system told you about to use hydra? Log it,
+  and you'll see it.
+
+
+RH: "RedialTime <seconds>"
+
+  Time between redial attempts when you are polling (only then!). This will
+  give you a better chance to get a connect without increasing "polltries" to
+  infinity. Works on BUSY, ERROR and timeouts ("NO CARRIER"). Does not work on
+  NO DIALTONE.
+
+
+RH: "AssumeBaud <bpsrate>"
+
+  In case the modem reports "CONNECT" or "CONNECT 300" binkley will use the
+  rate defined with assumebaud. Important for calculations of connect/frequest
+  times.
+
+
+RH: "BitType"
+
+  Default in binkley is "TypeExact".
+
+  This means, that a nodelist line with both analog and ISDN capability can be
+  separated only with acrobatic efforts. If you include "BitType" in your
+  binkley.cfg Binkley will scan each modemflag separately and will use the
+  first matching predial string. If you don't configure a "ModemTrans" predial
+  string, then the string after "Predial" (if any) is used (and this may lead
+  to dial attempts even if not wanted as of ISDN<-->modems.
+
+  Just look at my example:
+
+  [fastlst.cfg]
+  TypeDef HST      1
+  TypeDef PEP      2
+  TypeDef V32      4
+  TypeDef V32B     8
+  TypeDef VFC     16
+  TypeDef X75     32
+  TypeDef V110L   64
+  TypeDef V110H  128
+  TypeDef UX75    32
+  TypeDef UV110L  64
+  TypeDef UV110H 128
+
+  Now let's look at binkley.cfg. Please note the sequence of the entries!
+
+  [binkley.cfg]
+  BitType
+  ModemType 32      /  /X75
+  ModemType 64      /  /V110L
+  ModemType 128     /  /V110H
+  Modemtype 31   ATD/  /MODEM
+
+  RESULT: Your line will NOT call any ISDN node, even if (s)he has any modem
+          flag set!
+
+  [binkley.cfg]
+  BitType
+  ModemType 32   ATD/   /X75
+  ModemType 64   ATD/   /V110L
+  ModemType 128  ATD/   /V110H
+  Modemtype 31      /   /MODEM
+
+  RESULT: Your line will ONLY call ISDN nodes, even if they have a modem flag
+          set. It will never call a "modem only" node
+
+  [binkley.cfg]
+  BitType
+  ModemType 32   ATD/     /X75
+  ModemType 64   ATD/     /V110L
+  ModemType 128  ATD/     /V110H
+  Modemtype 31   ATK99D/  /MODEM
+
+  RESULT: Your line will call both ISDN and modem nodes, with different dial
+          strings. Preferred is "ISDN", but "modem" is possible
+
+
+RH: "ModemTrans"
+
+  Old style: "ModemTrans <flag> <prefix>/<suffix>"
+  New style: "ModemTrans <flag> <prefix>/<suffix> /<name of flag>"
+
+  There are no changes for your current config, but if you like to see the
+  nodelist info in the zoomed outbound window (ALT-I), you would like to see
+  the modem flags of the node in "ascii".
+
+  A line "ModemTrans 32 ATD/ /X75" would allow to display a modem of type 32 as
+  "X75". The display is "BitType" aware.
+
+
+RH: "NoErrDelay"
+
+  Binkley XE has the feature to wait 5 seconds after each error found in any
+  config file. With this keyword you can switch this off.
+
+
+RH: "BinkDir"
+
+  If a directory needed for binkley to run is not found: create it. This works
+  for all directories that are given in binkley.cfg. It works for the logfile's
+  directory, too.
+
+
+RH: "ShowDomains"
+
+  Binkley 2.60 and all XEs did NOT show the domains of outbound mail in their
+  outbound window. If you like it or if you need displaying of domains: include
+  this keyword in your config.
+
+  Default is: no domains in "Pending Outbound"
+
+  Note about domains:
+
+  Binkley is fully capable to handle 5D addresses, but you have to know how it
+  is done ;)
+
+  Assume there is mail for a node 256:256/256 (MXBBSNet). Where is his
+  outbound mail searched for?
+
+  Binkley 2.60 searches this mail in \MXBBSNet.100.
+
+  If you are using a 5D setup (this is: you are using domains) then your setup
+  has to be like this:
+
+  ;domain       domainname   abbreviation  name_of_nodelist
+  Domain        MXBBsNet     MXBBsNet      nodex
+
+  ;domainkludge zone         outbound_directory_PRE(!!)_name
+  DomainKludge  256          MXBBsNet
+
+  With these lines you determined, that "MXBBSNet.100" is the outbound
+  directory for all nodes in zone 256 (256 is hex 100, this is where this
+  ".100" comes from).
+
+
+RH: "BiDiOK", "JanusOK"
+
+  If either of them is set, binkley will allow janus/hydra connects even in
+  case the modem doesn't tell a "reliable" string. This only happens, however,
+  if the actual "baudrate" is equal or less then "BiDiBaud" resp. "JanusBaud".
+
+  Difference:
+
+  formerly: BiDiOk   /ARQ
+            BiDiBaud 9600
+
+  -> Only if modem reports "CONNECT <rate<9600>/ARQ" hydra/janus will be
+  enabled.
+
+  now:      BiDiOk
+            BiDiBaud 9600
+
+  -> If modem reports "CONNECT <rate<9600>/<anything>" hydra/janus will be
+  enabled, don't care about "<anything>"
+
+
+RH: "Port <name>"
+
+  Normally this would be "Port <number of comport>", as in "Port 2". From now
+  on you can write "Port COM1" as well as "Port 1", meaning that you can give
+  the device name of the port to use. This has, at the moment, no effect beyond
+  the fact that you can play with it. It will, however, be extended to use any
+  device that can handle serial communication.
+
+
+RH: "PasswordFile <path+filename>"
+
+  Instead of recompiling your nodelist again and again if you have password
+  problems or a new password protected link, you can from now on tell binkley
+  where it can search for YOUR passwords directly.
+
+  The file has to have the same format as a "fastlist" (tm) password file, i.e.
+  a line has to look like:
+
+  "PASSWORD zone:net/node.point@domain password"
+
+  Example:
+
+     Password 2:2476/7 passed ;comment        valid, password is "passed"
+     Password 2:2476/* passed                 invalid, no wildcards allowed
+     Password 2:2476/7@fidonet passed         valid, defines password "passed"
+                                              only for a node "2:2476/7" with
+                                              the CORRECT domain ("fidonet"). A
+                                              node 2:2476/7@anynet would get a
+                                              password failure.
+
+  This is an extension of password protection, 'cause with passwords only in
+  compiled nodelists binkley can normally not distinguish between a password
+  for "2:2476/7@anynet" and "2:2476/7@fidonet".
+
+  Note:  The password directly read from this file overrides any password
+  -----  in your compiled nodelist(s)! This feature IS intented to change
+         passwords on-the-fly without recompiling. The file is always read
+         at runtime when a password has to be verified. You don't need to
+         restart Binkley to be aware of any updates to that file.
+
+
+RH: "NoFancyStrings"
+
+  I really don't like that binkley changes strings. Sometimes it's ok, but most
+  times it is not, imho.
+
+  Don't use this keyword and nothing will change.
+
+
+RH: "ForcedRescan"
+
+  I've had the situation that one of my 2 lines crashed and left a BTRESCAN.BSY
+  file in the flags directory. When it started again it produced really a lot
+  of zero byte files in my \deleted\ directory (with OS/2 you can redirect all
+  deleted files to a directory of your wish).
+
+  Therefore i included this keyword: If you include it, too, then Binkley will
+  not create nor care about BTRESCAN.BSY and BTRESCAN.DMP but perform a real
+  rescan when it is scheduled.
+
+
+RH: "HoldAfterBadConnect <1...65535>"
+
+  Have you ever had this problem:
+
+  You have a session password with someone. This person has included it, you
+  have. But no session will be established because your friend uses some brand
+  new beta mailer with some little bugs?? I've had this situation. I will never
+  have it, cause this is very expensive: Binkley calls, all is technically ok,
+  the other side hangs up. No mail has been transferred, that's why binkley
+  calls again. And again. And again.
+
+  After <number> calls HoldAfterBadConnect will flag this nodes outgoing mail
+  as "has already made 65535 attempts to send".
+
+  This is something harder then "HOLD", cause other programs (Squish f.e.)
+  would probably set the status of "HOLD" mail back to "NORMAL". No program
+  except binkley itself will, however, decrease the count of 65535 or delete
+  the respectice counter file.
+
+
+RH: "ShowPassword"
+
+  Allows displaying of the password in the information window. Maybe you don't
+  like others to be allowed to press "alt-i" and view your session-pws. If you
+  don't care: include this keyword.
+
+
+RH: "NoEMSI"
+    "NoWaZOO"
+    "NoHydra"
+    "NoJanus"
+    "FTS-0001"
+    "NoRequests"
+    "NoDietIFNA"
+    "NoZedZap"
+    "NoSeaLink"
+    "ReqOnUs"
+    "NoPickup"
+    "NoWildcards"    this is a new statement
+
+  Now works either as known (this means: it is a global setting) or on a
+  per-node base. If you put nothing behind this verb, it works "globally", else
+  it works "on this node only". If you mix both, let's say "NoEMSI" and "NoEMSI
+  1:1/0", then it works globally, too, of course.
+
+  New Syntax:
+
+  FTS-0001    <nodenumber>: is the same as NoEMSI plus NoWaZoo plus NoSeaLink.
+                            and results in XModem connects.
+  NoEMSI      <nodenumber>: no EMSI on calls to "nodenumber".
+  NoWazoo     <nodenumber>: no WaZoo on calls to/from "nodenumber".
+  NoHydra     <nodenumber>: no Hydra on calls to/from "nodenumber".
+  NoJanus     <nodenumber>: no Janus on calls to/from "nodenumber"
+  NoZedZap    <nodenumber>: no ZedZap on calls to/from "nodenumber"
+  NoSeaLink   <nodenumber>: no Sealink on calls to/from "nodenumber"
+  NoDietIFNA  <nodenumber>: no FTS-1 sessions on calls to "nodenumber"
+  NoPickup    <nodenumber>: No Pickup FROM "nodenumber"
+  NoReqests   <nodenumber>: No Requests FROM "nodenumber"
+  ReqOnUs     <nodenumber>: Allow "nodenumber" to frequest even if YOU called.
+  NoHydraChat <nodenumber>: no hydrachats on calls to/from "nodenumber"
+  NoWildcards <nodenumber>: Reject requests containing wildcards (* and ?).
+
+  Default:   As in earlier times. If you don't change your config, you have no
+  --------   changes in binkley's behaviour.
+
+  Exception: As in earlier times: if no common protocol exists, FTS-0001 will
+  ---------- be choosen for INCOMING calls. You can, however, deny FTS-0001
+             sessions on OUTGOING calls with "NoDietIFNA".
+
+  Without "nodenumber" the changed behaviour works on both in- and outgoing
+  calls. With "nodenumber" it depends on *when* the nodenumber in fact is
+  known.
+
+  On outgoing calls it is always known, but on incoming calls you first have to
+  do (f.e.) EMSI, and after EMSI has been successful you will know that the
+  nodenumber is a "NoEmsi" number.
+
+  ALT-E in zoomed outbound lets you toggle the flags at runtime.
+
+              That state will be forgotten if binkley terminates!
+
+
+RH: "NoFilter"
+
+  Binkley in the past required a "filter string" (fe. "NoFilter /ARQ"). This
+  has been changed to not filter AT ALL if no string is present. "NoFilter"
+  means: no filtering.
+
+
+RH: Changed "current settings" window
+
+  It now doesn't show "M'Task" but the current DTE rate ("modem baudrate")
+  instead. With ISDN and 115200 bps there has been not enough space behind "COM
+  1". The "Status"-line now *shows* the status: "Waiting", "Init" but also
+  "Hydra", "Janus", "FTSC" and so on.
+
+
+RH: Changed size and position of the three windows "status", "recent", and
+    "outbound". The outbound window now is 2 columns more in size.
+
+
+RH: "AfterMail" with OS/2
+
+  Old Style: "AfterMail <any string>"
+  New Style: "AfterMail [#]<any string>"
+
+  I changed this to start a detached session of "aftermail" program. The
+  session is in VIO-mode, independent and gets the starting binkleys
+  environment. It will be started minimized and invisible. Don't forget to put
+  an EXIT statement at the end if CMD-files!
+
+  To enable detached sessions you have
+
+   1) to add the "#" char (this signals your intentions)
+
+   2) to change the command this way:
+
+        AfterMail #<os2-path>\CMD.EXE /C <script-path>\Toss.cmd
+
+      because CMD.EXE must be started to execute "toss.cmd".
+
+  Example: AfterMail #c:\os2\cmd.exe /c f:\binkley\toss.cmd
+
+  If you don't change your config, nothing changes. The char "# has is removed
+  if you don't run OS/2.
+
+
+RH: Changed behaviour so that a nodes mail is handled as if it were mail of an
+    "unlisted system" if that nodes modem is undialable.
+
+
+RH: Removed the limitation of number of allowed AKAs ("Address" keyword).
+
+  The limitation of recognizing the remotes AKAs is still left, though.
+
+
+RH: Added code to allow an EMSI string up to 64kB (EMSI limit).
+
+  In normal systems this code will have no function, but in systems with many
+  many AKAs (>100) it will work.
+
+
+RH: ALT-L in unattended mode
+
+  Toggles between loglevel 6 (debug mode) and configured loglevel.
+
+
+RH: Node Information
+
+  ALT-I in zoomed outbound and the "Send" and "Get" window, also in nodelist
+  lookup brings information about the currently tagged node. This led to an
+  extension of the keyword Modemtrans.
+
+
+RH: Loglevels
+
+  I extended it to up to 7 (formerly: 6).
+
+  Up to now LogLevel 7 is necessary to log the states of the statemachine to
+  binkley.log. The corresponding char is '&'. See StateTbl.c and Misc.c. If you
+  are really debugging the state machine: set your loglevel to 7.
+
+  Allowed Loglevel 0. Loglevel 0 means, that only strings staring with a '!'
+  will be logged to the logfile.
+
+
+RH: "Override <address> <phone> <modemflag[,modemflag]> <fidoflag[,fidoflag]>"
+
+  Allows to override any nodelist entry. Everything after a ";" or "%" is cut!
+
+  You can add nodes and points, that are not in the nodelist and change the
+  settings for listed nodes and points.
+
+  The <address> must be at least 3D (Zone:Net/Node). If you don't fill in the
+  address completely, the line is skipped.
+
+  The <phone> field must contain a "dialable" number, this is: the pure number
+  you have to dial. No prefixes for local calls, f.e.
+
+  The <modemflag> field
+   * requires configuration of "ModemTrans" statements
+   * "Override" must be included *after* "ModemTrans".
+
+  You are completely free in the names of the modemflags, but they must be the
+  same as in the third (new) field of "ModemTrans".
+
+  You can insert more then 1 string by putting a comma after each string.
+
+  The <fidoflag> field allows the following strings:
+   CM : this means CM (continious mail) as defined in FTS-5
+   HUB: this node is a hub
+   RC : this node is a region coordinator
+
+  The flags for "Host", "Point" and "ZC" are set by binkley internally.
+
+  You can insert more then 1 string by putting a comma after each string.
+
+  Instead of filling in the fields "phone" and/or "modemflag" you can insert a
+  dash ("-") as a placeholder if another field follows. Then Binkley will
+  ignore the "dashed" fields and will use the data from the nodelist.
+
+  Empty fields are allowed only from behind to the front.
+
+  Examples:
+
+    ModemTrans  31    / /Modem    ; links type 31 with string "Modem"
+    ModemTrans  32 ATD/ /X75      ; links type 32 with string "X75"
+    ModemTrans  64 ATD/ /V110L    ; links type 64 with string "V110L"
+    ModemTrans 128 ATD/ /V110H    ; links type 128 with .. you know it!
+
+    Override 1:-1/-1.0@fidonet   110 ; don't copy this line! #(
+    Override 1:901/499.0@fidonet 0054-1-8765432 X75,V32B
+    Override 1:901/499.0@fidonet 0054-1-8765432 X75,V32B CM
+    Override 1:901/400.0@fidonet 0054-1-8765432 - CM,HUB
+    Override 1:901/499.0@fidonet - X75
+    Override 1:901/499.7@fidonet - - CM,POINT
+                                ^^^^^^^^^^^^^^^^^^^^ note the dashes!
+
+
+RH: "PipeTo <remote computer name>"
+
+  Binkley OS/2 writes to a pipe named "\PIPE\BINKPIPE.???" with "???" being the
+  decimal tasknumber. This is NOT intended to serve a "Snoop" program, but to
+  transmit the complete screen to the pipe server "binkpipe.exe" (see below).
+
+  If you insert this keyword, be sure only to give the name of the remote
+  computer. Do NOT give the pipe's name, 'cause this is pre-defined and must
+  not be given!
+
+  Example:
+
+  [%Task%==1]
+  PipeTo \\pentium
+
+  [%Task%==2]
+  PipeTo \\notebook
+
+  [%Task%==3]
+  ;no "PipeTo" statement
+
+  Binkley (task 1), will write "\\pentium\pipe\binkpipe.001", and
+  Binkley (task 2), will write "\\notebook\pipe\binkpipe.002".
+  Binkley (task 3), will write "\pipe\binkpipe.003" if and only if binkpipe.exe
+  is running on the same computer as binkley/task 3 is running.
+
+  Note:  If you make use of this statement, then be aware that if the
+  -----  remote computer is switched off, binkley may slow down hardly!
+
+
+RH: "binkpipe.exe" (OS/2 only, Freeware under the binkley license agreement)
+
+  This is the serverside of said pipe.
+
+  It runs under OS/2 PM and displays binkley's screen. It must be called with
+  "tasknumber" at the commandline.
+
+  Example:
+
+  binkpipe         installs binkpipe watching for binkley/task 1
+  binkpipe 1       installs binkpipe watching for binkley/task 1
+  binkpipe 2       installs binkpipe watching for binkley/task 2
+
+  If you start binkpipe.exe after binkley, you will only see the screen
+  updates, not the complete screen. This is because it only prints what binkley
+  actually writes.
+
+
+RH: "DelBadCall"
+
+  Binkley remembers bad connects in his "netnode.$$?" files. If too many bad
+  connects are remembered, binkley will never call this system again. You, as
+  the sysop, have to delete this file manually. If you insert "DelBadCall" in
+  binkley.cfg then binkley will act as follows:
+
+  On outbound calls nothing changes: after x tries the remote system will be
+  remembered as "undialable" and will not be called again.
+
+  On inbound sessions, however, it will always check if there exists a
+  "netnode.$$?" file for the called system and delete it.
+
+  Where is the beef?
+
+  Without this feature, your binkley would not have called the remote system
+  even if the system becomes "living" again (proofed by his call to your
+  system). With this feature it will assume that the problem on the remote side
+  has been solved and will try again to connect.
+
+  If your leave the "DelBadCall" statement away, nothing will change.
+
+
+RH: BBSwelcome
+
+  Changed it from static data to a pointer to char. The needed memory will be
+  requestet and BBSwelcome set at runtime.
+
+
+RH: binkley.evt
+
+  Old behaviour: request 32KB and load up to 255 events there.
+
+  New behaviour:
+    request 32KB.
+    check for binkley.S??
+    if it exists:
+       request as much memory you need to load binkley.s??
+       success: free the old 32KB.
+                load binkley.s??
+                done.
+       failure: recompile binkley.evt to binkley.s??
+    else
+       continue with old code.
+
+
+RH: "EventFile <drive:\path\filename>"
+
+  If you omit this, binkley will read its events from "binkley.evt", this is
+  the normal behaviour. This normal behaviour means: it is not depending on
+  TASK variables, all tasks read the same file "binkley.evt", and that file has
+  to exist in binkleys start directory. This new statement allows (but doesn't
+  require) a path, however. If you ommit the path, the eventfile will be
+  searched in binkleys directory.
+
+  I've included in my binkley-configuration:
+
+  eventfile c:\binkley\cfg\binkley.event.0%task%
+
+  So task 1 reads "binkley.event.01" from path c:\binkley\cfg\ whereas task 2
+  reads "binkley.event.02".
+
+  Since task 2 is my modem line, that should always "do nothing but wait +
+  check if task 1 is living", I've a very small eventfile for task 2, but a
+  normal one for task 1.
+
+
+RH: "Event"
+
+  Added "Y" and "P"
+
+  Event All 00:00 00:01 Y   ; "no sound" between 00:00 and 00:01
+  Event All 00:00 00:01 P   ; "no pickup" between 00:00 and 00:01
+
+  Y and P can be mixed with every other flag, of course. NoPickup <nodenumber>
+  and the "no pickup event" work as "Do not pickup if either NoPickup is set or
+  this event does not allow pickups".
+
+
+RH: Modem-Init
+
+  After end of session binkley needed up to 10 seconds on my side before it
+  reinitialized the modem (and hung up).
+
+  I changed it to send a modem-init immediately after a session is in fact
+  finished, this means: no more mail to send and/or to receive. After this is
+  done binkley may do whatever it likes to: write a costlog, etc, but i don't
+  wanna charge for this time.
+
+
+RH: Borland C 3.1 for DOS
+
+  Made it compilable and running with BC 3.1 (not so much work)
+
+
+RH: Event A=x
+
+  The possible value for "A=x" has been documented as 0..1800. This maximum of
+  1800 would result in 180,000 1/100 secs (30 minutes). A value of 180,000
+  doesn't fit in a 16 bit integer, however. Therefore I changed binkley to
+  accept only values between 0 and 655.
+
+
+SM: "async_os.c"
+
+  32 bit comm routines are now included with some bugfixes. comTXBlockTimeout()
+  is now multithreaded and com_getbuf() now uses the receive-buffer much
+  better.
+
+
+SM: snserver.dll is not necessary anymore
+
+
+SM: AfterCall
+
+  If 'AfterCall <n> <string>' is being used and n>0, Binkley sends <string>
+  between 'PreInit' and 'Init'.
+
+
+SM: new config statement 'SharePort'
+
+  If 'SharePort' is specified and the (internal) 32 bit com-routines are used,
+  binkley opens the com-port as OPEN_SHARE_DENYNONE. This enables binkley to
+  share the com-port with a MDOS - BBS (via vfd.sys or vcfos.sys).
+
+
+SM: new config statement 'ModemRing RINGING' replaces 'ModemIgnore RINGING'.
+
+
+RH: status field of outbound window
+
+  Added '?' for status field of outbound window, meaning "undialable system".
+  The message "don't know.." is now displayed only in debug mode.
+
+
+RH: session startup
+
+  Increased speed for session startup by 3 seconds (from formerly 10 to now 7).
+
+
+RH: enabled debug to file (formerly "btpe_debug") in async_os.c.
+
+  If you set the environment variable "BINKDBG=<path+filename>" you'll get a
+  logfile of your com-transmission.
+
+
+RH: Removed "NoMNPFilter".
+
+  See note above about "NoFilter".
+
+
+RH: missing in the 2.60 doc:
+
+  Function Requests are possible if you add a line of that format
+
+   $<freq-magic> [!<password>] <params,...> %04x %04x %04x
+
+  To your "Okfiles"-list. This is a very useful and powerful feature, that i
+  lately re-enabled ;)
+
+  The format of the last three (and required!) params can be choosen at will,
+  but they should exist if you don't like the risk of a hang. They represent
+  the callers addess' "Node", "Net" and "Point".
+
+  The following line in OKFILES.TXT:
+
+  $GET_BT32 C:\OS2\CMD.EXE /C c:\zip.cmd  bt32    %04x    %04x    %04x
+  -magic--- ----------command----------- -para1- -para2- -para3- -para4-
+
+  will invoke this OS/2-Script if a caller frequests "GET_BT32":
+
+  +----------------------------------------------+----------------------
+  |@SETLOCAL                                     |set some local params
+  |SET BINKLEY=C:\BINKLEY\                       |
+  |SET  SOURCE=C:\BINKLEY\BIN                    |ZIP should be in the PATH
+  |SET     OUT=C:\BINKLEY\OUTBOUND               |
+  |                                              +----------------------
+  |ZIP %OUT%\%1.ZIP %SOURCE%\%1.EXE              |perform ZIP
+  |                                              +----------------------
+  |IF ".%4"==".0000" GOTO NODE                   |if point is 0000, then
+  |                                              |the caller is a node else
+  |MD   %OUT\%2%3.PNT                            |make point directory and
+  |ECHO %OUT%\%1.ZIP>%OUT%\%2%3.PNT\0000%4.QLO   |create a QLO-file with the
+  |ECHO           .>>%OUT%\%2%3.PNT\0000%4.QLO   |zipped filename
+  |EXIT                                          +----------------------
+  |                                              |
+  |:NODE                                         |if it is a node, then do
+  |ECHO %OUT%\%1.ZIP>%OUT%\%2%3.QLO              |do the same for the node
+  |ECHO           .>>%OUT%\%2%3.QLO              |this line makes a
+  |EXIT                                          |"newline" only.
+  +----------------------------------------------+----------------------
+
+
+RH: "Processing node ...."
+
+  Removed that bothering "Processing node ...." from unattended modes status
+  lines. Instead i changed it so, that the dial message looks like:
+
+   :12:34:45 BINK Dialing 0721821350  (2:2476/7@fidonet -- systemname)
+
+  That way binkley is completely quiet (if not in debug mode) if the other
+  nodes modem is "undialable".
+
+
+RH: xmit_set()
+
+  Rearranged xmit_set() and added the possiblity of a 'M H' event definition.
+  'M H' will lead to C-mail (CUT and CLO) to non-CM nodes been sent without
+  regarding the costs. Other non-CM mail (DUT and OUT) will be sent only if the
+  costs allow it.
+
+
+RH: event flag L
+
+  Added code to not send mail in case you defined an event with "L=xx", but the
+  assumed cost to transfer the stuff is not EQUAL xx. Formerly you could define
+  L=999 or L<1000, it was exactly the same: all mail was sent if the cost has
+  been assumed to be "less then 1000". But if i configure an event with exact
+  costs, i expect binkley to do that exactly as i configured it: if "L=999" is
+  defined, it shall not dial if cost is 998 or 1000 or even 0. In these cases i
+  would have written "L<1000".
+
+
+RH: "HoldAreaNameMunge"
+
+  Changed "HoldAreaNameMunge" to return a directory name parallel to our "Hold"
+  directory if the remote address contains domains we have not defined (where
+  we have no "abbreviations" for).
+
+  Formerly all *.BSY flags were created in the parent directory of our "Hold"
+  directory. If the "hold" directory was "\binkley\outbound", then all unknown
+  domains led to \binkley\*.BSY flags.
+
+  Now they lead to \binkley\outbound.???\*.BSY, where ??? is the zone number
+  (if not "nozones" defined in binkley.cfg).
+
+  OLD:
+
+   Setting flag file for 2:2476/8@fidonet
+   MakeDir: Attempting to create \Binkley\Outbound
+   Create flag file \Binkley\Outbound\09ac0008.BSY.
+
+   Setting flag file for 999:4711/0.815@lachdoch.net
+   MakeDir: Attempting to create \Binkley
+   MakeDir: Attempting to create \Binkley\12670000.PNT
+   Create flag file \Binkley\12670000.PNT\0000032f.BSY.
+
+  NEW:
+
+   Setting flag file for 2:2476/8@fidonet
+   MakeDir: Attempting to create \Binkley\Outbound
+   Create flag file \Binkley\Outbound\09ac0008.BSY.
+
+   Setting flag file for 999:4711/0.815@lachdoch.net
+   MakeDir: Attempting to create \Binkley\Outbound.3e7
+   MakeDir: Attempting to create \Binkley\Outbound.3e7\12670000.PNT
+   Create flag file \Binkley\Outbound.3e7\12670000.PNT\0000032f.BSY.
+
+
+RH: Since that "junk character from keyboard" message is removed, one can't
+    check whether BT lives or sleeps or is dead. I changed the "[" and "]"
+    around the task display to pulse. I hope this doesn't bother someone.
+
+
+RH: "Clock [<colour>] [<char>]"
+
+  The screen saver now displays a 7-segment digital clock if you put that
+  statement to binkley.cfg.
+
+  You can add a colour value for the clock to be displayed.
+
+  You can also add, after the colour value if any, a char that should be used to
+  display.
+
+  If you omit both parameters, then a "1" is drawn with '1' chars, a "2" is
+  drawn with '2' chars and so on.
+
+  Clock      ; displays the clock with default values
+  Clock 31   ; displays a clock white on blue with default chars
+  Clock °    ; displays a clock grey on black using '°' to draw it.
+  Clock 31 ° ; displays a clock... ok?
+
+  Clock ° 31 ; is *wrong* and will not work as you expected!
+
+
+RH: "Unread Netmails Pending"
+
+  "Unread Netmails Pending" now shows the amount of *received* and not
+  "intransit" unread netmails.
+
+
+RH: "cFosCost"
+
+  Add "cFosCost" to your binkley.cfg to get the real costs of an outbound call.
+  You need an ISDN line and cFos must be the actual "modem". You must configure
+  cFos to get the charge information, though!
+
+  If "cFosCost" is read before "AfterCall" then it will override and disable
+  any following "AfterCall" statements. Instead it will work as if "AfterCall 3
+  ATi1|" has been defined.
+
+  If "cFosCost" is read after "AfterCall", then your "AfterCall" string will be
+  used to get the costs.
+
+  "cFosCost" overrides any event-based cost definitions and cost calculations.
+  You should define a correct "CostUnit".
+
+
+RH: changed code when to display "chat available" in the caption field of the
+    "recent activity" window.
+
+  Obviously not everybody that has HOPT_DEVICE also has chat available. I've
+  seen that with BT EE, that has HOPT_DEVICE but no chat. With the current mode
+  of displaying this information it should be correct in that way, that binkley
+  will not show "chat available" if the other side does not explicitly transmit
+  the string "Remote has chat facility available".
+
+
+RH: os2_pm.c
+
+  Changed OS2_PM.C to load all external DLLs with DosLoadModule and provide an
+  interface to binkley. This way binkley can be compiled "completely" and no
+  functions are missing, if the runtime environement allows it. removed all
+  #definitions for MAX_MCP, OS2SETWINDOWTITLE and LOAD_PM_DLLS. Binkley doesn't
+  need to care about any more.
+
+
+RH: Removed support for SNSERVER.DLL completely.
+
+  Binkley uses its internal pipe code by Steffen Motzer. This code uses an own
+  thread and works perfectly. The config statement "Snoop" and the environment
+  variable "SNOOPPIPE" remain valid and are used for the same purpose.
+
+
+RH: Changed the way the names of "Snoop" and "MCPpipe" are evaluated to this:
+
+  If binkley.cfg contains the statement without a pipe name, then the
+  environment is searched for "SNOOPPIPE" or "MCPPIPE" respectively, else the
+  environment name is ignored.
+
+  This way you can, but must not, override the environment name. Old behaviour
+  was: if an environment name existed, this one was taken and the name in
+  binkley.cfg was ignored.
+
+
+RH: Re-installed support for name search for dialing in non fullscreen session.
+
+
+RH: The "blinking" flag around the task number should now work in X, Y and
+    ZModem sessions, too.
+
+
+RH: Removed UUE and ASC capabilities of hydra protocol.
+
+  You can easily enabled them again by #defining HYDRA_UUE in your makefile.
+  This #define HYDRA_UUE does both enabling UUE and ASC and increasing hydras
+  buffers to the then necessary (large!) size.
+
+
+RH: "SmartBiDi [Outgoing]"
+
+  SmartBidi enables SmartBidi behaviour - without this keyword, BT-XE will
+  behave as before.
+
+  With SmartBidi, BT will disable Hydra and Janus in case of we have no local
+  mail on hold for the remote system if:
+
+  - it is an inbound call (so all AKAs of remote are known to us [EMSI])
+  or:
+  - we have "NoPickUp" active
+  or:
+  - "SmartBidi Outgoing" has been configured and we do an outbound call.
+    This will check only the amount for the CALLED AKA (no other AKA is known
+    at this moment).
+
+  Then zmodem will be the fastest method (100 percent eff, whilst hydra and
+  janus have only 95 percent eff.) and is choosen. Since calling a system means
+  that EMSI knows nothing but the called address, and since the called system
+  might have other AKAs, too, for which we might have mail on hold, the
+  statement "SmartBiDi Outgoing" is used to force this behaviour in case we
+  are calling.
+
+  Be aware that SmartBidi may confuse your links because they are used to get
+  (x)Hydra and now get ZedZap.
+  Also, you won't be able to chat with ZedZap ...
+  Also, sending a file along with a file request to your system (expecting
+  xHydra) won't be nice with SmartBidi enabled, because you will get ZedZap.
+
+Comment of TJW: shall we really keep this keyword ? As it seems to me, it has
+                more disadvantages than advantages...
+
+
+TJW: Removed superfluous "Application" keyword
+
+
+TJW: Removed obsolete "Zone", "Aka", "Point" keywords
+
+
+TJW: Removed obsolete "NoZones" keyword
+
+
+TJW: added MCP / tasklist messages for outbound rescan / read
+
+
+CFS: New keyword: CallBack <node> [<callerid>]
+
+  If a call from node comes, it is rejected and all mail for 'node' is changed
+  to crash. If there is no mail, a .CLO is created. You'll also need ModemCID
+  and CallerID (to tell Binkley the node's CallerID). Alternativly you can also
+  add the number as the last parameter in CallBack. If you need more than one
+  CallerID for one node, DO NOT use multiple CallBack keywords but multiple
+  CallerID keyword.
+
+  Example:
+
+    CallBack 2:341/79 003413782005
+
+  If 003413782005 (that's me) calls, it is rejected and called back. Be aware
+  that cost and event configuration applies. If calling the node is too
+  expensive or the event is set to receive-only (or the nodelist flags don't
+  allow calling), BT-XE will *not* call, but still reject the call.
+
+  Remember to define ModemCID or callback will not work. Finally, remember that
+  callerID is used only to identify the call, but the number used to call back
+  is the nodelisted one.
+
+
+CFS: Added ModemCostReset.
+
+  If used, the cost timer will not start after connecting but after the last
+  string specified in ModemCostReset is received from the modem (or after
+  dialing if none is received). If the modem is able to return RINGING, it is a
+  good idea to use these keywords, as it will result in BT-XE knowing exactly
+  the true start of the charges.
+
+  Be aware that costtimecorrection still applies, so you may want to set it
+  to 0 if ModemCostReset is used.
+
+  Example:
+
+      ModemCostReset RINGING
+      ;ModemIgnore   RINGING
+      ;ModemRing     RINGING
+
+
+CFS: Added StatsToMsg.
+
+  BT-XE now has the ability of logging a stat sheet at the end of the day.
+
+  Syntax: StatsToMsg OurAKA DestAKA <PKT password>
+      or: StatsToMsg OriginAKA Echotag <PKT password>
+
+  BT-XE now has the ability of logging a stat sheet at the end of the day.
+
+  Examples:
+
+    StatsToMsg 2:341/70 BINKLEY.STATS would post the message in the echo
+                                      BINKLEY.STATS.
+
+  StatsToMsg writes a .PKT in the protected inbound directory, so one can store
+  the message in any messagebase supported by his/her tosser.
+
+  For echomail, the address is the 'from' address of the PKT. The destination
+  address is always the main address of the system.
+
+
+CEH: Added keyword "LocalInbound":
+
+  Defaulting to ProtInbound, you can now change the path to where Binkley
+  writes Statistic-PKTs to to somewhere else (usually your tosser's local
+  inbound).
+
+
+TS: DOS only:
+
+  Removed config statements (not recognized any more):
+   - MultiLink
+   - TaskView
+   - TopView
+   - Rev3
+
+  Removed code for the following obsolete multitaskers:
+   - DoubleDOS
+   - MOS386
+   - MultiLink
+   - TaskView
+   - TopView
+
+  Removed code for obsolete revision 3 type fossils
+
+
+TS: all versions
+
+  Removed config statement `NoFullScreen' (not recognized any more) and the
+  ability to run in line-oriented output mode.
+
+
+MT: New Keyword HydraMsgSend <text>
+
+  Sends a message to the remote system at the end of each hydra-block
+
+
+TS: updates MSC700/800 stuff;
+
+  Now able to produce an overlayed i386 16bit dos exe with MSC800
+
+
+MR: Changed config file search "logic"
+
+  If the environment variable BINKLEY is set then this is binkley's home
+  directory. Otherwise it's the current directory. The config and the event
+  file as well as binkley.ban are taken from binkley's home directory.
+
+
+MR: Include keyword
+
+  Binkley now checks if the given file name already has a complete path
+  (drive:\path\filename) and does no longer simply always add his home
+  directory.
+
+
+RH: fixed xmit_setflags() bug
+
+  "HOLD" and "REQ" files are not to be handled in xmit_setflags() (thanks to
+  Alex Woick who pointed this out).
+
+
+RH: fixed some errors in latest XE*.DIF
+
+  removed the partially included NetWare-Stuff (awaiting Alex' new DIF)
+
+
+RH: Updated exceptio.c
+
+  now it *does* print line numbers
+
+
+RH: janus and hydra
+
+  Removed throughput() calls from janus and hydra. It can't be done this way.
+
+
+RH: shells
+
+  Had the problem that pressing ALT-F2 lead to start a shell (SQUISH SQUASH)
+  and on return binkley could not re-open the COM port. Changed mailer.c to
+  avoid that problem.
+
+
+MR: new keyword: "UseCompletePaths"
+
+  If this keyword was found in the config file, Binkley adds its home
+  directory, when creating BAT or CMD files for BBS Exit/Batch and Extern
+  Exit/Batch. Also, the files created contain Binkley's home directory.
+
+   Example: home directory: c:\binkley
+            BBSBAT## is always created in c:\binkley
+            BBSBAT## calles c:\binkley\spawnbbs ...
+
+  Binkley also adds it's home directory to commands called when using BBS Spawn
+  and Extern Spawn.
+
+   Example: home directory: c:\binkley
+            binkley calls : c:\binkley\spawnbbs ...
+                            c:\binkley\extmail  ...
+
+
+MR: Little internal change
+
+  BBSopt and EXTopt no longer keep the string (e.g. "spawn") but only a flag
+  what to do. This saves about 8 bytes of memory! ;)
+
+
+MR: "BBS Batch" now always exits with errorlevel 101.
+
+  So you can simply use "if errorlevel 101 %binkley%\bbsbat%task%" to call your
+  BBS. But you should check your config to be sure, that you don't use this
+  errorlevel somewhere else...
+
+
+MR: ErrLevelShell now works for the funktion keys, too.
+
+
+MR: "ErrLevelShell <errlvl> none"
+
+  Nothing will be done for errorlevel <errlvl>. So you can disable unused
+  function keys if you like.
+
+
+MR: I_ALIVE.xx will now (hopefully) be deleted upon all exits.
+
+
+MR: language.txt
+
+  Changed language.txt for use with editors that strip trailing blanks. Please
+  use "\b" instead of them!
+
+
+MR: BINK_PM.DLL is now searched in binkley's home directory
+
+
+MR: added missing \n to error message used by share_fopen
+
+
+TJW: SmartBidi keyword/behaviour
+
+  Changed SmartBidi keyword/behaviour so that it is disabled if unused, see
+  above.
+
+
+CFS: Added colour support for the activity window.
+
+  Rather than providing it for the programmer, I have added it for the user.
+  This means that one can change the colours by editing the language file.
+
+  Colours are selected by inserting `new_colour` in the string, for example:
+
+    `cyan`Password `white`error
+
+  String replacements take effect before processing the colours, so you may add
+  colours (or remove them) if you wish, i.e.
+
+    StringRep CONNECT `red`CONNECT`white`
+
+  would result in something such as
+
+    CONNECT 64000/ID=003413782005
+
+  with CONNECT in red and the rest of the line in white.
+
+  Available colours are:
+
+    "black", "blue", "green", "cyan", "red", "magenta", "brown", "white",
+    "gray", "brightblue", "brightgreen", "brightcyan", "brightred",
+    "brightmagenta", "yellow" and "brightwhite".
+
+  Note:  If you use colours in the language file, you have to pay attention:
+  -----
+          1. Do not use colours in front of a log level indicator:
+
+               WRONG:   E#032L`brightred`*Lost Carrier.
+               CORRECT: E#032L*`brightred`Lost Carrier.
+
+          2. The whole line INCLUDING the colour tags must be shorter than
+             the screen width. Longer lines will be cut off.
+
+
+JNK: "ErrLevelShell <errlvl> poll <node1> <node2>..."
+
+  Creates poll-file for all nodes <nodex>. Checks if node is listed.
+
+
+SM: "ErrLevelShell <errlvl> post \sem32\<name>"
+
+  Binkley will post the specified Event Semaphore (usefull to start tosser).
+
+
+TJW: added some brightred colour to severe error messages (PW error e.g.)
+
+
+TJW: caution: new L event flags (only "L" is not valid any more):
+
+  Li : compares with cost index (V7 "RealCost" value)
+  Lc : compares with cost[cost index] * 1 minute
+  Lt : compares with cost[cost index] * (estimated transfer time)
+
+  Also made L handling in BT source a bit more "explicit".
+
+
+TJW: changed layout of event display in "Transfer Status" window
+
+
+MR: New command line keyword: TERM
+
+  Starts binkley in terminal mode.
+
+
+MR: Added Modem Window, new keyword: ShowModemWin
+
+  Can be switched off and on with Alt+V. If ShowModemWin is found in config,
+  modem window will be switched on upon startup.
+
+
+MR: Watcom DOS overlayed version
+
+  Moved some object files from overlay to root.
+
+
+MR: Cosmetical fix: window title
+
+  Title of recent activity window shouldn't be removed any more when switching
+  on/off chat windows.
+
+
+TJW: CSS (current session statistic) window implementation.
+
+
+TJW: did some changes in EMSI.C to speed up EMSI handshaking retries
+
+  (TJW 970309: EMSI data loss checker, EMSI_DAT resend, EMSI_INQ resend)
+
+  Be careful with this. It worked here, but who knows ...
+
+
+CFS: Added a event behaviour setup screen, just press alt-n and see.
+
+
+TJW: changed FORCEXIT.%u to FORCEXIT.%02X (same naming convention as other
+     flags)
+
+
+TJW: removed single task "support" (TaskNumber==0)
+
+
+JNK: "NoTranx"
+
+  Do not send Tranx info in EMSI-handshake.
+
+
+CFS: OS/2 only: Added CID detection directly from CAPI.
+
+  The scenario where this is useful is the following: An ISDN card (usually
+  used with a mailer task) is connected to an ISDN bus. A modem is connected to
+  the same bus, either via an A/B switch in the NT, or via an A/B switch in the
+  card. In any case, when an analog call comes to be answered by the modem, the
+  modem misses the caller-id.
+
+  This scenario is the one I have at home, and I think it is common. Since the
+  ISDN card gets the caller-id (I used J”rg-Stefan Sell's Caller-id to see it),
+  it is possible to use it to get the caller-id. The usage is the following:
+
+   CAPICID EAZs Services Modem_string1 [Modem_string2] ... [Modem_stringN]
+
+  When a call comes for any of the specified EAZs (of course, only the same
+  used by the modem should be indicated) and for the specified services (list
+  of services is listed below), BT-XE adds /ID=number to all the strings coming
+  from the modem that starts with modem_string.
+
+  For example:
+
+    CAPICID 0 T RING CONNECT
+
+  In my old 14400 it produces the following effect:
+
+    RING/ID=3780127
+    CONNECT 14400/ARQ/V32/LAPM/V42BIS/ID=3780127
+
+  The ID addition is performed right at the modem reception part. So it can be
+  used for freepoll, pass it to the BBS and everything that can be done with
+  "real" CIDs from modems.
+
+  Notes: While it seems to work great here, it is still a bit untested.
+
+  When this feature is used, BT-XE starts a new thread to answer the CAPI
+  messages, and if one of them is a phone number, BT-XE records it for "future"
+  usage. When a qualified modem string comes, BT-XE just adds the phone number.
+  Thus if a RING is detected by the modem before the CAPI message arrives (this
+  doesn't happen at home, but it's conceivable) it is possible that the RING
+  isn't followed by a ID, or could even be followed by a wrong ID! Be aware of
+  these potential problems and test to see how it works for you. (if it
+  doesn't, let me know :-)). Also note that the stored CID is reset after each
+  call, to avoid getting a RING with the phone number from the previous call.
+
+  The fake CID change is blocked (i.e. if a new CID comes it is ignored) in a
+  two cases: When we have dialed (the stored CID is changed to the dialed
+  number, so a valid ID is added to the CONNECT), and when we have answered.
+
+  The valid services to monitor are (you may indicate as many as you wish, even
+  if it is probably nonsense):
+
+     V -> Videophone       T -> Telephony    A -> A/B services
+     2 -> X.21             4 -> Fax (gr. 4)  I -> Videotext
+     D -> Data transmis.   5 -> X.25         L -> Teletex
+     M -> Mixed mode       R -> Remote ctl.  G -> Graphic telephone service
+     X -> Videotext (new standard).
+
+
+MR: "Colors" keyword:
+
+  Added two new colours (add at the end of "Colors" in Cfg) for modem activity
+  window: sent and received stuff. Please note, that you cannot change the
+  background colour.
+
+
+MR: Waiting for modem answers:
+
+  Binkley checked for key strokes while initializing the modem and getting
+  modem information after sessions. Now this is only done while answering and
+  dialing.
+
+
+MR: Init and TermInit
+
+  Binkley now accepts multiple init strings for mailer and terminal. At the
+  moment up to 5 for each.
+
+
+MR: Binkley now always checks for OK when initializing the modem.
+
+  If no OK was received, the init string will be retransmitted. After three
+  tries, SpawnNoOK will be called if specified.
+
+
+MR: New keyword: PreAnswer <string>.
+
+  Lets you setup the modem before answering a call. Binkley will check for OK.
+
+
+MR: New keyword: CallerID <nodenumber> <callerid>.
+
+  Lets you setup callerids for a node. Used for ConditionalPoll and CallBack.
+  If you need more than one CallerID for one node, simply use mutiple CallerID
+  keywords with the same node number.
+
+  Note:  Remember to set CallerID for EVERY nodenumber you use with
+  -----  ConditionalPoll (you can still set the callerid with the last
+         parameter of ConditionalPoll) and CallBack!
+
+
+MR: CallerID, CallBack and ConditionalPoll
+
+  ConditionalPoll and CallBack now optionally take a CallerID. You only need to
+  set a CallerID once for each AKA, either with CallerID or ConditionalPoll and
+  CallBack respectivly. Binkley will display an error message if you specify a
+  CallerID twice for an AKA.
+
+  Note:  YOU MUST USE "ModemCID <string>" to use THESE THREE FEATURES!
+
+
+MR: Changed WindowTitleFmt
+
+  Do NOT use this keyword if you don't want to use this feature. DO use it
+  WITHOUT parameter to use default title format. Use it WITH parameter to use
+  your own title format.
+
+
+TJW: changed progress meter optics (after an idea of Timo Maier)
+
+
+TJW: IMPORTANT!!! Change your configs:
+
+  Keywords About, KnownAbout, ProtAbout, Avail, KnownAvail, ProtAvail have been
+  removed!
+
+  Just add @FILES and @ABOUT to your OKfile / KnownReqList / ProtReqList - as
+  you do it with other magics, too (hint: add FILES and ABOUT magic at the
+  TOP[!] of the OKfile).
+
+
+CFS: (OS/2 only) Added CFOS support.
+
+  If 'CFOSLine' is used the last line will show a status line with data from
+  CFOS: Current ISDN time (based on the last info received from the telco),
+  whether the call is incoming or outgoing, phone number, b-channels being
+  used, control flow support, error correction support, CPS, B1 bps rate (for
+  example 64000), and cost info. I don't have cost info so this is untested.
+
+  There are three keys available on connections:
+
+    Alt-R    -> Reset ISDN hardware (terminates all connections)
+    Key Up   -> Add a b-channel
+    Key Down -> Remove a b-channel
+
+  Note:  CFOS/2 build 1214 or later is required.
+
+
+CFS: It is now possible to skip files in Hydra and Zmodem
+
+  Alt-S -> Skip file but keep all bytes received so far
+  Alt-K -> Skip file and kill it
+
+
+CFS: Added StringRepModem.
+
+  Syntax is the same as StringRep's. StringRepModem replaces a string received
+  from the modem for a different one. Replacement is done inmediately after
+  the string is received, and before it is processed by binkley itself.
+  For example,
+
+  StringRep RING INCOMING!
+
+  (senseless example, I know). You would have to change your config file to
+  let BT-XE know that it should answer to INCOMING! instead of RING, otherwise
+  it WILL NOT WORK.
+
+  Be careful with this command - most possibly you should not use it unless
+  you really need it.
+
+  If you want to do visual changes (such as adding colours to CONNECT),
+  use StringRep instead.
+
+
+TJW: removed "MakeDir" keyword
+
+  This is default behaviour now!
+
+
+TJW: changed efficiency / remaining time calculations
+
+  Changed efficiency / remaining time calculations to calculate with 8
+  bits/byte (assuming sync transfers) instead of 10 bits/byte (as needed with
+  async transfers, 8n1). This will give lower efficiencies (<100%), but they
+  are more useable than the old ones ...
+
+
+MR: CSS progress bars
+
+  Moved chars for progress bars to language.txt.
+
+
+MR: CallerIDs
+
+  The given CallerIDs now only need to be a substring of the CallerID
+  presented by a caller and do not need to be exactly the same.
+  You can now also define multiple CallerIDs for one node.
+
+
+CFS: Added a history window, press alt-h to enter.
+
+  Colours have the following meaning:
+    Yellow -> Incoming mailer call
+    Red    -> Outgoing mailer call
+    Cyan   -> Fax call
+    Green  -> BBS call
+
+
+MR: removed keyword "DTRHigh"
+
+  If you want the DTR to stay high on exits, use the Keyword "Busy" and don't
+  add a 'v' (see modem command character translation) to drop the DTR.
+
+  On the other hand if you wish to drop the DTR on exits, you now HAVE to add
+  a 'v' to drop the DTR if you use the keyword "Busy".
+
+  New default for Busy: v
+
+
+MR: REQ files are now only deleted after a successfull session
+
+
+MR: new keyword: "HangUp"
+
+  Use this keyword to define the string to be sent to the modem to hang up. It
+  shouldn't do anything else than sending a CR, drop DTR and raise DTR again
+  with some pause between those actions.
+
+  Default: |`v~~^`````|
+
+
+TJW: added V7+ support - changed Version7 keyword
+
+  You may activate V7+ support by using: Version7 Plus
+
+  So just add the "Plus" specifier after the normal Version7 keyword. To use
+  V7+ you additionally need a nodelist compiler generating a V7+ compatible
+  nodex.dtp/*.dtp file.
+
+  V7+ support will enable BT-XE to access complete raw nodelist data, e.g. for
+  supporting ,U,Txy flags and similar stuff. We just began implementing this,
+  so there isn't much USE of V7+ yet - but this will come later!
+
+  Concerning your other tools using V7: V7+ is highly compatible with V7 - so
+  there should be NO problems if programs that don't know V7+ (but only V7)
+  access a V7+ nodelist.
+
+  If you only specify "Version7" (without "Plus"), Binkley will use standard
+  V7 nodelist - as ever (but see also SysopNDX keyword !!!) ...
+
+
+MR: multiple PreAnswer keywords
+
+  Up to 5 PreAnswer strings are allowed now.
+
+
+CFS: Added some (more or less) complete stats screens.
+
+  Press Ctrl-T and then 1-7 to select stat page. The stats screens are based on
+  the data from the history file therefore the more time you have been using a
+  BT-XE with it the better the stats will be.
+
+  Note:  Stats are system-based, not call-based. For example the 'top mailers'
+  -----  will tell you the mailers that are used by most different systems, not
+         by most different callers, so if someone calls 100 times it is only
+         counted once. So what BT-XE does is build a list of different systems
+         and sort it for each stat. For the mailer stats, the speed stats, etc,
+         which may vary for a given system between different calls, only the
+         *last* entry in the history window counts. So if a guy switch to a
+         different mailer, only the new one is accounted.
+
+
+CFS: Added new keyword AutoChatOpen.
+
+  If used, the chat window will open as soon as the remote types something (so
+  no HCON: lines are logged). autochatopen also disables computer-generated
+  beeps in chat (for chat timeout or close or whatever).
+
+
+CFS: Added ChatLogDir directory
+
+  To indicate the directory where chat sessions are to be stored.
+
+
+CFS: Started work on a chat-based command interpreter.
+
+  It will allow both the local and the remote sysops to do real-time requests,
+  such as attaching or freqing files on the fly.
+
+  As of now, you may only do
+
+    /btloc log filename
+
+  to record the chat session. ChatLogDir must be used in order for this to
+  work.
+
+  I plan to add some more (useful) commands as soon as possible (I need to do
+  some other things that can't wait because I'm about to install BT-XE in a
+  special enviroment).
+
+
+CFS: Added NodeExtraDir directory
+
+  Allows to "link" a node with a directory. When the node connects, BT-XE will
+  send and delete everything in that directory before the usual .?LO and .?UT
+  stuff.
+
+   Example: NodeExtraDir 2:2453/470 e:\hauke\
+
+  Most of the people will have no use for this, however it is very useful if
+  you wish to share the files to send to a node between BT-XE and a FTP server,
+  for example. Just set the home directory in the daemon and the NodeExtraDir
+  in BT-XE to the same path. The user may now get its stuff with the most
+  convenient method each time. No need to choose... Of course, a utility to
+  move .?LO and ?UT files to the remote's directory is a handy tool if you plan
+  to use this :-) I'll provide a good (=one that does more than just moving
+  files) one in the near future.
+
+  Note:  You should make sure that files are not marked read only, otherwise
+  -----  BT-XE will not be able to delete them and will try to send them each
+         time the node connects.
+
+  Also, if you are running the DOS or Windows versions, be aware that I don't
+  know what happens if the directory has subdirectories (this means that you
+  should try it and notify - don't expect someone else to do so). The OS/2
+  version will just ignore them so you can build a tree for your FTP server or
+  whatever you need.
+
+  Note:  These NodeExtraDirs are not visible in the outbound window, nor
+  -----  do they influence anything else like calling or conditional poll.
+         Only their content is sent if a session was estabished with the
+         corresponding node. Not more, not less.
+
+
+MR: multiple TimeSync keywords.
+
+  You now can use multiple TimeSync keywords to define as many sync addresses
+  as you like.
+
+  Note:  MaxDeltaTSeconds is a global value, you can't define different
+  -----  values for different nodes. The last value is used for all nodes.
+
+
+MR: default address for node dialogs
+
+  Nearly all node dialogs now present a default address. This default address
+  is either the address under your cursor (zoomed pending outbound mail window)
+  or the top address (small pending outbound mail window).
+
+  If you want to edit the default address, simply use backspace or left arrow.
+  All other keys delete the default address. So if you want to enter a
+  completely different address simply type it in and do not use backspace.
+
+
+TS: added free stack / mem space display (DOS-versions only)
+
+
+TJW: fixed CPU-hogging of Janus, made Janus (hopefully) SRIF-capable
+
+
+TJW: "SysopNDX" keyword
+
+  If you want Binkley to use the old style "SYSOP.NDX", then you MUST use
+  this keyword. Version7 normally needs this keyword.
+
+  If this keyword isn't used, Binkley will use <NODEX>.SDX for sysop name
+  lookups. If you use only V7+ software, this should work.
+
+
+TS: fixed "CursorRow" bug
+
+
+AW: History importer for Maximus 3.0x
+
+  The program getmax3 imports the last called user from Maximus CBCS 3.0x into
+  the XE history. It must be called after a user logged off and Maximus exited
+  with errorlevel 3 or above (2 and below means: no user was logged on).
+  Help for getmax3 with "getmax3 -?".
+
+  Example spawnbbs.cmd:
+
+    maxp max -s%1 -b%2 -p%3 -n%TASK% -t%4 -y%5%6 -e0 -ll:\log\line%TASK%ad.log
+    if errorlevel 3 goto lastuser
+    goto end
+  :lastuser
+    getmax3 /h:%bt%\task\callhist.all
+  :end
+
+
+AW: added history importer for the internal fax receiver
+
+
+
+
+BT 2.60XE/Gamma-XR6
+=-=-=-=-=-=-=-=-=-=
+
+
+Bugfixes
+--------
+
+See knwnbugs.xr5 for a complete list of bugs / problems in XR5. All bugs with
+status 'F' should be fixed in this version.
+
+
+New features
+------------
+
+CFS: Expanded NodeExtraDir.
+
+  New syntax is
+
+     NodeExtraDir address directory [Hold] [Notify]
+
+  Hold makes BT-XE *not* send the files when calling (obvious, uh?).
+
+  Notify makes BT-XE generate a message on the fly, notifying the remote of the
+  files being sent. Usually helps the remote to keep his inbound clean, or at
+  least without unknown files.
+
+
+CFS: Stats
+
+  The stats screen nows support going up and down in all lists, by using the
+  arrow keys. This way you can see the complete lists instead of the top
+  systems only. Also, left and right may be used to go to the previous/next
+  screen.
+
+
+CFS: Added random node information system.
+
+  Three new keywords for this:
+
+     RandomSysop       group,[group,...] Sysop name
+     RandomSystem      group,[group,...] System name
+     RandomMyLocation  group,[group,...] Location
+
+  The group is an user selected tag that may contain a number of sysop,
+  system and location definitions.
+
+  BT-XE chooses a group randomly before each call. Then it chooses a
+  sysop name, a system name and a location from that group.
+
+  A example:
+
+     RandomSysop     BEACH Carlos "hot" Fernandez
+     RandomSystem    BEACH Enjoying the Spanish summer
+     RandomSystem    BEACH Possibly swimming!
+     RandomLocation  BEACH Somewhere with water
+     RandomLocation  BEACH On vacation!
+
+     RandomSysop     BT-XE Carlos "coder" Fernandez
+     RandomSysop     BT-XE "C"arlos Fernandez
+     RandomSystem    BT-XE A Binkley-XE Development Site...
+     RandomSystem    BT-XE Can't stop coding BT-XE stuff
+
+  If one string is ok for two groups, you may separate them with commas,
+  for example
+
+     RandomLocation  BEACH,BT-XE Madrid, Spain
+
+  If something is not defined for a group, BT-XE will just pick the default
+  string, defined by Sysop, MyLocation or System (so these keywords are
+  still required).
+
+
+CFS: Improved history screen
+
+  Now it is almost complete or at least very close to what I wanted to do.
+
+
+CFS: Added a new stats page.
+
+
+CFS: Address
+
+  Expanded Address with a new optional parameter, 'region'. For example
+
+     Address 2:341/70 34
+
+  Adds 2:341/70 to the address list (as always) and 2:34 to the region
+  list. As of now it is only used in for the 8th page of the stats.
+
+
+TJW: added DZA capability (DirectZap ZedZap variant)
+
+
+TJW: new keyword "NoDirZap" to globally disable DirectZap
+
+
+TJW: added keyword "DebugFlags <8 digit hex value>"
+
+  This sets an internal variable of BT-XE used for debugging.
+  To be used by BT-XE bug hunters together with BT-XE team.
+  *** DO NOT USE IF YOU DON'T KNOW WHAT YOU ARE DOING! ***
+
+
+TE:  new keyword "IPRepChar"
+
+  I added this keyword in reflection of the test listing of IP nodes in
+  the zone 2 nodelist. The problem with these nodes is that MakeNL can't
+  cope with phone numbers with dots in it, so the IP nodes get listed
+  with dashes instead of dots, e.g. 000-192-168-1-1. For existing
+  fidonet configurations, it is no problem to remove the leading "000"
+  (see the Dial keyword), but it is a problem to replace the dashes with
+  points. For this purpose, you can use the keyword "IPRepChar". Simply
+  add
+
+    IPRepChar -
+
+  to the configuration of your vmodem task, and every dash will be
+  replaced by \. (which means a single point) when dialing out.
+
+  Don't use this keyword on a "conventional" modem line!
+
+
+CE: added keyword "CheckPath <Errorlevel> <Checktime in sec.>"
+
+  checkroutines for not existing network drives. If inbound,
+  outbound, flagdir or netdir isn't available in an waiting binkley,
+  because fileserver is down, then binkley terminates immediately.
+  - 'Errorlevel' is the errorlevel when binkley exit. Default is 253,
+    allowed is 1 - 255.
+  - 'Checktime' is the time in seconds between 2 checks. Default is 30,
+    allowed is 1 - (2^15)-1 (short int).
+
+
+AW: request via maxfiles.idx with internal request processor
+
+  Files with full paths in compiled Maximus filebase will be found and sent, if
+  files.dat+files.dmp are present. Previously only the files in the main
+  filearea path could be found. One reason less to use a request processor ;-)
+
+
+AW: Maximus 3.0x support with maxfiles.idx request
+
+  With the new keyword:
+
+    MaxPrm  <path+filename of max.prm>
+
+  it is possible to specify a the max.prm of a Maximus 3.0x setup. Then
+  the filearea data is taken from the Maximus setup. No need to generate
+  the Max 2.x-compatible area.dat file any more!
+  It is no problem to specify a Maximus 2.x max.prm with the keyword, it
+  will be auto-detected by BT-XE which version it is.
+  The MaxAreas keyword therefore is obsoleted with this.
+
+  The request security has been enhanced accordingly:
+
+    FileSec   class/flags
+    KnownSec  class/flags
+    ProtSec   class/flags
+
+  class/flags could of course also be numeric_level/flags or only class or
+  only numeric_level.
+
+  With the new syntax you can specify a Class/Flags combination that is
+  matched against the acs strings in the filearea file. The acs strings
+  are fully interpreted by BT-XE like in Max 3.0x, that means things like:
+  ACS Sysop/A|Twit/B!X|name=testy_tester
+  are supported. The name= option of the acs strings are matched against
+  the sysop name that is transferred in the handshake.
+  If you changed the default classnames of Maximus 3.0x from Twit, Disgrace,
+  and so on to your own classnames, it will work too, as BT-XE will read
+  your Maximus 3.0x access.dat security database and interpret the new
+  classnames and levels.
+
+  For Maximus 2.x, a level<=>classname reference is now built-in, so you
+  could use now "FileSec Worthy" instead of "FileSec 3", if you like.
+  You can also specify a Maximus 2.x max.prm with "MaxPrm", the version
+  will be auto-detected and the 2.x or 3.x mode chosen as necessary.
+
+
+AW: Binkley now transmits offset to UTC in EMSI
+
+  You should make sure your TZ variable is set correctly, see tz_ibm.doc or
+  tz_watc.doc.
+
+  In the EMSI handshake now the TZUTC addon like with FD 2.12 or FD 2.20c is
+  sent, telling the offset from local time to UTC. The transaction number
+  itself is local time and so are the timestamps in the history file and the
+  timestamps of disk files.
+
+  Now the UTC value of the transaction number can be calculated and the time
+  difference to the local system clock is always around +-0 and not multiples
+  of 3600 seconds because the remote time zone was previously unknown/unset.
+
+
+MR/AW: NodeTimeZone <addr> <TZ string _without_ TZ=>
+
+  Use this keyword to set the time zone of a node.
+
+  If the remote system doesn't send a TZUTC value, the time zone and therefore
+  his time offset to UTC is unknown. With NodeTimeZone you can set the TZ
+  string for this node and you will get correct time difference values for
+  timesync operation.
+  Remember: set your TZ variable correctly to get correct time values.
+
+  - for systems that transmit only its local time in tranx and that are
+    in the same time zone as your system, you don't need to set NodeTimeZone.
+    Logfile example:
+
+     : 10 Feb 15:45:03.14 BINK RemTim: Tue, 10 Feb 1998 18:45:01 +0100
+     : 10 Feb 15:45:03.14 BINK LocTim: Tue, 10 Feb 1998 18:45:02 +0100
+     : 10 Feb 15:45:03.14 BINK UTCdif: -1
+
+  - for systems that transmit its local time in tranx and the TZUTC EMSI Addon,
+    you don't need to set NodeTimeZone. This is the case, if the reported
+    time offsets in logfile are different from one another. Also the time diff
+    is not multiples of 3600 but a small number near +-0.
+    Logfile exampe:
+                                                                 vvvvv
+     : 10 Feb 15:45:03.14 BINK RemTim: Tue, 10 Feb 1998 18:45:01 +0100
+     : 10 Feb 15:45:03.14 BINK LocTim: Tue, 10 Feb 1998 12:45:02 -0500
+     : 10 Feb 15:45:03.14 BINK UTCdif: -1
+
+  - for systems that transmit only its local time in tranx and that are
+    NOT in the same time zone as your system, set a correct NodeTimeZone for
+    this node.
+    Logfile example:
+
+     : 10 Feb 15:45:03.14 BINK RemTim: Tue, 10 Feb 1998 18:45:01 +0100
+     : 10 Feb 15:45:03.14 BINK LocTim: Tue, 10 Feb 1998 12:45:02 +0100
+     : 10 Feb 15:45:03.14 BINK UTCdif: +21599
+
+    If your timezone is TZ=CET-1CDT, set "NodeTimeZone <node> EST5EDT"
+
+  - for systems that transmit its local time in tranx and a false value in the
+    TZUTC EMSI Addon, set a correct NodeTimeZone for this node. That will
+    override the false value from the handshake.
+
+  - for systems that falsely transmit UTC time in tranx (instead of his local
+    time), set "NodeTimeZone <node> UTC0" for this node.
+
+
+TJW: merged history importer utilities into BTUTIL
+
+  They are invoked now by: BTUTIL GETHIST ...
+
+
+TJW: some new alias keywords
+
+  Inbound               - same as NetFile
+  Outbound              - same as Hold
+  OutboundRescanPeriod  - same as ReadHoldTime
+  OutboundCache         - same as CacheHold
+
+  Please use the new keywords because it's likely that we remove the old ones
+  in a future release.
+
+
+CE: added keyword "AKAMatching".
+
+  AKAMatching shows an incomming EMSI caller only your AKA's, if the zone is
+  identical. If the zone is differend, the caller will not see your AKA. This
+  feature is importent for big systems with many AKA's, because you can reduce
+  the number of AKA's for smaller systems with know only 10 or 20 AKA's
+
+
+AW: changed the history file (callhist.all) format for the DOS version
+
+  If you upgrade from the XR5 DOS version, you must convert the history
+  file (callhist.all) before you upgrade to XR6. Use the program
+  xr5toxr6.exe. Use it only if you upgrade from the XR5 DOS version,
+  not from any other version, and use it only once.
+
+  Due to a small error in the history file definition the format for the
+  XR5 DOS version was slightly different from the OS/2 or Win32 version. The
+  XR6 format is now equal among all three OS versions.
+
+
+MR: Enhanced [expression] (partial config inclusion / exclusion).
+
+  You can now use:
+   - [exp1] & [exp2] - means exp1 AND exp2 must evaluate to TRUE.
+   - [exp1] | [exp2] - means exp1 OR  exp2 must evaluate to TRUE.
+
+  You can connect as many [exp] with & or | as you like. The evaluation is done
+  from left to right.
+
+  Examples:
+   [%task%==1]                              ;only task 1 (as usual)
+   [%task%==1] & [%OS%==OS2]                ;only task 1 under OS/2
+   [%task%==1] | [%task%==3]                ;only task 1 or 3
+   [%task%==1] | [%task%==3] & [%OS%==OS2]  ;only task 1 or 3 under OS/2
+   [%OS%==OS2] & [%task%==1] | [%task%==3]  ;only task 1 under OS/2 or task 3
+
+
+CE: added Keyword "NodeInboundDir <AKA> <Directory>"
+
+  NodeInboundDir allowes you to specify an extra inbound directory for an
+  node, to handel his mail as special mail. The directory entry ignores the
+  original inbound entrys (unknown, known and protected) for this node.
+  - AKA is the nodenumber
+  - Directory is the new inbound directory.
+
+
+CE: change "StartBlkSize" from max. 2048 to max. 8192 (8k ZModem block at
+    begin)
+
+
+CE: added keyword "NoModem"
+
+  with NoModem you don't need a COM port for Binkley. It is nessesary if you
+  need a schedula without a modem. At the time this keyword is for OS/2 only.
+
+
+CE: added "SyncHydraSessions <AKA>"
+
+  with SyncHydraSessions you will only SEND data while RECEIVEing data in an
+  Hydra session. This is only active in outbound calls.
+
+
+CE: added size calculation of NodeExtraDir for #MOH and freepoll
+
+
+HJK: Removed keyword "WinFossil"
+
+  The use of the WinFossil for the Windows version routines now depends on
+  which version is used, the NTCOMM version (for NT) or the WinFossil (for 95).
+
+
+CE: added flag-file BTENDSES.%TASK%
+
+  BTENDSES.xx terminates an active session when sending files to the downlink.
+  It will not kill the session on incomming files!
+
+
+HJK: "AfterMail" new style with WIN32
+
+  AfterMail should also work in the new style now under Win32. Please refer for
+  the syntax to the OS/2 implementation section by RH.
+
+
+HJK: "Shell" keyword new style both OS/2 and WIN32
+
+  Shell keyword now works same as the AfterMail keyword:
+   Old Style: "Shell <any string>"
+   New Style: "Shell [#]<any string>"
+
+  I changed this to start a detached session of "shell" program. The session is
+  in VIO-mode, independent and gets the starting binkleys environment. It will
+  be started minimized and invisible.
+
+  To enable detached sessions you have to:
+   1) add the "#" char (this signals your intentions)
+   2) change the command this way: Shell #<program-path>\program.exe
+
+  Example: Shell #c:\bink\squish\squish.exe
+
+  If you don't change your config, nothing changes. The char "#" is removed if
+  you don't run OS/2 or WIN32.
+
+
+HJK: "WindowTitleFmt" and "SharePort"
+
+  Those keywords can now also be used in Windows version, "SharePort" works
+  only in the NTCOMM version. With almost the same beheaviour as in the OS/2
+  version.
+
+
+SMS: added support for "ExtrnMail <errlv> RING"
+
+  You may also use ExtrnMail for "RING" now. This is intended for use with a
+  voicebox, e.g. ANSW.EXE.
+  The "RING" is just "RING" and NOT the response from your modem. Even if your
+  modem says "RINGING" on incoming calls you have to use "RING".
+
+
+SMS: added CallerID to EXTMAIL.CMD / SPAWNBBS.CMD
+
+  The CallerID now is passed as %7 to EXTMAIL.CMD and %6 to SPAWNBBS.CMD.
+  You may use the following commands to distinguish CallerID and the extended
+  connect string in the batch:
+
+    SET CALLERID=%6
+    SET CONNECT=
+    IF NOT %7.==. SET CALLERID=%7
+    IF NOT %7.==. SET CONNECT=%6
+    ECHO CallerID: %CALLERID%, Connect: %CONNECT%
+
+
+AW: removed "HoldAfterBadConnect"
+
+
+
+
+BT 2.60XE/Gamma-XR7
+=-=-=-=-=-=-=-=-=-=
+
+
+Bugfixes
+--------
+
+See knwnbugs.xr6 for a complete list of bugs / problems in XR6. All bugs with
+status 'F' should be fixed in this version.
+
+
+New features
+------------
+
+JH: new keyword "RejectIgnoreSize <size>"
+
+  When calling a node and getting a reject, now Binkley checks first if there
+  is more mail for the called node to send than specified here and ignores the
+  reject, that means that normally the node is called again in a few seconds
+  (depending on your other config, which still applies).
+  Size ist given in byte and may be up to 2147483648 (2gb).
+  If you give a negative value this is not active (default behaviour).
+
+    Example: RejectIgnoreSize 0
+
+  If you call a node and there's _anything_ for this node to send (size > 0)
+  the reject is ignored.
+
+
+HJK: new keyword "FreqLongNames"
+
+  Makes it possible to request longer filenames (up to 45 characters),
+  for requests from systems that can handle long filenames and certain
+  Unix style systems. When this keyword is in binkley.cfg the old
+  2.60-style request dialog box appears when pressing <ALT><G> with an
+  long field for the filename.
+
+
+HJK: keyword "SIOMode" can now also be used with Win32 version
+
+  Use this if you use CFos and/or have problems with the modem hanging up
+  or DTR control problems
+
+
+HJK: removed support for V6 and QuickList nodelists
+
+  Functions where already out-of-use for ages, they did not even compile.
+  Everyone should use V7(+) nodelists now.
+
+
+VRP: Txy support in outbound
+
+
+VRP: new keyword: "Online <address> {CM | <start>-<stop>} [<WeekDays>]"
+
+  Use this keyword to override the online time of a node. This is normally set
+  in the nodelist via the T user flag.
+
+  <start> and <stop> are the local time in format hh:mm.
+  <WeekDays> (default - all) may be any combination of "Mo Tu We Th Fr Sa Su"
+  or "Wk" == "MoTuWeThFr" or "Wn" == "SaSu"
+
+  Examples:
+
+    Online 2:5080/41 20:00-08:00 WkSa
+    Online 2:5080/41 CM Su
+
+
+VRP: new keyword: "SendHoldIfCaller"
+
+  If this keyword is found in the config file, Binkley will also send hut/hlo 
+  bundles on outgoing calls.
+
+
+VRP: new keyword: "RestorePoll <flavour>"
+
+  If this keyword was found in the config file, Binkley will create a 
+  zero-sized ?lo bundle with corresponding flavor in case of an incomplete 
+  outgoing session.
+
+  <flavor> may be cra[sh], dir[ect] or norm[al]. Default is crash.
+
+  Example:
+
+    RestorePoll crash
+
+
+VRP: new keyword: "Hidden" (Hidden lines support)
+
+  Keyword:
+
+    Hidden <addr> <phone> <mdmflg,..> <fidoflg,..> {CM|<start>-<stop>} [days]
+
+  <phone> must be 'ready to dial' - no phone translations will be used
+  (like in 'Override' keyword).
+
+  <mdmflg> and <fidoflg> is the same as used in 'Override' keyword (if not
+  used, must be set to '-').
+
+  <start>, <stop> and <days> is like in 'Online' keyword. If <start> and
+  <stop> are not used set '-' instead.
+
+  Examples:
+
+    Online 2:5080/41 20:00-08:00 WkSa
+    Hidden 2:5080/41 746301 - CM - Su
+
+
+VRP: Changed ExtSession behaviour
+
+  If the external session was successfull, the external mail agent must now
+  set 'esess_ok.<nnn>' flag (where '<nnn>' is Binkley's current task number)
+  in Binkley's flag_dir.
+
+
+VRP: new keywords: "NetMailFlag", "ArcMailFlag" and "TicFlag"
+
+  NetMailFlag [<flagname>]    (default is btnetml.in in flag dir)
+  ArcMailFlag [<flagname>]    (default is btarcml.in in flag dir)
+  TicFlag     [<flagname>]    (default is bttic.in   in flag dir)
+
+  The flags are set if netmail/arcmail/*.tic files were received in the last
+  session.
+
+
+VRP: new keyword: "SaveExtSession [in | out]"
+
+  If this keyword was found in the config file all external sessions (see
+  "ExtSession" and "ExtrnMail" keywords) will be saved in the CallHist.All
+  history file.
+
+  Default is "off" (i.e. not to save any data about external sessions in the
+  history file - this is the behaviour as it was before).
+
+  "SaveExtSession" without any parameter means both, "in" and "out".
+
+
+SVM: Rewrite zfree() code for Win32
+
+   There was no check if the path given is complete and only the first
+   character of drive parameter was used as drive letter which makes some
+   problems with relative path. Now GetFullPathName is used to be sure
+   it's a full path. One should check whenever this will really return the
+   drive on network, not the \\server\share\...
+   Also added support for the drives over than 2G for WINNT 4.0 and Win95
+   OSR2 and higher (FAT32). Also for this case there is a check now not
+   for the drive free space but for the space available for current user
+   in the given directory.
+
+
+
+
+
+
+
+==============================================================================
+==============================================================================
+====   --------------------   ================================================
+=====-> Things Still To Do <-=================================================
+====   --------------------   ================================================
+==============================================================================
+==============================================================================
+
+- for unfixed bugs see knwnbugs.xr6
+
+- rewriting of terminal stuff from line-oriented output to fullscreen
+  sbuf'd windowed input/output. This is currently a real mess, sorry -
+  please use an external terminal program if you want to call a BBS.
+
+- "PrivateNet" / Boss* necessary ?
+
+- Event behaviour screen (Alt-N) : move strings to language.txt & clarify.
+
+- Write importers from popular BBS packages into history.
+
+- more V7+ usage / features
+
+
+[EOF]

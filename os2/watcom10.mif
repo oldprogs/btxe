@@ -1,0 +1,660 @@
+########################################################################
+#                                                                      #
+# make include file for BinkleyTerm Version 2.60 XE                    #
+#                                                                      #
+# Compiler: Watcom v10.x                                               #
+#                                                                      #
+########################################################################
+#                                                                      #
+# If you're using Watcom C v10.6 set environment variable WCCVER to    #
+# 106 (without a dot) to use the new features of v10.6.                #
+# Sorry, this is the only way I found to select between the different  #
+# versions of Watcom C.                                                #
+#                                                                      #
+########################################################################
+#                                                                      #
+# Set the environment variable WCCLOAD to the number of minutes you    #
+# want to keep wcc(386) in memory for faster compiling. Please note    #
+# that emxload is required to use this feature. If this variable is    #
+# not set, this feature is not used. Try "set WCCLOAD=5".              #
+#                                                                      #
+########################################################################
+#                                                                      #
+# The following macros can also be set in the command line or          #
+# in another makefile.                                                 #
+#                                                                      #
+# macro  description            default   possible values              #
+#                                                                      #
+# OS     Operating System       os2       dos, os2                     #
+# CPU    CPU                    386        86, 186, 286, 386, 486, 586 #
+# OVL    overlayed exe (DOS)    no        yes,  no                     #
+# DEB    debugging information  opt       yes,  no, code, opt          #
+# MCD    use maxcomm.dll        no        yes,  no                     #
+# CCH    outbound caching code  yes(OS2)  yes,  no                     #
+# IBS    internal BBS           no        yes,  no                     #
+# LNG    language               english   english, deutsch, startrek,  #
+#                                         swedish                      #
+#                                                                      #
+########################################################################
+
+.ERASE
+.OPTIMIZE
+.SILENT
+
+SRC_DIR    = ..\src
+INC_DIR    = ..\include
+LIB_DIR    = ..\lib
+DOC_DIR    = ..\doc
+
+!ifeq %WCCVER 106
+ERRFOPT    = /fr=$(OBJ_DIR)\$^&.err
+!else
+ERRFOPT = 
+!endif
+
+# check...
+
+!ifndef OS
+OS         = os2
+!endif
+
+!ifndef CPU
+CPU        = 386
+!endif
+
+!ifndef OVL
+OVL        = no
+!endif
+
+!ifndef DEB
+DEB        = opt
+!endif
+
+!ifndef MCD
+MCD        = no
+!endif
+
+!ifndef CCH
+! ifeq OS os2
+CCH        = yes
+! else
+CCH        = no
+! endif
+!endif
+
+!ifndef IBS
+IBS        = no
+!endif
+
+!ifndef ELN
+ELN        = no
+!endif
+
+!ifndef LNG
+LNG        = english
+!endif
+
+!ifneq CPU 86
+! ifneq CPU 186
+!  ifneq CPU 286
+!   ifneq CPU 386
+!    ifneq CPU 486
+!     ifneq CPU 586
+!      error unsupported cpu $(CPU)...
+!     endif
+!    endif
+!   endif
+!  endif
+! endif
+!endif
+
+!ifneq OS dos
+! ifneq OS os2
+!  error unsupported Operating System $(OS)...
+! endif
+!endif
+
+!ifneq DEB yes
+! ifneq DEB code
+!  ifneq DEB no
+!   ifneq DEB opt
+!    error unsupported debug option
+!   endif
+!  endif
+! endif
+!endif
+
+!ifeq OS os2
+BIT        = 32
+!else ifeq OS dos
+BIT        = 16
+!endif
+
+BU_OS_EXE  = $(BU_EXE)
+
+!ifdef __OS2__
+NULDEV     = 1>nul 2>nul
+! ifeq OS dos
+BU_OS_EXE  = ..\os2\e_32_386\btutil32.exe
+! endif
+!else ifdef __MSDOS__
+NULDEV     = >nul
+!endif
+
+
+# settings...
+
+EXE_DIR    = ..\$(OS)\e_$(BIT)_$(CPU)
+OBJ_DIR    = ..\$(OS)\o_$(BIT)_$(CPU)
+
+!ifeq BIT 32
+#CC        = wpp386.exe
+CC         = wcc386.exe
+!else ifeq BIT 16
+#CC        = wpp.exe
+CC         = wcc.exe
+!endif
+
+AC         = wasm.exe
+LNK        = wlink.exe
+RC         = rc.exe
+
+# files for binkley
+BT_OBJ_O   = aglcrc.obj
+BT_OBJ_O  += b_banner.obj
+BT_OBJ_O  += b_bbs.obj
+BT_OBJ_O  += b_faxrcv.obj
+BT_OBJ_O  += b_flofil.obj
+BT_OBJ_O  += b_frproc.obj
+BT_OBJ_O  += b_help.obj
+BT_OBJ_O  += b_initva.obj
+BT_OBJ_O  += b_logs.obj
+BT_OBJ_O  += b_passwo.obj
+BT_OBJ_O  += b_proto.obj
+BT_OBJ_O  += b_rspfil.obj
+BT_OBJ_O  += b_sbinit.obj
+BT_OBJ_O  += b_script.obj
+BT_OBJ_O  += b_search.obj
+BT_OBJ_O  += b_sessio.obj
+BT_OBJ_O  += b_spawn.obj
+BT_OBJ_O  += b_term.obj
+BT_OBJ_O  += b_termov.obj
+BT_OBJ_O  += b_today.obj
+BT_OBJ_O  += b_wazoo.obj
+BT_OBJ_O  += b_whack.obj
+BT_OBJ_O  += b_wzsend.obj
+BT_OBJ_O  += banner.obj
+BT_OBJ_R  += binkdlg.obj
+BT_OBJ_O  += brec.obj
+BT_OBJ_O  += bsend.obj
+BT_OBJ_O  += bt.obj
+BT_OBJ_O  += btconfig.obj
+BT_OBJ_O  += cache.obj
+BT_OBJ_O  += callback.obj
+BT_OBJ_O  += callerid.obj
+BT_OBJ_O  += callwin.obj
+BT_OBJ_O  += capi.obj
+BT_OBJ_O  += cfosline.obj
+BT_OBJ_O  += chat.obj
+BT_OBJ_R  += common.obj
+BT_OBJ_O  += css.obj
+BT_OBJ_R  += data.obj
+BT_OBJ_O  += debug.obj
+BT_OBJ_R  += dosfuncs.obj
+BT_OBJ_O  += emsi.obj
+BT_OBJ_O  += evtparse.obj
+BT_OBJ_O  += evtsetup.obj
+BT_OBJ_R  += file_all.obj
+BT_OBJ_R  += fossil.obj
+BT_OBJ_O  += freepoll.obj
+BT_OBJ_O  += ftsc.obj
+BT_OBJ_O  += heap.obj
+BT_OBJ_O  += history.obj
+BT_OBJ_R  += hydra.obj
+BT_OBJ_R  += janus.obj
+BT_OBJ_R  += keymap.obj
+BT_OBJ_O  += langload.obj
+BT_OBJ_O  += m7rec.obj
+BT_OBJ_O  += m7send.obj
+BT_OBJ_R  += mailer.obj
+BT_OBJ_R  += mailovly.obj
+BT_OBJ_R  += mailroot.obj
+BT_OBJ_O  += maxmcp.obj
+BT_OBJ_O  += maxprm.obj
+BT_OBJ_O  += mdm_proc.obj
+BT_OBJ_R  += misc.obj
+BT_OBJ_O  += nodeproc.obj
+BT_OBJ_O  += outbound.obj
+BT_OBJ_O  += pktmsgs.obj
+BT_OBJ_O  += protcomm.obj
+BT_OBJ_O  += recvbark.obj
+BT_OBJ_O  += recvsync.obj
+BT_OBJ_R  += sbuf.obj
+BT_OBJ_O  += sched.obj
+BT_OBJ_O  += sendbark.obj
+BT_OBJ_O  += sendsync.obj
+BT_OBJ_O  += squish.obj
+BT_OBJ_O  += srif.obj
+BT_OBJ_O  += statetbl.obj
+BT_OBJ_O  += stats.obj
+BT_OBJ_R  += timer.obj
+BT_OBJ_O  += times.obj
+BT_OBJ_O  += version.obj
+BT_OBJ_R  += version7.obj
+BT_OBJ_O  += vt100.obj
+BT_OBJ_O  += xmrec.obj
+BT_OBJ_O  += xmsend.obj
+BT_OBJ_O  += yoohoo.obj
+BT_OBJ_R  += zmodem.obj
+
+!ifeq OS os2
+BT_OBJ_O  += asyn_os2.obj
+BT_OBJ_O  += exceptio.obj
+BT_OBJ_R  += file_os2.obj
+BT_OBJ_O  += os2_pm.obj
+BT_OBJ_O  += pipe.obj
+BT_OBJ_O  += vfos_os2.obj
+!else ifeq OS dos
+BT_OBJ_R  += bink_asm.obj
+BT_OBJ_R  += file_dos.obj
+BT_OBJ_R  += spawn.obj
+BT_OBJ_R  += vfos_dos.obj
+!endif
+
+!ifeq IBS yes
+BT_OBJ_O  += script2.obj
+BT_OBJ_O  += bbs_ctra.obj
+BT_OBJ_O  += bbs_data.obj
+BT_OBJ_O  += bbs_io.obj
+!endif
+
+!ifeq OS os2
+BT_LNK_OBJ  = file {$(BT_OBJ_R) $(BT_OBJ_O)}
+BT_LNK_OPT  = option modname=BT-XE option description 'BinkleyTerm for OS/2 eXtended Edition' option version=2.60
+BU_LNK_OPT  = option modname=BTUtil option description 'BinkleyTerm for OS/2 eXtended Edition Utility' option version=2.60
+!else ifeq OS dos
+! ifeq OVL yes
+BT_LNK_OBJ  = option dynamic file {$(BT_OBJ_R)}
+BT_LNK_OBJ += begin autosection file {$(BT_OBJ_O)} end
+! else
+BT_LNK_OBJ  = file {$(BT_OBJ_R) $(BT_OBJ_O)}
+! endif
+!endif
+
+# files for btutil
+BU_OBJ     = btutil.obj
+BU_OBJ    += common.obj
+BU_OBJ    += gethcomm.obj
+BU_OBJ    += getra.obj
+BU_OBJ    += getbgfax.obj
+BU_OBJ    += getmax3.obj
+BU_OBJ    += gettg.obj
+
+# files for bink_pm.dll
+BD_OBJ     = bink_pm.obj
+
+# files for binkpipe.dll
+BP_OBJ     = binkpipe.obj
+
+# files for toss.exe (OS/2)
+TOS_OBJ    = toss.obj
+
+# files for xr5toxr6.exe (DOS)
+X56_OBJ    = xr5toxr6.obj
+
+# enable heap checking
+#OPTFLAGS += /dHEAPCHECK
+
+# hydra device
+OPTFLAGS  += /dHYDRADEV
+
+# OS/2 32bit, use internal async routines
+!ifeq OS os2
+! ifneq MCD yes
+OPTFLAGS   += /dNEED_OS2COMMS
+MCD_STR     = enabled
+! else
+MCD_STR     = disabled, using maxcomm.dll
+BT_LNK_OBJ += libfile maxcomm.lib
+! endif
+!endif
+
+# OS/2, enable priorities
+!ifeq OS os2
+OPTFLAGS  += /dNEED_SET_PRIOR
+!endif
+
+# bugfix for Spirit II modems
+#OPTFLAGS += /dSPIRIT_FIX
+
+# install internal cache module
+!ifeq CCH yes
+OPTFLAGS  += /dCACHE
+CCH_STR    = enabled
+!else
+CCH_STR    = disabled
+!endif
+
+# install except. handler (doesn't work; watcom's not able to produce valid codeview sym files)
+#OPTFLAGS += /dEXCEPTIONS
+
+# compile with internal BBS
+!ifeq IBS yes
+OPTFLAGS  += /dBBS_INTERNAL
+IBS_STR    = enabled
+!else
+IBS_STR    = disabled
+!endif
+
+# enable load of external BINKLEY.LNG (use only for debug proposes!)
+!ifeq ELN yes
+OPTFLAGS  += /dUSELNGFILE
+!endif
+
+# enable command line switch "notreleasedyet" for release candidates
+#OPTFLAGS += /dREL_CAND
+
+# LNKOPTS   - general linker options
+# T_LNKOPTS - linker options to build textmode EXEs
+# P_LNKOPTS - linker options to build PM EXEs
+# D_LNKOPTS - linker options to build DLLs
+
+# CCOPTS    - general compiler options
+# D_CCOPTS  - compiler options to build DLLs
+# E_CCOPTS  - compiler options to build EXEs
+
+CCOPTS     = /i=$(INC_DIR) /wx /zq /zp1
+LNKOPTS    = option stack=32768 option cache option quiet
+LNKOPTS   += path $(OBJ_DIR) libpath $(LIB_DIR)
+
+!ifeq OS os2
+CCOPTS    += /bt=OS2V2 /dOS_2 /mf
+E_CCOPTS   = /bm
+D_CCOPTS   = /bd
+T_LNKOPTS  = system os2v2 pmcompatible
+D_LNKOPTS  = system os2v2 dll initinstance
+P_LNKOPTS  = system os2v2_pm
+GNAT       = 32
+!else ifeq OS dos
+CCOPTS    += /bt=DOS /dMSDOS /ml /zt48
+ACOPTS     = /bt=MSDOS /w9 /q $(ACOPTS_CPU) /dWATCOM
+LNKOPTS   += system dos
+GNAT       =
+! ifeq OVL yes
+CCOPTS    += /dOVERLAYS /wo /of
+OVL_STR    = enabled (dynamic overlay manager)
+! else
+OVL_STR    = disabled
+! endif
+!endif
+
+!ifeq DEB yes
+CCOPTS    += /d2 /od /hw /dCO_NOPT
+LNKOPTS   += debug all option symfile
+OPT_STR    = disabled
+DEB_STR    = enabled (watcom, symfile)
+!else ifeq DEB code
+CCOPTS    += /d2 /od /hw /dDEBUG /dCO_NOPT
+LNKOPTS   += debug all option symfile
+OPT_STR    = disabled
+DEB_STR    = enabled (watcom, symfile) + debug code
+!else ifeq DEB no
+CCOPTS    += /od /dCO_NOPT
+OPT_STR    = disabled
+DEB_STR    = disabled
+!else ifeq DEB opt
+! ifeq OS os2
+CCOPTS    += /omilre
+! else ifeq OS dos
+CCOPTS    += /osmlre
+#CCOPTS   += /oneatx
+! endif
+CCOPTS    += /s /dCO_OPT
+OPT_STR    = enabled
+DEB_STR    = disabled
+!endif
+
+!ifeq BIT 32
+! ifeq CPU 386
+CCOPTS    += /3r
+! else ifeq CPU 486
+CCOPTS    += /4r
+! else ifeq CPU 586
+CCOPTS    += /5r
+! endif
+!else ifeq BIT 16
+! ifeq CPU 86
+CCOPTS    += /0
+ACOPTS    += /0
+! else ifeq CPU 186
+CCOPTS    += /1
+ACOPTS    += /1
+! else ifeq CPU 286
+CCOPTS    += /2
+ACOPTS    += /2
+! else ifeq CPU 386
+CCOPTS    += /3
+ACOPTS    += /2
+! else ifeq CPU 486
+CCOPTS    += /4
+ACOPTS    += /2
+! else ifeq CPU 586
+CCOPTS    += /5
+ACOPTS    += /2
+! endif
+!endif
+CCOPTS    += /d_CPU=$(CPU)
+
+!ifeq OVL yes
+BT_EXE     = $(EXE_DIR)\bt_o_$(CPU).exe
+BT_MAP     = $(EXE_DIR)\bt_o_$(CPU).map
+!else
+BT_EXE     = $(EXE_DIR)\bt$(GNAT)_$(CPU).exe
+BT_MAP     = $(EXE_DIR)\bt$(GNAT)_$(CPU).map
+!endif
+
+BU_EXE     = $(EXE_DIR)\btutil$(GNAT).exe
+BU_MAP     = $(EXE_DIR)\btutil$(GNAT).map
+
+!ifeq OS os2
+BD_DLL     = $(EXE_DIR)\bink_pm.dll
+BD_MAP     = $(EXE_DIR)\bink_pm.map
+BP_EXE     = $(EXE_DIR)\binkpipe.exe
+BP_MAP     = $(EXE_DIR)\binkpipe.map
+TOS_EXE    = $(EXE_DIR)\toss.exe
+TOS_MAP    = $(EXE_DIR)\toss.map
+!endif
+
+!ifeq OS dos
+X56_EXE    = $(EXE_DIR)\xr5toxr6.exe
+X56_MAP    = $(EXE_DIR)\xr5toxr6.map
+!endif
+
+
+.EXTENSIONS  :
+.EXTENSIONS  : .exe .dll .obj .res .lib .c .asm .rc .lng
+
+.c   : $(SRC_DIR)
+.rc  : ..\os2_pm
+.asm : $(SRC_DIR)
+.exe : $(EXE_DIR)
+.dll : $(EXE_DIR)
+.obj : $(OBJ_DIR)
+.res : $(OBJ_DIR)
+.lng : $(OBJ_DIR)
+.lib : $(OBJ_DIR)
+
+
+# dependencies
+
+all           : .SYMBOLIC tell dirs preload $(BT_EXE) $(BD_DLL) $(BP_EXE) $(X56_EXE) $(TOS_EXE)
+
+bt            : .SYMBOLIC tell dirs preload $(BT_EXE)
+
+btutil        : .SYMBOLIC dirs $(BU_EXE) 
+
+clean         : .SYMBOLIC clean_o clean_e clean_d
+
+
+tell          : .SYMBOLIC
+        echo .
+        echo compiling BT-XE for $(OS) $(BIT)bit i$(CPU)
+        echo optimzations  : $(OPT_STR)
+        echo debugging inf.: $(DEB_STR)
+!ifeq OS dos
+        echo overlays      : $(OVL_STR)
+!endif
+        echo .
+        echo optional modules
+        echo - outbnd cache: $(CCH_STR)
+!ifeq OS os2
+        echo - int. async  : $(MCD_STR)
+!endif
+        echo - int. BBS    : $(IBS_STR)
+!ifeq ELN yes
+        echo - ext.LNG sup.: enabled (use only for debuging)
+!endif
+        echo .
+
+dirs          : .SYMBOLIC
+        echo creating directories
+        -md $(EXE_DIR) $(NULDEV)
+        -md $(OBJ_DIR) $(NULDEV)
+
+preload       : .SYMBOLIC
+!ifdef %WCCLOAD
+        echo preloading $(CC)
+        emxload -m $(%WCCLOAD) $(CC)
+!endif
+
+clean_o       : .SYMBOLIC
+        echo removing object files
+        -erase $(OBJ_DIR)\*.obj $(OBJ_DIR)\*.res $(OBJ_DIR)\*.lng $(OBJ_DIR)\*.pch $(OBJ_DIR)\*.bak $(OBJ_DIR)\*.err $(OBJ_DIR)\*.mbr $(NULDEV)
+
+clean_e       : .SYMBOLIC
+        echo removing exe files
+        -erase $(EXE_DIR)\*.exe $(EXE_DIR)\*.dll $(EXE_DIR)\*.map $(EXE_DIR)\*.sym $(EXE_DIR)\*.ovl $(NULDEV)
+
+clean_d       : .SYMBOLIC
+        echo removing directories
+        -rd $(EXE_DIR) $(NULDEV)
+        -rd $(OBJ_DIR) $(NULDEV)
+
+
+$(BT_EXE)    : $(BT_OBJ_R) $(BT_OBJ_O) $(BU_EXE) $(BU_OS_EXE) $(LNG).lng
+        echo linking $(BT_EXE)
+        *$(LNK) $(LNKOPTS) $(T_LNKOPTS) option map=$(BT_MAP) name $(BT_EXE) $(BT_LNK_OBJ) $(BT_LNK_OPT)
+!ifneq ELN yes
+        echo patching language ($(LNG)) to $(BT_EXE)
+        $(BU_OS_EXE) lng patch $(BT_EXE) $(OBJ_DIR)\$(LNG).lng $(NULDEV)
+!endif
+
+!ifneq BU_OS_EXE $(BU_EXE)
+$(BU_OS_EXE)  : $(BU_OBJ)
+        echo you need $(BU_OS_EXE), please compile for your native OS first.
+!endif
+
+$(BU_EXE)     : $(BU_OBJ)
+!ifeq DEB code
+        echo debug code enabled, can't link $(BU_EXE).
+!else
+        echo linking $(BU_EXE)
+        *$(LNK) $(LNKOPTS) $(T_LNKOPTS) option map=$(BU_MAP) name $(BU_EXE) file {$(BU_OBJ)} $(BU_LNK_OPT)
+!endif
+
+gethcomm.obj  : .AUTODEPEND
+        echo compiling $(SRC_DIR)\gethist\$^&.c
+        *$(CC) $(SRC_DIR)\gethist\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS)
+
+getra.obj     : .AUTODEPEND
+        echo compiling $(SRC_DIR)\gethist\$^&.c
+        *$(CC) $(SRC_DIR)\gethist\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS)
+
+getbgfax.obj  : .AUTODEPEND
+        echo compiling $(SRC_DIR)\gethist\$^&.c
+        *$(CC) $(SRC_DIR)\gethist\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS)
+
+getmax3.obj   : .AUTODEPEND
+        echo compiling $(SRC_DIR)\gethist\$^&.c
+        *$(CC) $(SRC_DIR)\gethist\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS)
+
+gettg.obj     : .AUTODEPEND
+        echo compiling $(SRC_DIR)\gethist\telegard\$^&.c
+        *$(CC) $(SRC_DIR)\gethist\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS)
+
+
+english.lng   : $(BU_OS_EXE) $(SRC_DIR)\language.txt
+        echo creating $(EXE_DIR)\english.lng
+        $(BU_OS_EXE) lng key E $(SRC_DIR)\language.txt $(OBJ_DIR)\english.lng $(NULDEV)
+
+startrek.lng  : $(BU_OS_EXE) $(SRC_DIR)\language.txt
+        echo creating $(EXE_DIR)\startrek.lng
+        $(BU_OS_EXE) lng key S $(SRC_DIR)\language.txt $(OBJ_DIR)\startrek.lng $(NULDEV)
+
+deutsch.lng   : $(BU_OS_EXE) $(SRC_DIR)\language.txt
+        echo creating $(EXE_DIR)\deutsch.lng
+        $(BU_OS_EXE) lng key G $(SRC_DIR)\language.txt $(OBJ_DIR)\deutsch.lng $(NULDEV)
+
+swedish.lng   : $(BU_OS_EXE) $(SRC_DIR)\language.txt
+        echo creating $(EXE_DIR)\swedish.lng
+        $(BU_OS_EXE) lng key V $(SRC_DIR)\language.txt $(OBJ_DIR)\swedish.lng $(NULDEV)
+
+!ifeq OS os2
+$(BD_DLL)     : $(BD_OBJ)
+        echo linking $(BD_DLL)
+        $(LNK) $(LNKOPTS) $(D_LNKOPTS) option map=$(BD_MAP) name $(BD_DLL) file {$(BD_OBJ)} option modname=Bink_PM option description 'BinkleyTerm for OS/2 eXtended Edition PM Routines' option caseexact segment class 'code' loadoncall export {IsPipeRunning SetWindowTitle GetVersion}
+
+$(BP_EXE)     : $(BP_OBJ) binkpipe.res
+        echo linking $(BP_EXE)
+        *$(LNK) $(LNKOPTS) $(P_LNKOPTS) option map=$(BP_MAP) name $(BP_EXE) file {$(BP_OBJ)} option modname=BinkPipe option description 'BinkleyTerm for OS/2 eXtended Edition PM Pipe Server' option manyautodata option heapsize=8192
+        echo adding resources to $(BP_EXE)
+        *$(RC) -p -x $(OBJ_DIR)\binkpipe.res $(BP_EXE) >nul
+
+$(BD_OBJ)     : .AUTODEPEND
+        echo compiling $(SRC_DIR)\os2\bink_pm\$^&.c
+        *$(CC) $(SRC_DIR)\os2\bink_pm\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(D_CCOPTS) /D__MIG_LIB__
+
+$(BP_OBJ)     : .AUTODEPEND
+        echo compiling $(SRC_DIR)\os2\binkpipe\$^&.c
+        *$(CC) $(SRC_DIR)\os2\binkpipe\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS) /D_Optlink=
+
+binkpipe.res  : $(SRC_DIR)\os2\binkpipe\binkpipe.rc
+        echo copying ..\os2\bt32.ico to $(SRC_DIR)\os2\binkpipe
+        copy ..\os2\bt32.ico $(SRC_DIR)\os2\binkpipe >nul
+        echo compiling $(SRC_DIR)\os2\binkpipe\$^&.rc
+        -cd $(SRC_DIR)\os2\binkpipe
+        *$(RC) -i ..\..\$(INC_DIR) -r $^&.rc ..\..\$(OBJ_DIR)\$^&.res >nul
+        -cd ..\..\..\os2
+
+$(TOS_EXE)    : $(TOS_OBJ)
+        echo linking $(TOS_EXE)
+        *$(LNK) $(LNKOPTS) $(T_LNKOPTS) option map=$(TOS_MAP) name $(TOS_EXE) file {$(TOS_OBJ)} option modname=TOSS option description 'TOSS - server/client for BinkleyTerm 2.60 eXtended Edition'
+
+toss.obj      : .AUTODEPEND
+        echo compiling $(SRC_DIR)\os2\toss\$^&.c
+        *$(CC) $(SRC_DIR)\os2\toss\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS)
+
+!endif
+
+!ifeq OS dos
+$(X56_EXE)    : $(X56_OBJ)
+! ifeq DEB code
+        echo debug code enabled, can't link $(X56_EXE).
+! else
+        echo linking $(X56_EXE)
+        *$(LNK) $(LNKOPTS) $(T_LNKOPTS) option map=$(X56_MAP) name $(X56_EXE) file {$(X56_OBJ)}
+! endif
+
+xr5toxr6.obj  : .AUTODEPEND
+        echo compiling $(SRC_DIR)\dos\$^&.c
+        *$(CC) $(SRC_DIR)\dos\$^&.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) /i=$(SRC_DIR)\dos $(CCOPTS) $(E_CCOPTS)
+!endif
+
+.c.obj        : .AUTODEPEND
+        echo compiling $[*.c
+        *$(CC) $[*.c /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(CCOPTS) $(E_CCOPTS) /fh=$(OBJ_DIR)\btincs.pch $(OPTFLAGS)
+
+.asm.obj      : .AUTODEPEND
+        echo compiling $[*.asm
+        *$(AC) $[*.asm /fo=$(OBJ_DIR)\$^& $(ERRFOPT) $(ACOPTS)
+

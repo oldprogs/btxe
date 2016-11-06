@@ -1,0 +1,78 @@
+Hi,
+
+the BinkleyTerm XE developers team is pleased to announce the fifth Gamma
+release of BT-XE, which will offer you a truckload of fixes, improvements
+and new, amazing features. To name only a few:
+
+-   A quite severe EMSI bug has been fixed.
+
+-   Completely new and improved screen layout, including:
+
+    .   A newly designed comprehensive current session statistics window
+        will pop up during connects, providing information on the system
+        connected to, names and number of files, current/left time, volume
+        and percentage. The graphical progress bars have been doubled in
+        their resolution and can use user defined characters now.
+
+    .   Two new windows/views of extensive history/call statistics including
+        several sorted Top Caller/Called Lists, etc. are now accessible from
+        the mailer screen.
+        Similar information even can be posted by the mailer as messages to
+        the SysOp in netmail or echomail.
+
+    .   An optional new modem monitoring window has been added so you can
+        watch which commands are being really sent to the modem and what it
+        answers to them.
+
+    .   A new interactive current event setup/change window is accessible
+        from the mailer screen on key press.
+
+    .   Improved name/address input boxes will optionally show extended
+        target address information on demand.
+
+    .   User-configurable colouring/highlighting of displayed recent activity
+        window strings.
+
+    .   Dropped old fullscreen terminal mode. There's a VERY simple windowed
+        terminal mode now, but most things aren't working yet.
+        This is OK to configure your modem, but you will need something else
+        to call a BBS and do up/downloads.
+
+-   Optional new V7+ nodelist support, that is a good basis for future
+    enhancements, like ,U,Txy support etc. - to make use of V7+ feature you
+    you will need a nodelist compiler capable of generating V7+ nodelists.
+    Most likely the next FastList release will support the V7+ nodelist format.
+
+-   Extended cFos support (OS/2 versions only).
+
+-   Improved pipe- and PM-support for OS/2. Now you can run BTXE even
+    without the OS/2 Presentation Manager (again).
+
+-   New CallBack feature and improved CallerID-detection/mapping.
+
+-   Interactive / manual file skipping during connect now possible.
+
+-   Support for private node outbound directory.
+    All stuff you copy in there will be transmitted to this node.
+
+Instead of posting the whole quite long list here, we suggest to grab a
+copy of the distribution archives and have a look for yourself. Beneath all
+these improvements the range of available versions now includes:
+
+-   New Windows/NT version.
+    Please note that this one still is regarded somewhat beta, and most
+    likely will not run under Windows/95.
+
+-   New overlayed DOS versions will work with less than 400k of free memory!
+
+Moreover, the original BinkleyTerm documentation files have been rewritten
+and updated to reflect the state of current BT-XE versions and development.
+As per now the new documentation currently is only available in German
+language, but the English one will follow "when it is ready" ;-) The new docs
+come as preformatted, ready to print text files and also in OS/2 .INF format.
+
+We like to thank all users, beta testers and the documentation team, who
+all helped us with their bug reports, suggestions and work.
+
+    Enjoy! :-)
+

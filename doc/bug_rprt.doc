@@ -1,0 +1,35 @@
+BTXE bug report form
+====================
+
+Before reporting a bug:
+
+- Be sure that it is not a problem with your configuration.
+  Read the docs, review your configs.
+
+- Try to reproduce the bug and write down how you managed this.
+
+- If you do not fill out this bug report form, your bug report might be IGNORED.
+
+
+--8<--------------------------------------------------------------------------
+
+Your name   :
+FIDO address:
+
+Short (1-2 lines only)
+description :
+
+BTXE version: BT 2.60XE/
+         for: [ ] OS/2  [ ] DOS  [ ] Win32
+
+Exact description of the bug and how to reproduce it (please supply config
+files and log file excerpts of both "sides" if necessary):
+
+
+
+--8<--------------------------------------------------------------------------
+
+Send this bug report form to one of the developers of the BTXE extensions.
+Best would be choosing the guy who did the extension that makes you troubles.
+Names and Fido addresses are shown when you start BTXE ...
+

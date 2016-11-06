@@ -1,0 +1,6 @@
+todo list for screen classes
+
+ - window classes aren't ready for multithreaded applications yet
+ - some DOS functions are missing (see scrndos.h)
+ - no Linux support (use scrnos.h as template and scrndos.h for reference)
+

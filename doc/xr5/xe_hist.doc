@@ -1,0 +1,1819 @@
+
+            (very detailed) History of BinkleyTerm 2.60XE/Gamma-5
+           =======================================================
+
+
+
+Beta XG1:
+---------
+
+- Robert Hoerner's lots of nice changes up to now
+- Steffen Motzer's changes up to now (mainly ASYNC / DTR stuff)
+- TJW: minor fixes to Robert's stuff
+- corrected documentation (?)
+  there's some confusion between Robert Hoerner (RH ?) and Rudolf Heeb (RDH ?
+  HR ?). Maybe best is if Robert and Rudolf verify / correct this (also in
+  source code).
+
+
+
+Beta XG2:
+---------
+
+Changes:
+
+- see docs
+
+
+
+Beta XG3:
+---------
+
+hydrabug: no doc
+
+rh970119: no doc
+
+rh970123:
+
+- fixes a mistake in includes.h
+- changes async.c so, that #define NEED_OS2COMM will lead
+  to #include and compile async_os.c instead (no need to change the
+  makefiles in two lines, simply change the /definition).
+- removes the remove of always "SET TZ=GMT0"
+- fixes a copy error (emsilog/passwordlog)
+- removes a newly again introduced bug:
+  you CAN NOT call time_release() at this time!
+- fixes a bug in displaying "other side has chat available"
+- fixes that CPS:26000 bug, that came from wrong computations
+  with unix_time.
+  The old BT2.60 code worked only, if a transmission needed at
+  least "some seconds".
+
+sm011920:
+
+- dce rate was not displayed when calling out
+- snoop was still not implemented correct
+
+sm011922:
+
+- SIOMode support added for async_os.c
+- next_time was set to rescantime instead of 15 seconds
+- unsupported config-lines were not displayed correct
+
+TS011912:
+
+makefile / rsp changes etc.
+
+TJW:
+
+- fixed a little, but nasty bug in hydra.h
+- fixed stuff diffed wrong (DO NOT USE -b -B as diff option !)
+
+rh012120:
+
+- see file "history"
+
+
+
+Beta XG4:
+---------
+
+ts012412:
+
+-   fixes `renittime' const overflow/truncation (with uSoft700 16bit compiler)
+-   double-checked many typecast & signedness warnings and supplied
+    forced casts where appropiate
+-   adds differentiation between CSet/2 and VAC++ compilers
+-   adds some #defines missing from CSet/2 include files
+-   removes obsolete TBBSList support code
+-   removes obsolete Version5 support code
+
+ts012418:
+
+- ugly hack to temporarily adapt prometer window to new window layout
+  using only one vertical line between upper three windows of fullscreen.
+  the prometer module should better use the _Dlg functions of R. Hoerner
+  instead.
+
+ts012516:
+
+- makes emx-compiled os/2 versions working again.
+
+sm012223:
+
+- #define NO_THREAD added to async_os.c
+
+sm012410:
+
+- binkpipe did not compile here
+
+rh012515:
+
+* save your MAKEFILES before patching this dif!
+  There are changes of makefiles for VAC and watcom (OS/2) included!
+* exception handler for OS/2 (#define EXCEPTIONS)
+* moved all PM related functions to a separate DLL, which is loaded at runtime.
+  This allows binkley to run without PM.
+  You'll have to #define LOAD_PM_DLLS to activate it. If if works, we should
+  let this be the default way to call PM functions, imho.
+* changed "chat available" information behind sysopname in recent act. window.
+* removed changes concerning fsent and changed (at least temporary) ZSEND.
+* new ..\doc\fsent.doc ;)
+* ..\doc\new_user.doc updated. Please read it!
+* makefiles for binkpipe and bink_pm.dll created ( in ..\os2_pm)
+
+tjw:
+
+- fixed bug in frequest routine leading to infinite loop
+- removed unneccessary skip_blanks() calls from btconfig.c
+  you need NOT call c=skip_blanks(c) in a "case" of the big switch because
+  this has already been done before the switch is entered.
+- changed ibmvacpp.mak to use async.c / debug infos / profiler infos
+- changed version string to "beta"
+
+
+
+Beta XG5:
+---------
+
+rh012701:
+
+* zmodem.h commented (i took the original zmodem.h to copy the comments)
+  no further changes made there.
+* removed all (yes, all) warnings from Borland C 3.1, Watcom 10.0, VAC 3.00.
+  Please take care not to introduce new ones.
+
+tjw:
+
+- added "FROZEN" msg to IPC stuff
+- added "Spawned" msg to IPC stuff
+- added correct NoHundredths behaviour for ReadLog
+
+ts012817:
+
+-   changed default from version6/newnodelist to version7 nodelist
+-   `version6' aka `newnodelist' type nodelists are out-#define'd by
+    `V6_LIST' now as a default. the according config statements have
+    no meaning/function anymore and the code for them is not there
+    anymore, unless you define `V6_LIST' again.
+    sorry to say so, but this only cuts approx 2k from an usoft dos exe :-(
+-   misc updates to emx makefiles
+
+sm012913:
+
+- pipe.c is now multithreaded
+- Binkley does not disconnect from pipe anymore when frozen - this was not
+  really necessary.
+
+sm012914:
+
+- small bugfix in pipe.c
+
+sm012921:
+
+- snoop_write was much to slow.
+- mdm_proc.c fixed : afterconnect and mnp_filter did not work anymore
+
+rh012822:
+
+Be careful: makefiles will be DIFfed, too. Save your's before applying.
+
+There are two files that are not diffed, but that should replace others
+completely:
+
+execptio.c  replaces    exception.c
+os2_pm.c    replaces    os2_pm.c
+
+the diff would have been unnecessarily large if i would have diffed it: two
+files instead of 1 file each.
+
+What's new? mcp32.dll and bink_pm.dll are loaded if they are available.
+This way the functions are available "on demand" and one doesn't need more
+then 1 binkley.exe.
+
+Second: some type casts especially in timer.c and misc.c did solve the "seems
+to hang" in DOS. The timers in fact run arbitraily 'cause wrong conversions
+because of missing type casts.
+
+Some wrong types of (near/far) pointers (mea culpa) correctly casted.
+
+SNSERVER.DLL cannot be loaded *and executed* with the new "load dll" code.
+If anybody succeeds with that: it would be great! I'll not try it again.
+It loads fine and traps gloriously if called, the same problem why i moved
+the PMMERGE code to bink_pm.dll. Maybe an "interface" dll would solve the
+problem with SNSERVER, too?
+
+The exception routine now really displays line numbers IF they are
+available (Watcom... it doesn't put the information about existing
+debug information into the exes header....
+But its more then nothing and works with VAC:
+
+-------------------------------------
+01/27/97 23:45:15
+Exception   : c0000005
+an Adresse  : 000609a0
+Ausl봲er in : binkley
+Information : 00000001, 009702c0
+OS/2 Version 2.30
+Code Modul (interner Name): BT32
+Code Modul (Dateinname)   : J:\BINKSRC\OS2\BT32.EXE
+Code Object # 1 an Offset 509a0 
+
+      File     Line#  Public Symbol
+  컴컴컴컴컴컴 컴컴�  컴컴컴컴컴컴-
+Nearest Public Symbol : 0001:00050114  div  (E:\BUILD\RT\SRC\DIV.C)
+Nearest Source Line   : 0001:00000043  line #0 
+-------------------------------------
+Klartext    : Ung걄tiger Zugriff [Art: Lesen von Data:009702c0]
+-------------------------------------
+
+rh013111:
+
+- fixes "can't open (null)" in terminal mode ("give number", but you give a
+  name)
+- removes SNSERVER support completely and installs Steffen Motzers pipe per
+  default.
+- some minor changes, to minimize memory useage in DOS.
+- fixes bug in Do_Edit when displaying "-all-" string.
+- compiles without errors with BC, Watcom, VAC.
+
+rh013119:
+
+sorry, but in screen save mode we would get a problem with the original
+debugging code: large logfiles!
+
+
+
+Beta XG6:
+---------
+
+sm020123:
+
+- fixed bug in mailer.c : display_life() did not work correct.
+
+rh020219:
+
+- misc doc changes
+- "AltClock" replaced by "Clock"
+- LED removed from async_os.c
+- Carlos' name is now Sanz ;)
+- Outbound.c: replaced large constant "        "-strings with two constant
+  "        "-strings (frees about 500 byte in DOS versions).
+- Removed UUE and ASC capabilities of hydra protocol. You can easily
+  enabled them again by #defining HYDRA_UUE in your makefile.
+  This #define HYDRA_UUE does both enabling UUE and ASC and increasing
+  hydras buffers to the then necessary (large!) size.
+
+TJW:
+
+- Removed superfluous "Application" keyword
+- Removed obsolete "Zone", "Aka", "Point" keywords
+- Removed obsolete "NoZones" keyword
+- corrected range check for V7 cost field (solves potential 16Bit problem
+- with cost = -1 / 65535)
+- added MCP / tasklist messages for outbound rescan / read     
+- removed blinking cursor after unfreeze
+- fixed bug in Alt-S (if you gave no path/drive, first letter was duplicated)
+- "Resending ..." corrupted Transfer Status window
+  omitted displaying this message and changed status log entry from > to !
+
+ts020418:
+
+DOS only:
+
+-   removes config statements (not recognized any more):
+    -   MultiLink
+    -   TaskView
+    -   TopView
+-   removes code for the following multitaskers:
+    -   DoubleDOS
+    -   MOS386
+    -   MultiLink
+    -   TaskView
+    -   TopView
+-   saves aprox 700 bytes on a DOS executable
+
+sm020318: - Has yet to be cleared. Not inlcuded yet! -
+
+sm020422:
+
+- 'System not found' was not displayed correct in the statusline.
+- using stringrep !"string" >"string" to suppress some logfile-entries did not
+  work.
+- changed dial_modem() : 'NO CARRIER' or 'NO DIALTONE' were not displayed when
+  dialing out
+
+
+
+Beta XG7:
+---------
+
+TJW:
+
+- fixed bug in receive_exit: any stuff to do IN binkley has to be done
+  before any errorlevel exit may happen (mail flag, aftermail etc.).
+- fixed misc. "cosmetical" bugs in Zmodem display routines
+- fixed wrong blanks (instead of leading '0's) in cost.log
+
+BJ020621:
+
+- Fixed "Are you sure ?"-bug in terminal (answer was case-sensitive)
+
+SM020623:
+
+- fixed 'outbound reading bug' in mailovly.c
+
+SM020717:
+
+- bink_pm.dll cause exception in _crt_term() when more than one instance
+  of binkleyterm was loaded and exited in the same order they were started :
+
+  [...]
+  Code Object # 1 an Offset 23ad 
+        File     Line#  Public Symbol
+    컴컴컴컴컴컴 컴컴�  컴컴컴컴컴컴-
+  No debug info in exe file
+   between _ufree + 51 and _umalloc - F2B
+  -------------------------------------
+  Klartext    : Ung걄tiger Zugriff [Art: Lesen von Data:00000001]
+  -------------------------------------
+  [...]
+ 
+CF070297:
+
+-  I'm trying to catch up with the current source and mix my stuff. Obviously
+desyncronization is quite expensive so I will never let this happen again. I
+have added the missing parts of the callback stuff, and added a new thing
+to the cost part. I still have some things left but mixing them now seems a
+bit risky as we want to release soon. I will add my .PKT support routines
+from CFRoute, though. They are 100% tested and are reliable, and they simply
+cannot spoil anything in Binkley. What I want to do is add a function
+
+   WarnViaPKT (originadd,destinationadd,from,to,subj,body) for example
+
+   Example
+   if (passwordmismatch)
+      WarnViaPKT (AKA[0],AKA[0],"Binkley-XE",sysopname,
+                  "password mismatch warning",
+                  "Password mismatch calling node 2:341/70 - expected...");
+   (sorry if the actual variable names don't match reality).
+
+[TJW: suggestion: please name this function "CreatePkt" and do it in a general
+way so we can use it for other "notification packets, too. Then make another
+function PWErrorWarningPkt(...) using this CreatePkt function as you wanted.
+Don't forget to include INTL/FMPT/TOPT kludges.]
+
+ - New keyword CALLBACK callerID node
+   If a call from callerID comes, it is rejected and all mail for 'node' is
+   changed to crash. If there is no mail, a .CLO is created.
+   Example:
+   CALLBACK 003413782005 2:341/79
+   If 003413782005 (that's me) calls, it is rejected and called back.
+   Be aware that cost and event configuration applies. If calling the node
+   is too expensive or the event is set to receive-only (or the nodelist
+   flags don't allow calling), BT-XE will *not* call, but still reject the
+   call.
+   Remember to define MODEMCID or callback will not work.
+   Finally, remember that callerID is used only to identify the call, but
+   the number used to call back is the nodelisted one.
+
+ - Added UseRingingCost & ModemCostReset. If used, the cost timer will not
+   start after connecting but after the last string specified in
+   ModemCostReset is received from the modem (or after dialing if none is
+   received). If the modem is able to return RINGING, it is a good idea to
+   use these keywords, as it will result in BT-XE knowing exactly the true
+   start of the charges.
+   Be aware that costtimecorrection still applies, so you may want to
+   set it to 0 if UseRingingCost is used.
+   Example:
+        UseRingingCost
+        ModemCostReset RINGING
+        ;ModemIgnore RINGING
+
+[TJW: comment: this gets a bit confusing meanwhile. Maybe we could just
+implement that without new Binkley.Cfg keywords ? Or does this really NEED
+to be configurable ?]
+
+TS020818:
+
+-   misc fixes only of concearn for the emx compiler
+-   updated `xe_user.new' doc
+
+SM020900:
+
+- update xe_user.new : 'SharePort' and 'ModemRing RINGING'
+
+RH099718 (includes AW020421, except os2_pm.c):
+
+* "SmartBiDi"
+
+    Changed EMSI.C to forbid Janus or Hydra in case
+
+    - either "SmartBiDi" is configured and we are the calling system but
+      have nothing to send to the called address (i.e.: we're polling)
+
+    - or we are the called system and have nothing on hold for the caller
+
+    - or we have "noPickup" active.
+
+    Then zmodem will be the fastest method (100 percent eff, whilst hydra
+    and janus have only 95 percent eff.) and is choosen. Since calling
+    a system means that EMSI knows nothing but the called address, and
+    since the called system might have other AKAs, too, for which we might
+    have mail on hold, the statement "SmartBiDi" is used to force this
+    behaviour in case we are calling.
+
+*   While implementing smart_bidi, i found and removed a bug in emsi.c that
+    could (and did) lead to that the called side told the caller "agree to
+    zmodem", but in fact switched to hydra. The error was that neither
+    my_capabilities nor remote_capabilities were not masked by the actual
+    protocol but all protocol-bits remained to be set.
+
+*   Changed Alex Woicks code to set the Netware Server time to make it
+    work with VAC, too.
+
+*   Changed btconfig.c to use less code for error messages.
+
+*   Fixed cosmetical bug with binkpipe ("Last:" field was wrong).
+
+*   Fixed cosmetical bug in pending outbound: scoll down scrolled one line
+    too much.
+
+cf100297:
+
+First, I have finally updated XE_USER.TXT with the callback and the
+other stuff from the last diff.
+I have completed the .PKT interface. I have an exams every day this week,
+so instead of touching the source code a lot I have decided to add a
+StatsToMsg keyword to test the code with something trivial and get
+to my exams. I think the interface is rather easy so feel free to use it
+and add warnings for password failures and the like :-)
+There are a few things to do regarding this .PKT stuff, the most important
+one is adding MSGID. It already adds  tear and origin lines for echomail,
+and of course required kludges for netmail. So it is (should be) 100%
+complaint with the specs.
+As commented in BINKLEY.DEV, three functions are used to write to .PKT:
+
+struct S_PKTh *CreateMSGinPKT (char *dir,char *fromname,ADDR fromaddr,char *toname,ADDR toaddr,
+                                                char *subject,word attribs,char *area);
+int WriteToPKT (struct S_PKTh *h, char *fmt,...);
+int ClosePKT (struct S_PKTh *h);
+
+The struct S_PKTh contains the file handle and the info that is needed
+to write the origin line (our address).
+All parameters are quite straight forward so I won't comment them. See
+pktmsgs.h for available attribute contants.
+When ending a paragraph, use \r only, do not use \n (or a combo of both)
+at all.
+CreateMSGinPKT returns null if it can't create an unique .PKT file. Usually
+the cause is that the directory doesn't exist.
+
+ts021018:
+
+-   removes `Rev3' config word and obsolete revision 3 type fossil code
+-   updates `xe_user.new' accordingly
+
+mt970002:
+
+- changed doc for SRIF and HydraMsgSend
+
+ts021218:
+
+-   updates MSC700/800 stuff; now able to produce an
+    overlayed i386 16bit dos exe with MSC800
+
+
+
+Beta XG8:
+---------
+
+xg7-mr1:
+
+ - don't be shocked, the diff is this large because of the doc changes and
+   the tab/spacing stuff
+ - doc reviewed / changed
+ - changed Watcom's makefile to be able to create overlayed dos versions
+ - delete wlmanpre.cmd !!!   (the second time, I think ;)
+ - added some things (asyos2v1.h, async.h and .c) to be able to compile for
+   OS/2 v1.x (not jet finished!?)
+ - BBSopt and EXTopt no longer keep the string (e.g. "spawn") but only a flag
+   what to do. This saves about 8 bytes of memory! ;)
+ - If the environment variable BINKLEY is set then this is binkley's home
+   directory. Otherwise it's the current directory. The config and the event
+   file as well as binkley.ban are taken from binkley's home directory.
+ - config parser: Binkley now checks if the given file name already has a
+   complete path (drive:\path\filename) and does no longer simply always add
+   his home directory.
+ - new keyword: "UseCompletePaths"
+ - "BBS Batch" now always exits with errorlevel 101.
+ - "ErrorLevelShell" now works for the funktion keys, too.
+ - "ErrorLevelShell <errlvl> none"
+ - hopefully made include.h a little bit more readable.
+ - pktmsgs.h: watcom doesn't like 0000001 and so on at all... it get's confused
+   with octal numbers -> stripped leading "0"s.
+ - added little function "errl_exit_shell" to remove some code.
+ - new function no_longer_alive to delete I_ALIVE upon all exits.
+ - changed language.txt for use with editors that strip trailing blanks. Please
+   use "\b" instead of them!
+ - bink_pm.dll is now searched in binkley's home directory
+ - added missing \n to error message used by share_fopen
+
+rh021414: no *.doc included
+
+rh021416:
+
+- minor doc updates, some EMX warning should be removed
+
+rh021420:
+
+- Changed in binkdlg.c (removed GetFromDlg())
+- Bug in btconfig.c fixed
+
+sm021518:
+
+- fixed small bug in misc.c
+- stats_to_msg() was always called
+- UseRingingCost/ModemCostReset were always used
+- 'UseRingingCost' not necessary anymore
+
+sm021520:
+
+- fixed btconfig.c
+
+TJW:
+
+- fixed RH's SmartBidi behaviour, so that if SmartBidi is unused, BT-XE will
+  behave as usual.
+  RH: Please think over if SmartBidi is a good thing, as it seems to have
+      quite some disadvantages if used and Hydra isn't that bad...
+- included Roland Schiradin's BT-XE document sources (german and beginning
+  english version) - if you find bugs, please send diffs as usual ...
+- please enter your personal record into doc\devlist and send a diff!
+
+
+
+Beta XG9:
+---------
+
+sm021812:
+
+- fixed bug in bink_pm.c
+- Binkley was sometimes sending answer_string ('ATA|') after hangup instead
+  of init : timer 'waitfor_line' was not running correct.
+- documentation : PMSnoop can be exited and (re)started at any time now.
+- updated devlist
+
+sm022012:
+
+- writing to SnoopPipe is now much faster :
+  Waiting for a thread with DosSleep(1) to become available does slow down
+  Binkley too much - now I use a UnnamedPipe as a circular buffer to pass
+  data to the server-thread (the UnnamedPipe must not become full !).
+
+sm022210:
+
+- ErrLevelShell <err-no> post \sem32\<name>
+  can now be used to post an Event Semaphore.
+- added server/client program for Event Semaphore.
+- fixed snoop_close().
+
+sm022310:
+
+- fixed small bug in pipe.c
+
+sm022322:
+
+- fixed small bug in pipe.c
+
+sm022323:
+
+- fixed small bug in pipe.c
+- changed com_online() in async_os.c
+
+ts021816:
+
+-   removed config statement `NoFullScreen' (not recognized any more)
+    and the ability to run in line-oriented output mode. i hope, i
+    didn't introduce any errors ...
+-   misc little other fixes
+-   added `Canonical Binkley-XE Developers Joke List' to .\doc directory
+
+ts021907:
+
+-   some updates to *.DEF and *.MAK files
+
+rh022320:
+
+ doc changes
+ ftsc-bugfix
+ xmodem/sealing/barkrequest fixes and debug code
+ zreceive/zsend debug code and bug fix.
+ nearly complete new binkdlg.c: now delay in screen output.
+ (steffen: you used a pipe, so i felt "forced" to use a queue  ,)))
+
+jk970301:
+
+- added ErrorLevelShell <errlvl> poll <node1> <node2> ...
+
+cf160297:
+
+- I have removed the debug stuff for the ringingcost keyword. No longer needed
+  as it seems to work just fine. Talking about ringingcost: Whoever removed
+  it and thought that it would be a nice idea to use ModemCostReset to
+  enable it made a wrong move: RINGING and other modem strings are already
+  defined for that, so people with standard modems shouldn't have to define
+  them. That's why I added a ringingcost! I haven't added it back, though.
+- Stats are only written if StatsToMsg is used :-) Sorry for that lapsus.
+- I have changed the .PKT interface a bit. CreateMSGinPKT now expect two
+  new parameters: The origin address for the .PKT and the destination address
+  for the .PKT. So they can now be different than the addresses for the
+  message. Also a optional (use null otherwise) pointer to a tm structure is
+  accepted so one can use a different date for the message.
+- StatsToMsg now accepts a third parameter which is the password for the .PKT.
+  So the syntax is now
+  StatsToPkt origin_AKA destination_AKA|echotag password
+  Origin AKA is not only the origin AKA for the message but also the origin
+  *and destination* AKA for the .PKT file. So
+  StatsToMsg 2:341/70 2:2453/970 EXAMPLE
+  writes a .PKT from 2:341/70 to 2:341/70 with a message from 2:341/70 to
+  2:2453/970 with the password EXAMPLE.
+- MSGID is now added to messages. See source code for an explanation about it.
+- I have started the colour support. The colour is defined in the string, so
+  anyone can define his favourite set by editing the language file. The escape
+  character is ` (as usual with escape codes, `` writes one). After it, a
+  color is written, for example:
+  Entering `red` POLL `white` mode.
+  Does exactly what do think it does :-)
+  The ` after the colour is optional, i.e. "Entering `red POLL..." has the same
+  effect.
+  The following colors are available
+
+  char *availcolors[]=
+  {"black","blue","green","cyan","red","magenta","brown","white","gray",
+   "brightblue","brightgreen","brightcyan","brightred","brightmagenta",
+   "yellow","brightwhite",NULL};
+
+  BTW I have had to change sbuf.c a bit: On scrolls, it was clearing
+  the characters for the new line, but not its attributes, so it was getting
+  the ones from the previous line, which of course produced an unwanted
+  effect. Since there is no default colour to use for it, I have done the
+  following: The attribute used for the last fill is stored as part of the
+  window structure and used for this scroll stuff.
+  The diff includes NO changes to the language file because I think most of
+  you would not like my changes :-)
+  Finally, a note: The scrollback buffer supports colours just fine, *but*
+  now it is possible that a line takes more bytes to store than characters
+  to display, for example `red`hello`white` requires 17 bytes but prints
+  5 characters. So allocating 'screen width' bytes to save each lines may
+  not be enough any longer.
+
+TJW:
+
+- made "ReadLog" feature more safe. Shouldn't crash any more if
+  input log format is invalid (e.g. if Maximus crashed)
+- added some brightred colour to severe error messages (PW error e.g.)
+- sized requests were broken - fixed by removing mailovly.c::netsize()
+  and adapting cache.c::netsize for cached/uncached operation.
+- caution: new L event flags (only "L" is not valid any more):
+   Li : compares with cost index (V7 "RealCost" value)
+   Lc : compares with cost[cost index] * 1 minute
+   Lt : compares with cost[cost index] * (estimated transfer time)
+  Also made L handling in BT source a bit more "explicit".
+- fixed RC* <-> RC$ confusion
+- changed layout of event display in "Transfer Status" window
+- if there is mail for a "Hold"-listed node, Binkley showed strange
+  behaviour ("NO DIALTONE ..."). Temporary fix.
+- fixed EMSI.C::EncodeEmsiHeader (removed superfluous strtok call)
+  this bug caused outgoing calls NOT to do ZedZap (e.g.)
+
+
+
+Beta XGA:
+---------
+
+AS021608
+
+- Changes made by this diff (short, long version see documentation):
+- Win32 adaption done by Alexander Sanda - Details please see doc\win32.doc.
+
+
+
+Beta XGB:
+---------
+
+sm030622:
+
+- bug in async_os.c caused binkley to trap in ComTXBlockTimeout
+- removed fullscreen from css.c
+
+sm030717:
+
+- reverted change in com_online (SM030622)
+- fixed small bug in misc.c
+- updated os2\ibmvacpp.mak
+
+ts030616:
+
+-   some minor fixes to make XGA source level code compile and work
+    using uSoft7.0/8.0 compilers
+
+xgamr1:
+
+- HoldAfterBadConnect: maybe problem with DOS version (compiler warning).
+  Changed from int to unsigned int. HoldAfterBadConnect 0 and
+  HoldAfterBadConnect 1 is the same now.
+- renamed MOVE_OVERLAYS to OVERLAYS, Watcom doesn't know "moveapi" (b_spawn)
+- New command line keyword: term. Starts binkley in terminal mode.
+- Added Modem Window. Can be switched off and on with Alt+V.
+- new Keyword: ShowModemWin. Switches on Modem Window upon startup (default:
+  off)
+- window title will be changed to "Terminal" in terminal modus
+- Someone's still using those nasty TABs! Killed them again.
+- Sbuf: lines are no longer wraped around (only in chat window)
+- Watcom makefile changed
+   - added deb=code to compile with /dDEBUG (first compile btutil with
+     "wmake /f watcom.mak btutil" and then compile binkley with
+     "wmake /f watcom.mak deb=code"
+   - removed old optflags "Snoop" and "INTERNAL_PIPE"
+   - changed all values of variables to lower case (not os=OS2 but os=os2)
+   - DOS overlayed version: moved some object files from overlay to root
+   - removed /dEXCEPTION, doesn't work (seems as if watcom's compiler can't
+     create codeview debug information even when compiling with "/hc" and
+     linking with "debug codeview option symfile"
+   - it's now possible to compile under DOS
+- Bugfix: trap if there are not enough lines in recent activity dump. Fixed.
+- Cosmetical: title of recent activity window shouldn't be removed any more
+  when switching on/off chat windows
+- Bugfix: allocated memory for chat windows will now be freed
+- debugmodus: added time to log entries
+- Bugfix: added missing */ to sbuf.c::stripcolors()
+
+ts030911:
+
+-   misc minor updates/optimizations for EMX compiler and in prometer.c
+
+cf970309:
+
+- Added a event behaviour setup screen, press alt-n to
+
+as030916:
+
+- ASYNC_NT.C and COM_NT.H:
+  - adopted to use NTCOMM.DLL. Note: The header files for NTCOMM.DLL are
+    still missing. I'am waiting for some Copyright hints from the Author
+    (Scott Dudley).
+  - Completely removed old (stock 2.60) Win32 comm stuff, but left intact
+    the WinFossil comm routines. This is a compile-time option (define the
+    symbol USE_WINFOSSIL to get a executable which supports WinFossil).
+    Note: WinFossil is completely untested. I really don't know, if it works,
+    but I'll do some investigating soon.
+- PIPE.C:
+  - Snoop support for Win32. This includes changes in several other files
+    (most likely to activate snooping).
+- HYDRA.C:
+  - LFN support for Win32
+- VFOS_NT.C
+  - fixed the ALT-Y <> ALT-Z bug. No more need to change the language file.
+
+sm031000:
+
+- binkley can now display 'DCE: <dcerate>' instead of 'DTE: <dcerate>'
+
+xga_mr2:
+
+- modem window: changed color for incoming msgs... if you don't like them,
+  feel free to change MW_SENT and/or MW_RCVD in sbuf.h
+- little bugfix (used || instead of |)
+- Changed some parts of mdm_proc.c: everything sent to modem including DTR and
+  pauses are now done with mdm_cmd_char. This is needed to ensure that the
+  modem window gets all information sent / related to the modem.
+- modem window: does no longer scroll the contents of the window by itself but
+  lets sbuf do this.
+- also had to change sbuf to do exactly what I wanted it to do... that is: only
+  scroll if allowed and only wrap text if allowed.
+
+
+
+Beta XGC:
+---------
+
+ts031417:
+
+-   partly reimplementation of prometer bars using new CSS stuff,
+    but not functional by now.
+
+ts031517:
+
+-   cont'd reimplementation of prometer bars using new CSS stuff.
+    unidirectional protocols are nearly done, but when using janus
+    or hydra, stuff is written by them in the filewin, overwriting
+    some of the metering bar stuff. i phoned with TJW recently and
+    we agreed upon that he will do the necessary cleanup in the
+    protocols stuff to complete the transition from PROMETER to
+    CSS (current session statistics).
+
+ts031617,dif:
+
+-   fixed bug in `Do_Poll_Packet()'
+-   misc emx makefile cleanup
+
+ts031818:
+
+-   cont'd work on progress bars stuff; new keyword `NoProgressBars'
+    (only active when source compiled with `CSS' defined) to switch
+    of the progress bar display (default=on).
+
+sm031113:
+
+- snoop-pipe does not display color-control-strings anymore
+- modified bink_pm.def:
+  bink_pm.dll caused exception in _crt_term() when more than one instance of
+  binkleyterm was loaded and exited in the same order they were started.
+
+sm031600:
+
+- 'net_problems' was set by errors but never cleared : this caused 
+  an unexpected 'lost carrier' while emsi/ftsc session.
+
+jk970312:
+
+- added "NoTranx"
+- updates makefile for ibm cset 2.01
+
+rh160320.doc (misc *.dif files):
+
+these are some fixes. Most important ones:
+
+the new "L" event flags break currently running cfgs.        *fixed*
+ftsc goes to an endless loop if a frequest cannot be served. *fixed*
+a variable to unix_time() must be "time_t" (and not "long")  *fixed*
+bt doesn't compile without /DCSS                             *fixed*
+(due to too much changes between last XM.dif and my actual source
+ it happens that i did not diff the complete fix. Sorry for that.
+debug code in async_os.c is more "handy" (log_to_file)       *update*
+much faster "sendbanner" routine (still emsi aware)          *update*
+
+rh170321.doc (misc *.dif files):
+
+bt trapped with no events defined                        *fixed*     sched.dif
+
+as031518:
+
+misc.c: modified stuff concerning the modem activity window.
+bt.c: modified the creation of the announcement string. (Win32 only)
+bink.h: modified PRD_SH_PRTY for Win32
+misc.c: added a #if defined(_Win32) to activate SnoopWrite
+        (have forgotten this with my last diff).
+ansi_time(): added _timezone. Removed _timezone from mailovly.c
+             (setting timestamp for BTRESCAN.DMP).
+bcc50.mak: Changed makefile to support CSS (PROCMETER removed). New
+           source files (evtsetup.c) added. New target: btutil32.exe
+dosfuncs.c: set_prior() is now VOID. I had forgotten this before, but
+            now my compiler started to complain; seems that somebody has added
+            a prototype for set_prior()...
+misc.c, chat.c, mdm_proc.c, b_session.c:
+        Some minor changes to make the chat windows aware of an existing modem
+        window. See the changes in misc.c, mdm_proc.c and b_session.c for
+        details on my proposed
+        "modem-activity-window-does-not-go-away-during-sessions" :-) stuff.
+Please check out these changes carefully. They _do_ work here, but they
+might break something else.
+I have also changed the scrolling logic somewhat, because of problems
+with the response messages from my modem. NOTE: regard this to be
+EXPERIMENTAL.
+
+as031605:
+
+mailroot.c:  Added semaphore capability for Win32.
+win32/sem.c: sample client/server (like os2_sem/toss.c).
+
+cf970313:
+
+Started the work on the CFOS support. What I have done so far is already
+there, even though it isn't very usable yet.
+There are some problems, and there are not in my code but in L갺er's. Chris
+has just told me that he hasn't tested the CFOS/2 appendage. Where it is
+supposed to return AX=0 on success, it is returning AX=size of returned
+structure (which is supposed to be in CX).
+In any case, add CFOSLine to your modem configuration. You should see the
+current CPS rate right from CFOS at the bottom line. I'll of course complete
+the line with the other info provided by CFOS.
+BTW: If anyone can tell me how the hell to access the ID as returned by
+CFOS (swapping the offset and the segment words as append.doc suggests won't
+work) I'd appreciate it.
+
+CF970310
+
+Added the SEEN-BY stuff.
+Added direct caller-ID recovery from CAPI. Please read XE_USER.DOC for
+a (quite long) explanation.
+
+ts032115:
+
+-   fixes bug in send-file input box when doing multiple file inputs
+
+sm032022:
+
+- fixed : being rejected doesn't work anymore
+
+sm032210:
+
+- fixed : being rejected doesn't work anymore
+
+TJW:
+
+- cosmetical change: moved "Status" window between Recent Activity and top
+  windows, so it can be "merged" with CSS window ...
+- added "Elapsed" into CSS window
+- other "cosmetical" changes
+
+sm032413:
+
+- added debug code in async_os.c
+
+xgcp_mr3:
+
+ - removed defines: BTPE, CSS and PROMETER
+ - grouped modem commands together into the structure modem_commands
+ - moved FreePoll and CallBack structs into NodeStruct, removed callback.h
+ - CFOSMonitorStart needs maxcomm.dll! Removed when using internal async
+   routines
+ - Changed async_os.c for Watcom to be able to use precompiled headers.
+           DO _NOT_ COMPILE ASYNC_OS.C BUT ONLY ASYNC.C!
+ - changed config parser:
+    - split it up
+    - using cfg_CopyString / cfg_CopySlashString for all pointers to char
+    - no longer needs to jump to badline or to print general errors by your
+      self but only return the type of error...
+ - added QueryNodeStruct() to reduce duplicate code
+ - rewrote inloop of handle_inbound_mail()
+ - Changed version generation. As time was compile time it didn't make much
+   sense. Now we've got a version_type (as before), a version_base (XGC at the
+   moment) and a version_modified (put your name sign here plus a number or
+   what ever you like when you modify bink).
+ - two new colors (add at the end of Colors in Cfg) for modem window: sent
+   and received stuff
+ - Binkley checked for key strokes while initializing the modem and getting
+   modem information after sessions. Now this is only done while answering and
+   dialing.
+ - Modem window scrolled too many lines, because CRLF was received from the
+   modem. Now LF is ignored.
+ - Binkley now accepts multiple init strings for mailer and terminal. At the
+   moment up to 5 for each.
+ - Binkley now allways checks for OK when initializing the modem. If no OK was
+   received, the init string will be retransmitted. After three tries,
+   SpawnNoOK will be called if specified.
+ - New keyword: PreAnswer <string>. Let's you setup the modem befor answering a
+   call. Binkley will check for OK.
+ - New keyword: CallerID <nodenumber> <callerid>. Let's you setup a callerid
+   for a node. Used for FreePoll and CallBack.
+ - FreePoll and Callback NO LONGER EXPECT A CALLERID!
+ - CallerID, CallBack and FreePoll: YOU MUST USE "ModemCID <string>" to use
+   this feature AND THE FEATURES USING CALLERID such as FreePoll and CallBack!
+ - Changed WindowTitleFmt: do NOT use this keyword if you don't want to use
+   this feature. DO use it WITHOUT parameter to use default title format. Use
+   it WITH parameter to use your own title format.
+
+
+
+Beta XGD:
+---------
+
+ts032811:
+
+-   lots of little fixes to make it compile/run using emx
+    and uSoft compilers
+-   cosmetical fix for css stuff (in language.txt)
+-   discontinued emx omf-obj-format support, please delete .\os2\emxomf.*
+-   included in this archive is an edited warnings list as generated
+    by emx *after* this diff has been applied: file `xgc_warn.emx'
+    there are some quite interesting warnings which IMHO should not be
+    ignored. i didn't really investigate on them so far, so please have
+    a look at them for yourself.
+
+TJW:
+
+- fixed these warnings (except the silly ones ;-)
+- fixed bugs and better cosmetics in CSS and Event Status window.
+  CSS display should use a bit less CPU.
+- Yet todo: Up/Downloads in terminal mode don't display anything.
+            They should also use CSS display ...
+
+eh032902:
+
+- replaces "Last" in "Today at a Glance" by "Size I/O".
+
+ts032912:
+
+-   doubles progress bar resolution
+
+xgc_mr1:
+
+ - removed some unused variables / definitions
+ - readded #ifdef PROMETER in prometer.c  (no longer used)
+ - updated xe_user.doc
+ - broke freepoll; should be fixed - please test!
+ - btconfig.c: TaskDir was only copied (ctl_string) and not checked
+   (ctl_slash_string), fixed
+
+cf970329:
+
+-  Completed CFOS support, including on the fly channel
+   additions and removals (see doc for details).
+-  Fixed the SEEN-BY bug.
+-  Added the ability to skip files in Hydra.
+
+tjw:
+
+- changed CSS display, concerning the "total" values: until yet only
+  the bytecount of completed files were added / display in the total
+  counter/bar. E.g. if you had 2 files to transmit:
+  1 file 999K
+  1 file   1K
+  then the total display didn't show anything while the first file was
+  being sent, but when this file was completed, it "jumped" to 999K.
+  This was changed to honour currently transferred file's position, so
+  these values don't "jump" any more, but (normally) continiously progress.
+- included small files upload.c / download.c into b_term.c - change
+  your makefile !
+- removed "CSS" #define / #ifdef etc.
+- lots of display stuff changes related to terminal mode
+  terminal mode (when doing up- or downloads) now looks like mailer mode -
+  so I was able to use the same output routines for both modes
+
+sm033015: - not included, was already done by Carlos AFAIK -
+
+sm033021:
+
+- small modification in capi.c (AFAIK there is a bug in one of the TELES capi
+  Release 2.9x)
+
+sm033121:
+
+- fixed bug in capi.c
+- fixed returncode for timeup() and longtimeup()
+
+TJW:
+
+- fixed bug in CSS display: after a file was sent, it was double-added to
+  the total. Fixed.
+
+as040121.doc:
+
+- new makefile
+
+sm040119:
+
+- modified get_emsi() 
+
+sm040120:
+
+- modified get_emsi() 
+
+cf970402:
+
+- File-skipping now in ZModem
+- Also fixes freepoll and callback.
+
+TJW:
+
+- made EMSI experiments selectable via #define - see top of EMSI.C ...
+  uncritical changes are #define'd, maybe critical changes are #undef'd
+
+
+
+Beta XGE:
+---------
+
+ts040317:
+
+-   makes XGD level sources compile/work with uSoft and EMX/gcc compilers
+
+ts040322:
+
+-   fixes some optical buglets and updates emx-related stuff
+
+TJW:
+
+- fixed "99%, 1 byte missing" (instead of 100%) bug in CSS
+
+ts040420:
+
+-   fixes ErrLevelShell bug (was only present in DOS versions)
+-   started work on 32bit protected mode DOS version
+
+as040414:
+
+- Makefile updated.
+- Some #ifdef's added to callerid.c and protcomm.c
+
+TJW:
+
+- fixed CSS percent calculation long overflow problem
+- fixed MAX log read problem (".020" was displayed as 1/100 sec part)
+
+xgd_mr1:
+
+ - updated xe_user.doc (CallerID, ConditionalPoll)
+ - some minor changes to be able to compile with Watcom (makefile, externs.h)
+ - added Watcom to typesize.c (BTW: the part for Watcom should work for nearly
+   all compilers?)
+ - split status window and current session statistics
+ - some little changes to btconfig.c (cfg_condpoll) - made CallerId optional
+ - added /dCACHE to Watcom makefile (seems to work!?)
+
+ts040518:
+
+-   further work on dos versions
+
+xgd_mr2:
+
+ - fixed CacheHold bug - see BINKLEY.DEVELOP
+ - updated xe_user.doc
+ - Changed janus.c::through() to use MSG_TXT(M_CPS_MESSAGE) and not a static
+   string. This removes the double %% in this msg...
+
+xgd_mr3p: not hatched, MR had no time left. This "doc" is from TJW:
+
+ - fixed MailFlag bug with no filename given
+ - fixed callback / freepoll
+
+TJW:
+
+- removed Zmodem debug messages
+- moved EMSI / send_WaZoo debug messages to debug level
+- changed "efficiency" / remaining time to calculate with 8bits/byte (sync)
+  instead of 10bits/byte (async 8n1)
+- unified through() (Janus, Hydra) and throughput() (X/Zmodem)
+- fixed minor MOH miscalculation with *.REQ
+- removed SYS3175 problem in cache.c (if you use CacheHold)
+- fixed bug with duplicate pkt names if invent_pkt_name is called several times
+  within the same second
+- changed "today at a glance" window (cosmetical changes)
+
+
+
+Beta XGF:
+---------
+
+XGE-MR1:
+
+ - Added some compile information. Please change you makefile:
+    - define CO_NOPT if you compile a non-optimized version and
+    - define CO_OPT  if you compile an optimized version
+ - removed unused msgs from msgs.h and language.txt
+ - changed btutil to skip #??? in language file (needed to number all msgs)
+ - added numbers to all msgs in language file for easier search
+ - the given CallerID now only needs to be a substring of the CallerID
+   presented by a caller and not exactly the same
+ - bugfix: FreePoll did not reject any calls
+ - moved chars for progress bars to language.txt
+
+XGE-MR2:
+
+ - added multiple callerids per node
+
+cf0414b:
+
+- New history window. Fixed stats logging to echo. ZModem file-skipping.
+
+About the history window:
+Mailer, FAX and BBS calls are displayed. Note that I do *not* use BT's
+internal fax receiver but BGFAX. So faxes received directly by binkley are
+NOT logged in the history file (BTW: It is called ALLTASKS.HST in the task
+directory), someone using it please add support for it.
+The file GETBGFAX.C imports the log from BGFAX into the history file. Possibly
+we should include compiled exes for all versions into a HISTORY.ZIP file,
+which should include importers for Maximus and other BBS or fax software as
+well - once we or someone else do them.
+GETRA.C imports LASTCALL.BBS (generated by RemoteAccess and others) into
+ALLTASKS.HST.
+The format of the history file should be released with XR5 so people can
+support it.
+Finally: I know that some of the data that is stored in the history file is
+not displayed (for example the cps rate) - the idea is that the file can be
+used as a source for stats programs, that currently have to use the ASCII
+log file.
+
+About the stats logging:
+For echomail, the given address is now used as the origin of the PKT *only*.
+The destination is ALWAYS the main address of the system. This should get rid
+of the security problems with some tossers.
+
+sm041223:
+
+- modified parsing of 'post \sem32\[sem_name]' in mailroot.c
+
+sm041820:
+
+- disabled IOCTL_DEBUG in async_os.c
+- fixed os2\ibmvacpp.mak
+
+ts040918:
+
+-   makes XGE tree compile using emx and uSoft compilers
+
+ts040922:
+
+-   minor optical changes
+
+ts041218:
+
+-   made a temporarily ugly hack to display graphic chars
+    instead of the leading/trailing blanks in the captions.
+    i will remove alle the blanks in the caption strings RSN...
+
+ts041312:
+
+-   more optical `schnickschnack'
+
+ts041421:
+
+-   work on window captions is finished with this diff.
+
+ts041518:
+
+-   misc cleanup/updates
+-   drop the makefiles in the appropiate subdirectories
+
+xge_mrx:
+
+ - moved Carlos' history import prgs to their own directory named gethist\.
+   Delete src\getbgfax.c and src\getra.c.
+ - changed enums for config parser to be able to use same naming convention
+   for mailer session errors
+ - removed keyword: DTRHigh - use keyword "Busy" instead!
+ - changed modem handling: modem should be initialized after each modem
+   action, aftercall should be called before initialization after a session.
+   Only dialing does not yet work as it should: you can break it with every
+   key but imho only esc should do that. But as dialing code is a mess, this
+   will take some time...
+   Not yet tested: cfos cost and callback / freepoll (call rejection)
+ - Reqfiles should now only be deleted if session was successfull.
+ - rewrote some functions (removed gotos, added return values)
+ - modem window isn't removed any more when a mailer session is started
+ - New define: HEAPCHECK. Define it if you like binkley to do heap checking.
+   Was always disabled till now.
+ - new keyword: HangUp. Used only (!!!) to hangup the phone (send CR, drop
+   DTR, raise DTR)
+
+RS:
+
+- updated german docs in man\ directory
+
+TJW:
+
+- doc\ideas\v7_plus.doc
+- V7+ support added to version7.c, keyword extension "Version7 Plus"
+- began implementing support for ,U,Txy flags as in FSC-0062  
+- increased CPS measuring resolution to 1/100s (and removed the lower / upper
+  limit values in [] - as they are pretty useless with 1/100s measuring
+  resolution)
+
+
+
+Beta XGG:
+---------
+
+ts042916:
+
+- Makes XGF sources compile with uSoft8.0 for overlay versions
+
+cf970430:
+
+- Added some (more or less) complete stats screens. Press Ctrl-T and then
+  1-5 to select stat page. The stats screens are based on the data from
+  the history file therefore the more time you have been using a BT-XE
+  with it the better the stats will be.
+- Added new keyword autochatopen. If used, the chat window will open as
+  soon as the remote types something (so no HCON: lines are logged).
+  autochatopen also disables computer-generated beeps in chat (for chat
+  timeout or close or whatever). 
+- Added ChatLogDir directory
+  To indicate the directory where chat sessions are to be stored.
+- Started work on a chat-based command interpreter. It will allow both
+  the local and the remote sysops to do real-time requests, such as
+  attaching or freqing files on the fly.
+  As of now, you may only do
+  /btloc log filename
+  To record the chat session. ChatLogDir must be used in order for this
+  to work.
+  I plan to add some more (useful) commands as soon as possible (I need to
+  do some other things that can't wait because I'm about to install
+  BT-XE in a special enviroment).
+- Added NodeExtraDir directory
+  Allows to "link" a node with a directory. When the node connects, BT-XE
+  will send and delete everything in that directory before the usual .?LO
+  and .?UT stuff. Most of the people will have no use for this, however it
+  is very useful if you wish to share the files to send to a node between
+  BT-XE and a FTP server, for example. Just set the home directory in the
+  daemon and the NodeExtraDir in BT-XE to the same path. The user may now
+  get its stuff with the most convenient method each time. No need to
+  choose...Of course, a utility to move .?LO and ?UT files to the remote's
+  directory is a handy tool if you plan to use this :-) I'll provide a
+  good (=one that does more than just moving files) one in the near future.
+  Note: You should make sure that files are not marked read only, otherwise
+  BT-XE will not be able to delete them and will try to send them each time
+  the node connects.
+  Also, if you are running the DOS or Windows versions, be aware that I
+  don't know what happens if the directory has subdirectories (this means
+  that you should try it and notify - don't expect someone else to do so).
+  The OS/2 version will just ignore them so you can build a tree for your
+  FTP server or whatever you need.
+
+TJW:
+
+- changed V7+ routines to autodetect v7+ DTP offset presence w/o bit 15 usage
+- change hydra's calls to throughput function
+  timer is started now when finfoack is sent / received
+  timer is stopped now when eofack is sent / received
+  this is a better measurement method than the one used before, but it may
+  lead to a bit lower throughput CPS values, because one "ack" transmission
+  is within the time interval that's measured.
+  With very small files, this method should give much better results than
+  the old method.
+
+xgf-mr1:
+
+ - up to 5 PreAnswer commands
+ - modem will hangup after uucp exits, too
+ - in case of modem faliure while initializing the modem or sending PreAnswer:
+    - no SpawnNoOK: Binkley will abort after second init string
+    - SpawnNoOK: Binkley will retry initializing the modem after SpawnNoOK; if
+      this fails, too, abort
+
+xgf-mr2:
+
+ - changed show_session() to show dial and xfer as well
+ - removed mdm_proc.c :: update_ipc_status(), does same as show_session()
+ - changed function calls before and after b_spawn() calls
+    - some functions were called two times or even three times!
+    - moved some functions to b_spawn()
+ - removed strupr in errlevelshell - some programs have case sensitive
+   parameters!
+ - when posting semaphores binkley behaved like exiting or shelling (closed
+   all logfiles, even said it would exit in IPC_SetStatus) - removed.
+
+xgf-mr3:
+
+ - some bugfixes to b_session.c
+
+TJW:
+
+ - began windowed / buffered terminal mode with internal ANSI/VT100 emulator
+ 
+sm050220:
+
+- fixed ringtries
+
+sm050312:
+
+- fixed division by zero bug in stats.c
+
+JS/MR/TJW:
+
+- fixed 2 age calculation problems in outbound and maxbsyage code (this fixed
+  the bug with all lines rescanning at the same time and strange age display
+  in outbound window)
+  PLEASE: if you want to know how old xyz unix timestamp is, then use from now
+          on: age_in_seconds = age_seconds(xyz);
+          this avoids the common problem with xyz being in the future,
+          generating an underflow in the unsigned calculation ...
+- fixed EMSI to correctly remove dupe AKAs (there was still a dupe called_aka /
+  presented aka==called_aka)
+- fixed opening mode of flow files to DENY_WRITE while sending
+
+SM050617:
+
+- protected counter in pipe.c with a MutexSemaphore
+
+SM050718:
+
+- called_addr was not always backed-up in saved_addr in b_wazoo.c and destroyed
+  the content of called_addr (this caused a trap when the calling system
+  presented a wrong password).
+
+TJW:
+
+- new file doc\xe_prog.doc - if you have hints for other programmers, put them
+  in there ... - PLEASE READ THAT REGULARLY !!!
+
+eh042622:
+
+This file contains some thoughts (expressed in C-Source) about how a
+programmable bbs (and maybe other things, too!) could be programmed.
+
+New compiler-switch:
+- BBS_INTENRAL compiles with the bbs-script
+
+New keyword:
+- BBS can now be set to "internal" (if compiled with BBS_INTERNAL)
+
+IMPORTANT NOTES:
+- many code is missing, so there will be lot's of things that do not
+  work (not even produces errors, just dont say anything)
+- the code for some already implemented commands is buggy and it will
+  only produce errors (crash the systems or produce SYSxxxx...)
+- The compiler is far from being completed. It may generate code that
+  causes Binkley to crash and does not compile everything.
+- the example-bbs (test.txt) also contains some "bugs" (wrong use of
+  commands). They are in to test the compiler.
+
+src\bbs_ctra.c      - character-translation for bbs-module (just
+                      dummy-functions)
+src\bbs_data.c      - global data for bbs (not much, dont worry)
+src\bbs_io.c        - basic bbs-io-functions
+src\script2.c       - executor for the compiled scripts
+src\script2.inc     - modified b_script.c that it maybe may be used by
+                      script2.c and replace the original script (I'm
+                      not sure if this would be good...)
+src\bbs_user.c      - accessing bbs-userbase
+include\bbs_incl.h  - bbs-includefile
+compiler\script.def - description of the compiled files
+compiler\mini.txt   - bbs sourcefile, just saying "out of order" (this
+                      one is in use on my system at the moment...)
+compiler\test.txt   - an attempt to write something that looks like a
+                      "real" bbs
+compiler\script.def - textfile, that describes the commands and the
+                      format of the compiler's output.
+
+Please note that compiler.c, script2.c and script.def may see the
+syntax of the compiled files a bit different. The way it is in the
+compiler should be newest (if I remember correctly).
+
+xgf_mr7:
+
+ - changed return code of Send_Zmodem() from NOTHING_SENT to CANNOT_SEND if
+   ZS_GetReceiverInfo() returns ERROR which happens when ZCAN, RCDO or TIMEOUT
+   is recieved from Z_GetHeader() - wazoo should now be able to detect this
+   error.
+ - finally added ALT-V to help screen :)
+ - some minor cosmetical changes to statistic screens:
+    - added page number
+    - moved help (press 1-5 to select page) to window caption
+
+xgf-mr8:
+
+ - dialing was some kind of playing roulette... this should be more save now:
+   - user can only break with ESC and no longer with every key
+   - dial_modem() now reports, that the user hit ESC, so try_1_connect() is
+     able to does this, too
+   - modem will now hang up and will be reinitialized after break
+   - timeout while waiting for a modem respons is now ignored if we still have
+     some chars waiting in buffer (no longer "RINGIN")
+
+TJW:
+
+- fixed security leak in EMSI
+  as a consequence of this fix, password failure msgs are logged earlier in
+  EMSI processing (before System:, Aka:, Uses: etc. is logged).
+
+cf970517:
+
+- Miscellaneous fixes in history and stats.
+- Started work on an enhancement for freepoll: Different values for
+  netmail, echomail or other stuff (and combinations of them) will
+  be allowed.
+
+xgf-mr9.doc:
+
+ - fixed manual poll node (Alt+M) - it now dials EVERY node
+ - changed node dialog to present a default node address:
+    - default node address is address under cursor (zoomed outbound) or first
+      address in window (normal outbound)
+    - default node address is deleted if you press another key than backspace,
+      left arrow or return
+
+Roland Schiradin:
+
+- updated man\ directory
+
+
+
+Beta XGH:
+---------
+
+ts051910:
+
+-   only makes XGG source tree compile with emx and usoft compilers.
+    please note that adress input box functions are probably broken
+    with all versions ...
+
+ts051917:
+
+-   fixes some 32/16 conversions for DOS16 compilers
+
+xgg-mr1.doc:
+
+ - bug in node dialog fixed
+ - bug in readdress function fixed
+ - updated doc
+
+TJW:
+
+ - minor changes to xe_user.doc
+ - fix for freepoll (unsigned time_t difference problem, as usual)
+ - minor changes to language.txt
+
+xgg_eh01:
+
+- just some changes to the bbs-system:
+  - dropped many bbs-variables (user.*, online.*, ...) and added a few
+    new ($a..$z)
+  - included some bbs-timervariables (t0..t5) for user's free usage
+  - dropped support for loaduser, saveuser, etc.
+  - defined something to handle files (not implemented yet)
+  - added some documentation (compiler\scr_user.doc and scr_defs.doc)
+
+NOTE: Even if there are some "not implemeted yet" or similar in the
+      doc or source, it does NOT mean, that the absence of such a
+      statment allows the conclusion that the command already works ;)
+
+
+
+Beta XGI:
+---------
+
+sm052022:
+
+- fixed ibmvacpp.mak : NEED_OS2COMMS is correct - not NEEDOS2COMMS
+- fixed RingWait: Binkley now accepts the next RING only within the next 7
+  seconds.
+
+sm052116:
+
+- synchronized thread (hydra-sendthread) in async_os.c with EventSemaphores
+
+xgh_ts1:
+
+-   includes new STATS.C module from CFS (dated 970519, 16:xx o'clock)
+-   further work on 32/16 bit conversions. the sources compile with
+    nearly no warning at all using uSoft8.0
+-   updated uSoft makefile
+
+xgh_mr1:
+
+ - updated bugreport form
+ - one more option for watcom makefile: IBS (internal BBS)
+ - com port is disabled now when shelling, except when we're online
+ - hopefully fixed node address dialogs
+
+xgh_mr2:
+
+ - changed nearly all LOWER_DTR() to modem_hangup()
+ - remove CR from default dial setup
+ - added alternative scancode for backspace for DOS
+
+TJW:
+
+ - window cosmetics, this status window was pretty useless during sessions
+ - removed binkpipe.exe from distribution archive, because it is not up-to-
+   date with new screen layout
+
+xgh_eh1:
+
+ - some stuff for the bbs-system:
+   a) added a local-mode for bbs, key: Ctrl-B from unattended
+      PLEASE VERIFY if the key is correctly added and does no
+      harm even if bbs_internal is not defined.
+   b) added termwin_init/exit to prototyp.h to be able to use
+      it for bbs-output. Well, looks at least as bad as the
+      terminal ;)
+   c) few new bbs-script-commands defined, some implemented
+
+xgh_mr3:
+
+ - number of files in outbound was incorrect if there was more than one ?LO
+   file for one node/point, fixed
+ - added call of display_life() to function time_release()
+ - made answering on ring more save
+ - readdressing to same address could end in an endless loop, fixed
+
+MR: mailroot.c
+
+ - further changes
+
+TJW:
+
+ - misc. bug fixes
+
+
+
+Beta XGJ:
+---------
+
+sm052323:
+
+- should fix hangup-problems and improve response time to keyboard-input
+  while hydra-sessions (e.g. chat)
+
+sm052415:
+
+- fixed Call history screen position
+
+xgi_ts1:
+
+-   updated uSoft makefile
+-   updated cbdjl.lst
+
+xgi_ts2:
+
+-   DOS only:   supplies function to get largest free memory block in kB.
+                (nowhere displayed so far; i'll do this tomorrow...)
+
+xgi_ts3:
+
+-   free stack & free mem display for dos versions
+
+xgi_ts4:
+
+-   DOS only: fixes address input box bug
+
+cf970524:
+
+  - Fixes a bug in CPS calculation in stats module.
+  - Added some comments regarding stats in xe_user.doc.
+
+TJW:
+
+- temporary fix for REQ files not getting deleted with ZModem sessions
+- removed some hardcoded debugging messages "!...session" from b_sessio.c
+- cost event toggle removed - made NO sense!
+- fixed Session:, Protocol: and Netmail: display
+- Janus FREQs were totally broken and resulted in endless loops (with Carrier
+  active). Fixed (with SRIF support now ;-).
+- Fixed Janus' CPU-hogging
+
+
+
+Beta XGK:
+---------
+
+xgj_ts1:
+
+-   makes XGJ source compile with emx & uSoft
+
+TJW:
+
+- new keyword "SysopNdx" -> use SYSOP.NDX instead of <nodex>.sdx
+- made V7+ of BT-XE compatible with latest fastlst/2 1.99 beta and current V7+
+  draft. There's still much to do, but it should at least work now.
+- bugfix for progress bars with high volumes (>50MB)
+- removed "errors: 0/0" from daily stats msgs as error counter are not working
+  yet. So better don't post them...
+- deleted doc\ideas\v7plus-stuff and included latest draft in doc\v7plus.doc
+- minor cosmetical changes
+- bugfix for stringrep also affecting modem responses
+- bugfix for call counters
+
+sm052622:
+
+- implemented _ungetch() for EMX 
+
+sm052722:
+
+- modem_hangup() is now used to hangup in async_os.c
+- modified DCB-handling in async_os.c - this could be a reason for
+  hangup-problems
+
+sm053000:
+
+- updated xe_user.doc
+- number of outgoing calls was not updated, when the modem signalled BUSY
+
+sm053010:
+
+- updated xe_user.doc
+
+sm053021:
+
+- should fix possible SYS3170/SYS3171 on exit
+
+xgj_mr1.doc:
+
+ - changed screen layout a little bit
+
+MR:
+
+- updated XE_USER.DOC
+
+
+
+Beta XGL:
+---------
+
+xgk_ts1:
+
+-   makes XGK compile with uSoft & emx
+
+xgk_ts2:
+
+-   some optical fixes
+
+TJW:
+
+- fixed wrong V7+ error logging ("V7+ enabled, but not detected") if you did
+  NOT have V7+ enabled
+- new command line option "notreleasedyet"
+  This option gets enabled by #defining REL_CAND (Release Candidate).
+  If you use this command line option, BT-XE will announce as Beta-XGL.
+  If you don't use this keyword, it will announce as Gamma-5.
+  This should make switching from final beta to release easier ...
+  All beta testers should please use this command line option as long as the
+  stuff is not released - to avoid people doing useless, too early requests.
+  I included this define in any current makefile for OS/2, DOS and NT - please
+  check if I did correctly.
+
+xgk_mr1:
+
+ - changes to xe_user.doc
+ - made XGK compile with Watcom (DOS version)
+ - DOS+Watcom: no extra file for overlays any more
+
+aw053118:
+
++ external history importer for maximus 3.0x, internal extension for
+  more history lastuser bbs info.
++ added history importer for internal fax receiver
+
+MR:
+
+- updates to XE_USER.DOC
+
+CFS:
+
+- getra.c and getbgfax.c updated
+
+TJW:
+
+- moved history importers to their own subdirectories below gethist\
+
+sm060221:
+
+- fixed problem in async_os.c with Watcom
+- threads in pipe.c and async_os.c are now started with _beginthread() instead
+  of  DosCreateThread() (recommended by VAC++ documentation)
+
+xgk_ts3:
+
+-   DOS only: fixed "CursorRow" bug for cursor line requests greater
+    than available screen rows as reported by BIOS vars
+-   updated uSoft make/batch-files
+
+xgk_mr2:
+
+ - default for node address box for renames
+ - no domain added to default for node address if not showdomains in config
+
+TJW:
+
+- fixed yoohoo problem with TrapDoor and TIMS mailers (thanks to Bob Juge!)
+
+
+
+Beta XGM:
+---------
+
+aw060215:
+
+- workaround to fix "sem_clr: could not delete <flagdir>\BTRESCAN.FLG (rc=-1)"
+  with Watcom Compiler
+
+xgl_mr1:
+
+ - some minor changes to xe_user.doc
+
+xgl_mr2:
+
+ - updated xe_user.doc
+ - updated watcom makefile for DOS
+
+xgl_mr3:
+
+ - updated xe_user.doc
+
+xgl_ts1:
+
+-   makes XGK compile with emx & usoft compilers and updates
+    makefiles accordingly
+
+xgl_ts2:
+
+-   fixes stack overflow problem with GETMAX3.EXE
+
+xgl_ts3:
+
+-   fixed (actually worked arround) a bug in the stats.c module which
+    only affected the keyboard input scan of DOS versions: you needed
+    to hit every key twice to get it recognized. i do not know why the
+    original code didn't work for DOS versions, but now it does :-)
+
+TJW:
+
+- fixed division by zero bug in stats.c
+- fixed wrong gmtime call (-> localtime) in stats.c
+- fixed wrong time bug in getmax3 / history.c
+- #define'd UTC_DIFFERENTIAL for OS/2 to keep BT from kludging TZ=GMT0
+
+
+[EOF]

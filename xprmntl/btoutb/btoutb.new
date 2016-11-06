@@ -1,0 +1,124 @@
+BT-XE style outbound, ideas for draft #2
+========================================
+
+1. Basic idea
+
+*.?LO / *.?UT
+? := one character out of string ALL
+ALL = "utsrqponmlkjihgfedcba9876543210" (31 chars total)
+      chars "w".."z" are yet undefined and reserved
+
+As BT-XE is a pure mailer (and does NO routing), there is (as far as Binkley is
+concerned) no routing semantics contained in the outbound filenames.
+
+As long as it does not conflict with BT-XE's settings / interpretation, other
+software (like net, file and echomail processors) is free to define their own
+semantics.
+
+1.1 Simplyfication of "normal" flavour
+
+BT yet uses *.?lo and *.?ut for outbound flow files and mail packets.
+? = c means crash
+? = h means hold
+? = d means direct
+? = f (flo) or o (out) means normal (you see that would be easier with "n")
+
+New simplyfied BT-XE outbound style:
+
+Same as above, but you also can use "n" for "normal" flavoured stuff ("nlo" and
+"nut") - it will have the same default behaviour as "flo" and "out".
+
+Software developers are encouraged to favour "n" in future, making things
+easier for everybody. "flo" and "out" will be removed from default normal
+sequence later.
+
+1.2 "Direct" flavour semantics
+
+BT-XE does not make any difference between direct and normal flavour.
+"Direct" is yet supported as it is contained in the default Normal-Set, but
+there is no special default treatment being different from "Normal" flavour.
+
+Software developers should NOT use "direct" flavour and expect a special
+default behaviour of BT-XE as "direct" will be removed from the default normal
+sequence later.
+
+
+2. General note on transfer behaviour (what stuff will be transferred)
+
+Behaviour is primarily CALLER driven.
+Only if caller is unable to do so (using software not supporting the new
+methods described in this document), behaviour will be called-party event
+driven (you may save some of the remote's cost by coordinating your settings
+with the remote sysop).
+
+Behaviour MAY also be restricted by called-party settings, but that should
+only be done if REALLY necessary (e.g. not giving out echomail while netmail
+hour).
+
+3. Outgoing calls (own cost)
+
+3.1 Outbound behaviour
+
+Immediate-Sequence I = sequence of flavours to IMMEDIATELY call out
+                       default: "i"
+Crash-Sequence     C = sequence of flavours to call out if allowed
+                       (CM / cost restrictions apply)
+                       default: "c"
+Normal-Sequence    N = sequence of flavours to send along with crash/immediate
+                       default: "nfod" note: "fod" is supplied for
+                                compatibility reasons only and may be removed
+                                later from default.
+Hold-Sequence      H = sequence of flavours to hold (send out only when being
+                       called)
+                       default: "h"
+Leave-Sequence     L = sequence of flavours to totally leave alone (ignore)
+                       default: ALL - I - C - N - H
+
+3.2 Inbound behaviour
+
+Pickup-Sequence    P = sequence of flavours to pickup from remote system
+                       default: ALL
+
+4. Incoming calls (other's cost)
+
+4.1 Outbound behaviour
+
+Remote will tell us his Pickup-Sequence using EMSI.
+
+If not (old software calling), we use
+
+Give-Sequence      G = sequence of flavours to give out if system doesn't tell
+                       us
+                       default: ALL - L
+
+4.2 Inbound behaviour
+
+We will use the Fetch-Set for incoming calls (this will be transmitted instead
+of the Pickup-Set used with outgoing calls):
+
+Fetch-Sequence     F = sequence of flavours to fetch from remote system on
+                       incoming calls
+                       default: ALL
+                   
+5. Emulation of old BT (and similar mailer) behaviour
+
+I = ""                   [there is no "immediate" in old BT]
+C = "c"                  [crash]
+N = "fod"                [side effect: flo=olo=dlo, fut=out=dut]
+H = "h"                  [hold]
+L = ALL - I - C - N - H  [default L set]
+P = ALL                  [default P set]
+G = ALL - L              [default G set]
+F = ALL                  [default F set]
+
+Event examples:
+
+Event ... I= N=FOD ... (quite same as old BT: no I/Immediate, no N/Normal -
+                        only "direct" is maybe treated a bit different [?])
+Event ... (no special settings will give you same behaviour as above, but
+           with "immediate"(i) and "normal"(n) support)
+
+6. Implementation details
+
+...
+      

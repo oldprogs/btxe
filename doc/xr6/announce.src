@@ -1,0 +1,51 @@
+Hi,
+
+The BinkleyTerm XE developers team is pleased to announce that we have
+decided to release the source code of XR6 (aka Beta-XH2) and all of the
+following betas and gammas.
+
+This does NOT mean, that we are stopping development or closing the team.
+
+The only change: Everyone can get the sources, compile his own BinkleyTerm if
+he prefers and make his own changes. You are still highly encouraged to join
+the team, if you want to help make BinkleyTerm XE better. But if you prefer,
+you can also send your changes to a team member (see team.lst in current
+source tree) and ask him to incorporate them.
+
+When you decide to join the team you will have the following advantages:
+
+- you are connected to the developers discussion area and file echos,
+- you receive the diffs of all other developers and
+- you can submit changes directly.
+
+As we are planning a LOT of BIG changes - especially structural ones, because
+Binks source gets more and more complex -, you should really consider joining
+the team if you want to make changes other than little bug fixes.
+
+BTW: You are definitely NOT encouraged to create your own BinkleyTerm and
+keep your changes for yourself, or even release yet another BinkleyTerm.
+Also please do NOT spread your self-compiled versions - but if you do, add a
+VERY, VERY BIG note telling the users that this is not an official release and
+to NOT send any bug reports to us as we really can't support your version.
+
+As a consequence of the release of the sources, all future betas will also be
+publicly available so everyone who is brave enough can test them and report
+possible bugs. We hope that this also will help improve stability and help
+find new bugs sooner.
+
+To distribute the sources and betas, we have several file areas. Everyone who
+wants to receive the files via these file echos is free to find someone who
+is already connected to them.
+
+You can also simply request them at the usual places. There will be no magics
+for the sources or the betas, but we will use the following naming scheme for
+the filenames: bWHT?VER.rar where WHT is the OS ('DOS', 'OS2', 'W32') or 'SRC'
+for sources, ? is the compiler ('B'=Borland, 'M'=M$, 'V'=VAC++, 'W'=Watcom)
+or '_' for sources and VER is the version (i.e. XH2).
+
+Yet another way to get the files and information is in the internet from
+http://btxe.ml.org/.
+
+
+    Thanks for your attention.
+

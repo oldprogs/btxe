@@ -1,0 +1,879 @@
+        
+        
+                              Nodelist Version 7+
+        
+                             Version 0, May 30 1997
+        
+                    Alberto Pasquale, 2:332/504@fidonet.org
+                    Thomas Waldmann, 2:2474/400@fidonet.org
+        
+        
+                                     TOPIC
+        
+        A new nodelist standard that remains FULLY compatible with V7
+        applications while adding new features and resolving the major
+        shortcomings of V7.
+        
+        
+        0. Why V7+ ?
+        ============
+        
+        V7 is a commonly adopted standard for a "nodelist database"
+        (often V7 is also called a "nodelist index", but this is only
+        half of the truth - *.NDX is the index, but *.DAT is some sort
+        of database file).
+        
+        V7 uses B-tree indices for sysop names and system addresses and
+        is really FAST.
+        
+        Many software uses V7 and a totally different standard maybe
+        would not get adopted by programmers.
+        
+        But V7 has a great drawback: it currently does not put all
+        information that is contained in the "raw" nodelist into the V7
+        database.
+        
+        So if you use V7, you do NOT have all nodelist information that
+        you maybe WANT to use (e.g. it does not support U,Txy (FSC-0062)
+        and other new flags, some characters get "lost" due to the
+        "packing" algorithm used etc.).
+        
+        This drawback will be solved with V7+ - any thing that is present
+        in a raw nodelist will also be present in the V7+ database - no
+        information is lost.
+        
+        V7+ also introduces a Phone Index (useful for CID lookup) and a
+        whole set of "links" that allow to move through the Fidonet
+        structure:
+        
+        - Ring of "same sysop" entries
+        - Ring of "same phone" entries
+        - Pointer to "first downlink"
+        - List of "same downlink level"
+        - Full Region and Hub information
+        
+        Besides V7+ introduces a semaphore method to avoid collisions
+        between applications and the compiler.
+        
+        
+        1. Naming Convention
+        ====================
+        
+        The base name is user specified; from here on it will be
+        referred to as <NODEX>.
+        
+        Files already used by V7, that are also used by V7+:
+        
+        <NODEX>.DAT The V7 / V7+ data file.
+                    V7+ remains fully compatible with V7, but adds a new
+                    field (8 hex digit pointer to the DTP entry) at the
+                    end of the packed data.
+        
+        <NODEX>.NDX Traditional B-tree address index.
+        
+        <NODEX>.SDX Traditional B-tree sysop index (case insensitive).
+                    For V7 compatibility, both compilers and
+                    applications MUST be able to use SYSOP.NDX instead
+                    of the default <NODEX>.SDX.
+        
+        V7+ specific files:
+        
+        <NODEX>.DTP V7+ Data file, contains complete nodelist
+                    information and compiler-generated links.
+        
+        <NODEX>.PDX B-tree Phone index (case insensitive), to be used
+                    just as <NODEX>.SDX.
+        
+        
+        The application that finds <NODEX>.DTP can assume that a V7+
+        nodelist is available. It is the user responsibility to delete
+        old files if downgrading.
+        
+        A compiler in V7+ mode MUST generate all the above files by
+        default (no need to specify anything more than "Version7+" and
+        <NODEX>).
+        
+        
+        
+        2. V7 Database File (<NODEX>.DAT)
+        =================================
+        
+        2.1. Old structure and procedure
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        struct _vers7
+        {
+          short Zone;         // Zone number
+          short Net;          // Net number
+          short Node;         // Node number
+          short HubNode;      // If a point, this is point number
+          word CallCost;      // phone company's charge
+          word MsgFee;        // Amount charged to user for a message
+          word NodeFlags;     // set of flags
+          byte ModemType;     // Modem type
+          byte Phone_len;     // length of phone number (not packed)
+          byte Password_len;  // length of password (not packed)
+          byte Bname_len;     // length of system name (unpacked)
+          byte Sname_len;     // length of Sysop's name (unpacked)
+          byte Cname_len;     // length of City's name (unpacked)
+          byte pack_len;      // total length of packed data
+          byte BaudRate;      // baud rate divided by 300
+        };
+        
+        
+        Accessing V7 data is currently done like this:
+        
+         1. find the stuff in the index - result is the "datpos" value -
+            the offset into the <NODEX>.DAT file
+           
+         2. Seek to offset <datpos> into the <NODEX>.DAT file
+        
+         3. Read sizeof(struct _vers7) bytes out of the <NODEX>.DAT file
+            into a variable of type  struct _vers7
+           
+         4. Read the next <Phone_len> bytes out of the <NODEX>.DAT file
+            -> Phone Number
+        
+         5. Read the next <Password_len> bytes out of the <NODEX>.DAT
+            file -> Password
+        
+         6. Read the next <pack_len> bytes out of the <NODEX>.DAT file
+            -> some "packed" data
+        
+         7. Unpack the "packed" data
+        
+         8. First <Bname_len> bytes of the unpacked data contain the
+            System's (BBS') name
+        
+         9. Next <Sname_len> bytes of the unpacked data contain the
+            Sysop's name
+        
+        10. Next <Cname_len> bytes of the unpacked data contain the
+            City's name
+        
+        
+        Data layout in the <NODEX>.DAT file is like that:
+        
+        <_vers7 struct>
+        <Not packed: Phone>
+        <Not packed: Password>
+        <Packed: <BBS name>
+                 <Sysop name>
+                 <City name>
+        >
+        
+        
+        2.2. New structure and procedure
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        struct _vers7 is NOT changed: both indexed and sequential
+        accesses are guaranteed compatible with V7.
+        
+        There's only a slight addition in the packed data, see below.
+        
+        Accessing V7/V7+ data should be done like this:
+        
+         1. |
+        ... |
+        10. | all the same as described in section 2.1 (compatibility!)
+        
+        11. Check if there are 8 hex digits at the end of the packed
+            data, after <Bname_len>+<Sname_len>+<Cname_len> bytes (see
+            steps 7..10).
+        
+            In a V7+ nodelist, you should _always_ find these 8 hex
+            digits at the end of the packed data, BUT a V7 nodelist
+            editor may have removed them from modified entries.
+        
+            Applications MUST be able to handle the "missing 8 hex
+            digits" situation as a normal condition and proceed as
+            possible with the simple V7 data (some message signalling
+            the situation may be issued, abnormal termination is
+            unacceptable behaviour).
+        
+            If the 8 hex digits are found, they represent an offset into
+            the new <NODEX>.DTP file.
+        
+            Applications MUST ignore any data possibly following the 8
+            hex digit pointer.
+        
+            Due to the V7 base-40 3:2 packing algorithm, the compilers
+            have to pad the data to be compressed so that its length is
+            a multiple of 3: it is recommended that the space (ASCII
+            0x20) is used.
+        
+        
+        12. Seek into <NODEX>.DTP to the offset you got in step 11.
+        
+        13. Read/Process <NODEX>.DTP fields as described in section 3.
+            
+                
+        So the new data layout in the <NODEX>.DAT file is like that:
+        
+        <_vers7 struct>
+        <Not packed: Phone>
+        <Not packed: Password>
+        <Packed: <BBS name>
+                 <Sysop name>
+                 <City name>
+                 <8-hex-digit-offset into <NODEX>.DTP>
+        >
+        
+        
+        3. <NODEX>.DTP file layout
+        ==========================
+        
+        Let's define some glossary:
+        
+        byte    8 bit unsigned integer
+        word   16 bit unsigned integer (LSB first)
+        dword  32 bit unsigned integer (LSB first)
+        
+        
+        The <NODEX>.DTP file has the following layout:
+        
+        <Header>    File header
+        <Entry>     Entry for first compiled system
+        <Entry>     Entry for second compiled system
+        <Entry>     Entry for third compiled system
+        ...
+        
+        
+        3.1. <Header>
+        ~~~~~~~~~~~~~
+        
+        <Header> has the following layout:
+        
+        <Control>   Miscellaneous Information for Compatibility
+        <TopLink>   Link to top level fidonet hierarchy
+        
+        
+        3.1.1. <Control> Structure
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        struct _DTPCtl {
+            word size;          // Size of this control structure
+            byte Version;       // Version of DTP file
+            byte AllFixSize;    // sizeof (_DTPAllLnk)
+            byte AddFixSize;    // sizeof (_DTPNodeLnk)
+        };
+        
+        
+        size:
+              This structure may be expanded in the future, so size is
+              provided to allow compatible positioning on the following
+              <TopLink> record.
+        
+        Version:
+              This is the V7+ Version, currently 0.
+              The compatibility towards previous versions is guaranteed,
+              so correctly behaved applications will have no problems
+              dealing with newer versions of V7+.
+        
+              When new features will be added, new applications will be
+              able to check for the version level of the V7+ database,
+              while old ones will remain compatible.
+        
+              The check will be "if Version >= n then ...".
+        
+        AllFixSize:
+              This is the size of the fixed-length structure associated
+              with ANY system in the nodelist. It is provided to allow
+              compatible positioning on the following field, in the case
+              of future extensions.
+        
+        AddFixSize:
+              This is the size of the fixed-length structure associated
+              with Nodes only (no points) and with <TopLink>. It is
+              provided to allow compatible positioning on the following
+              field, in the case of future extensions.
+        
+        
+        3.1.2. <TopLink>
+        ~~~~~~~~~~~~~~~~
+        
+        V7+ has pointers to link the entire fidonet structure, from the
+        top coordinators to the points.
+        
+        The <NODEX>.DTP header contains the link to the first (in
+        zone/region/net/hub/node/point order) "top level" system found
+        in the nodelist, usually ZC1.
+        
+        struct _DTPNodeLnk {
+            word  ndowns;   // number of systems in lower level
+            dword FlOfs;    // DAT offset of "Lower Fido Level"
+        };
+        
+        
+        ndowns:
+              The number of direct downlinks; in this case it is the
+              number of "top level" systems (systems that do not have
+              uplinks in the nodelist).
+        
+              Usually it's the number of ZCs.
+        
+              Please note that if you have included a Region segment and
+              the corresponding Zone is not included in other nodelists
+              compiled to the same <NODEX>.*, this RC will be a "Top
+              Level" system. The same happens in the case of lower level
+              systems that are "orphans" of the upper coordinator.
+        
+        FlOfs:
+              Offset into <NODEX>.DAT for the first direct downlink; in
+              this case it's usually ZC1.
+        
+        
+        3.2. <Entry>
+        ~~~~~~~~~~~~
+        
+        This is the <NODEX>.DTP entry for each and every compiled
+        system, pointed to by the 8-hex-digit offset found at the end of
+        the _vers7 packed data.
+        
+        
+        The layout is:
+        
+        <Links>                 Fixed size info (see <Header>)
+        <Raw-size>              word (size of following raw-line)
+        <Raw-nodelist-line>     variable size raw nodelist line
+        
+        
+        This layout may be expanded in the future, both in the
+        fixed-length and variable-length sections.
+        
+        Please, always use the size information found in the <Header> to
+        remain compatible with future V7+ extensions.
+        
+        
+        3.2.1. <Links>
+        ~~~~~~~~~~~~~~
+        
+        The layout is:
+        
+         <AllLinks>     Common to all entries
+        [<NodeLink>]    Not present for Points
+        
+        
+        3.2.1.1. <AllLinks>
+        ~~~~~~~~~~~~~~~~~~~
+        
+        The following structure is used for all the systems in the
+        nodelist.
+        
+        
+        struct _DTPAllLnk {
+            word  Region;  // Region
+            word  Hub;     // Hub
+            dword SOfs;    // DAT offset of next Same SysOp entry
+            dword POfs;    // DAT offset of next Same Phone entry
+            dword FeOfs;   // DAT offset of next "Equal Fido Level"
+            byte  Sn;      // Number (base 0) of SysOp entry (ADR order)
+            byte  Pn;      // Number (base 0) of Phone entry (ADR order)
+        };
+        
+        
+        Region:
+              Region number, 0 if none.
+        
+        Hub:
+              Hub number, 0 if none.
+        
+              Please note that the "NodeHub" field of _vers7 may not
+              always be the same as this one, not only because it is
+              absent for points, but also because the compiler may
+              infer the Hub from other nodelist entries while linking
+              <NODEX>.DTP.
+        
+              DO NOT USE NodeHub in _vers7 for reliable Hub information.
+        
+        SOfs:
+              Offset into <NODEX>.DAT for next system with the same
+              SysOp name (in order of Address).
+        
+              0xffffffff if none.
+        
+              This is a RING link, that is the last entry points to the
+              first one.
+        
+        POfs:
+              Offset into <NODEX>.DAT for next system with the same
+              Phone number (in order of Address).
+        
+              0xffffffff if none.
+        
+              This is a RING link, that is the last entry points to the
+              first one.
+        
+        FeOfs:
+              Offset into <NODEX>.DAT for next system at the same
+              "fidonet level", that is with the same direct
+              uplink/coordinator.
+        
+              0xffffffff if none.
+        
+              This is a LIST link, that is the last entry points nowhere
+              (0xffffffff).
+        
+              Please note that "equal level" systems are not necessarily
+              all of the same coordination level (all HCs or RCs etc.).
+        
+              For example a ZC may have as direct downlinks (linked with
+              FeOfs between one another):
+        
+              - his points (usually administrative entries should not
+                have points, but it may happen),
+        
+              - Independent nodes in the Zone
+        
+              - Independent HCs in the Zone
+        
+              - Independent NCs in the Zone
+        
+              - RCs in the zone
+        
+        Sn:
+              Number of same-sysop entry (0 based).
+              0xff if no link available.
+        
+              Please do NOT use Sn to check for links, use SOfs instead.
+        
+        Pn:
+              Number of same-phone entry (0 base).
+              0xff if no link available.
+        
+              Please do NOT use Pn to check for links, use POfs instead.
+        
+        
+        When you are looking for a SysOp or Phone that has multiple
+        entries in the index, you get one and then you follow the links
+        (SOfs, POfs) through all the remaining entries.
+        
+        Since the first entry (got from the index) may be in the middle
+        of the "Ring", you can use Sn and Pn to know how many "lower"
+        entries you will find. This may be useful for keeping the
+        "Address order" while gathering all the information throughout
+        the RING.
+        
+        Please note that some "common" entries (as "-Unpublished-" for
+        the phone number), may have more than 254 links; so be aware
+        that Sn and Pn may (under exceptional conditions) overflow,
+        arrive at 0xff and restart from 0x00.
+        
+        This should be no concern when doing a normal lookup, but
+        "statistical programs" that list all the Rings must be careful.
+        
+        The proper way to check whether you have finished the RING is to
+        check the new SOfs/POfs against the first encountered one; Sn/Pn
+        should be used for reference only.
+        
+        
+        
+        3.2.1.2. <NodeLink>
+        ~~~~~~~~~~~~~~~~~~~
+        
+        The following structure is absent for points, since they do not
+        have downlinks. It's the same structure used in the <Header> for
+        <TopLink>.
+        
+        
+        struct _DTPNodeLnk {
+            word  ndowns;   // number of systems in lower level
+            dword FlOfs;    // DAT offset of "Lower Fido Level"
+        };
+        
+        
+        ndowns:
+              The number of direct downlinks.
+        
+              It includes the lower level coordinators and all the
+              systems that, for some reason, are orphans of the upper
+              coordinator (not included in compilation or not existent).
+        
+              Examples:
+        
+              ZCs -> ZC's points
+                     independent nodes in the zone
+                     independent HCs in the zone
+                     independent NCs in the zone
+                     RCs in the zone
+        
+              RCs -> RC's points
+                     independent nodes in the region
+                     independent HCs in the region
+                     NCs in the region
+        
+              NCs -> NC's points
+                     independent nodes in the net
+                     HCs in the net
+        
+              HCs -> HC's points
+                     nodes in the Hub
+        
+             Node -> Node's points
+        
+        
+        
+        FlOfs:
+              Offset into <NODEX>.DAT for the first direct downlink, in
+              "zone/region/net/hub/node/point" order.
+        
+        
+        
+        3.2.2. <Raw-size>
+        ~~~~~~~~~~~~~~~~~
+        
+        This is a word specifying the length of the following
+        <raw-nodelist-line> field.
+        
+        
+        3.2.3. <Raw-nodelist-line>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        This is the zero terminated raw nodelist line, taken verbatim
+        from the source nodelist; neither carriage-return nor line-feed
+        is present.
+        
+        REQUIREMENTs for applications that use this field:
+        
+        - The line's fields must be recognized ONLY by considering the
+          comma ',' as a separator.
+        
+        - Fields containing space are to be handled normally.
+        
+        - Unknown qualifiers at the start of the line (the field usued
+          for Hub, Host, Region, Zone) must be accepted.
+        
+        - The second field (where the node number is usually placed)
+          may contain further information and space: it must be accepted
+          without error.
+        
+        
+        3.3. DTP extensions
+        ~~~~~~~~~~~~~~~~~~~
+        
+        The DTP format is suitable for backward compatible extensions.
+        
+        If you would like new fields, please contact Alberto Pasquale
+        (2:332/504@fidonet) and/or Thomas Waldmann (2:2474/400@fidonet)
+        for discussion.
+        
+        If the new field is considered useful, a draft for the new
+        version of V7+ will be issued by Alberto Pasquale.
+        
+        
+        
+        4. <NODEX>.PDX Phone Index
+        ==========================
+        
+        The purpose of the Phone Index is to allow an indexed search of
+        a system entry from its phone number.
+        
+        This is especially useful with CID (caller ID) enabled systems.
+        
+        
+        4.1. <NODEX>.PDX format
+        ~~~~~~~~~~~~~~~~~~~~~~~
+        
+        The index is a btree, just like those for the Address and SysOp
+        indices that are standard in Version 7.
+        
+        Phone numbers will be indexed in the "processed" dialable form
+        (i.e. as in the V7 phone field) after removal of dashes.
+        
+        Special non-numerical phone entries, including IP addresses and
+        internet domains, are indexed verbatim (the possible
+        translations operated by the nodelist compiler to allow the
+        dialing on some mailers is NOT applied to the indexed entry).
+        
+        The indexing is NOT case sensitive, although the case is
+        retained in the index entries.
+        
+        The index look-up must be done just the same way as for the SysOp
+        index: from the "phone number" string you obtain a pointer to
+        the corresponding entry in the <NODEX>.DAT.
+        
+        Please be aware that multiple entries with the same "phone" are
+        possible, e.g for administrative akas; the Phone links in
+        <NODEX>.DTP allow easy browsing of all the "same phone" entries
+        once you have got one by index.
+        
+        Currently there is no purpose in doing a case sensitive lookup;
+        in the case it becomes useful in the future, the application may
+        optionally provide settings to allow that by skipping
+        non-case-matching entries.
+        
+        
+        4.2. The Look-up problem
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        Since most ISDN devices do NOT report the CID as a "ready to
+        dial" number, some processing is required before looking up the
+        index.
+        
+        Let's classify the CID reported by ISDN devices in various
+        nations into categories:
+        
+        Cat A reports CID with domestic and international dialing codes,
+              local numbers have the area code.
+        
+        Cat B reports CID with NO long distance dialing code,
+              local numbers have the area code.
+        
+        Cat C reports CID exactly as dialable.
+        
+        Cat D reports CID with NO long distance dialing code,
+              local numbers are exactly dialable.
+        
+        
+        
+        I will now explain with an example:
+        
+        I live in Modena, Italy;
+        
+        Country code          : 39
+        District (area) code  : 59
+        domestic code         :  0
+        international code    : 00
+        
+        
+        Call Type       A-CID           B-CID           Dialable
+        
+        Local           059246112       59246112        246112
+        Domestic        0513456789      513456789       0513456789
+        International   00492312345     492312345       00492312345
+        
+        
+                        C-CID           D-CID
+        
+        Local           246112          246112
+        Domestic        0513456789      513456789
+        International   00492312345     492312345
+        
+        
+        Processing needed:
+        
+        Category A: for local calls we need to remove the domestic and
+        district codes; domestic and international calls do not need any
+        processing.
+        
+        Category B: we need to attempt finding a domestic number then,
+        in case of failure, try the international one; unfortunately the
+        CID reported by these devices allows for some ambiguity.
+        
+        Category C: no processing needed.
+        
+        Category D: we need to attempt finding a local number, if not
+        found we look for a domestic number, if still not found we try
+        the international one. Even more ambigous than B.
+        
+        
+        4.3. The ALGORITHM
+        ~~~~~~~~~~~~~~~~~~
+        
+        The application must have configurable District/Area, domestic
+        and international codes; let's name them:
+        
+        AreaCode
+        DomesticPrefix
+        IntlPrefix
+        
+        Besides, the application must have a configurable "category",
+        which must have selections for cases A,B,C,D; let's name this
+        variable:
+        
+        Category
+        
+        
+        Let "Search" be the name of a function that does the index
+        look-up. Please be aware that the index may contain multiple
+        entries with the same "phone" value (perhaps administrative
+        akas).
+        
+        "Restore CID" means "restore the CID as got from the device".
+        
+        Start:
+        
+           get CID
+        
+           if (category == A) {
+               If (CID begins with DomesticPrefix+AreaCode)
+                   Remove DomesticPrefix and AreaCode   // is local
+               Search
+               goto END
+           }
+        
+        
+           if (category == B) {
+               If (CID begins with AreaCode) {  // local or intl
+                   remove AreaCode          // try local
+                   Search
+                   if (found)
+                       goto END         // is local
+                   else {
+                       Restore CID
+                       Add IntlPrefix   // try international
+                       Search
+                       goto END
+                   }
+               } else {                 // domestic or intl
+                   Add DomesticPrefix   // try domestic
+                   Search
+                   if (found)
+                       goto END         // is domestic
+                   else {
+                       Restore CID      // try intl
+                       Add IntlPrefix
+                       Search
+                       goto END
+                   }
+        
+               }
+           }
+        
+        
+           if (category == C) {    // no processing required
+               Search
+               goto END
+           }
+        
+           if (category == D) {
+               Search             // try local
+               if (found)         // is local
+                   goto END
+               else {
+                   Add DomesticPrefix    // try domestic
+                   Search
+                   if (found)            // is domestic
+                       goto END
+                   else {                // try international
+                       Restore CID
+                       Add IntlPrefix
+                       Search
+                       goto END
+                   }
+               }
+           }
+        
+        
+        END: report results (pointer to NODEX.DAT or nothing found)
+        
+        The Phone links in <NODEX>.DTP allow easy browsing of all
+        remaining "same phone" entries.
+        
+        
+        5. V7+ Semaphore
+        ================
+        
+        To avoid collisions between the nodelist compiler and V7+
+        applications, a semaphore is used.
+        
+        When the compiler needs exclusive access to the nodelist files,
+        it creates (if non existent) and keeps open in SH_DENYRW mode a
+        "<NODEX>.BSY" file.
+        
+        When the application must access the nodelist files, it creates
+        (if non existent) and keeps open for reading in SH_DENYWR mode
+        the "<NODEX>.BSY" file.
+        
+        This method allows for concurrent access by multiple programs in
+        "read" mode, while granting exclusive access to the compiler.
+        
+        Please note that <NODEX>.BSY does NOT need to be deleted in case
+        of abnormal termination or power failure since it's considered
+        busy only while kept open.
+        
+        
+        Example for a program that must read V7+:
+        
+        bsyname is the "<NODEX>.BSY" file name;
+        timeout is the timeout in seconds;
+        the file handle is returned on success, -1 on timeout
+        
+        
+        int waitopen (const char *bsyname, int timeout) // -1 on timeout
+        {
+          int ret = -1;
+          int i = 0;
+        
+          do {
+            if (i > 0)
+              sleep (1);
+            if (access (bsyname, F_OK)) {       // file not existent
+              int handle = open (bsyname, O_WRONLY | O_CREAT, S_IWRITE);
+              if (handle != -1)
+                close (handle);
+            }
+            ret = sopen (bsyname, O_RDONLY, SH_DENYWR);
+            i ++;
+          } while ((ret == -1) && (i < timeout) &&
+                   ((errno == EACCES) || (errno == ENOENT)));
+                   // sharing violation or file not found
+            return ret;
+        }
+        
+        
+        
+        6. Space/Time needed for V7+ database vs. usability
+        ===================================================
+        
+        The V7+ DTP file may be considered redundant, since it contains
+        the entire "source" nodelist line, that duplicates some of the
+        information already present in the V7 DAT file.
+        
+        Let's look at the time and space overhead involved and at the
+        gain in usability:
+        
+        
+        Time:
+        
+        Accessing V7+ is as fast as V7, if you use the normal V7 access
+        method (and if you are NOT interested in the additional data).
+        
+        If you access the additional data in the <NODEX>.DTP file, you
+        have 1 direct file access more. Nothing to worry about...
+        
+        Generating a V7+ database will take somewhat longer since there
+        is more data to be written to disk, links to be set, indices to
+        be prepared; on modern machines this should not be a concern.
+        
+        
+        Space:
+        
+        Space needed is about twice as much as for V7, but this should be
+        no concern on modern machines.
+        
+        
+        Usability:
+        
+        - Full and complete (no lossy compression) nodelist information
+        
+        - Phone Index for easy CID lookup
+        
+        - SysOp/Phone/Fidonet links for easy nodelist browsing
+        
+        - Backward compatible extendability
+        
+        
+        
+        7. Sample "C" source code (taken from BT-XE)
+        ============================================
+        
+        See archive v7p_src.* ...
+        
+        Attention: this source code is far from being final - in fact it
+                   is the very first V7+ implementation in BT-XE and does
+                   not support all stuff that has been defined in this
+                   document. But it can read and parse V7+ data and is
+                   maybe better than no source code at all ...
+                   
+                   
+        8. History of this document
+        ===========================
+        
+        Draft 1->8: preliminary thoughts about possible versions of V7+
+        
+        Draft 9: completely rewritten, this should be the final
+                 "Version_0" of V7+.
+        
+        Version 0: first release version
+        

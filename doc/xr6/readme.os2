@@ -1,0 +1,61 @@
+
+DOCs:
+=====
+
+See doc\ directory. If you're searching for "full" docs:
+
+- English: Please be patient and request BDOC_260.ZIP until translation
+           of BT-XE manuals to English is completed
+
+- German:  Please frequest magic BTXE_DOK to get the *.HTML/*.INF/*.DOC full
+           docs of BT-XE.
+
+
+BinkleyTerm:
+============
+
+maxcomm\*    BT32 exe for use with maxcomm.dll
+async\*      BT32 exe with internal 32bit async routines - if you have
+             problems with it, then try the maxcomm version!
+common\*     stuff needed for both - copy these files to the Binkley
+             directory, too
+doc\*        for Documentation and other Information about Binkley
+
+bt*.exe      BT-XE mailer exe, internal async and maxcomm versions
+bt*.sym      BT-XE symbol information - put this into the same directory
+             as the *.EXE file
+bink_pm.dll  BT-XE PM code dll, only copy into binks dir if you're using PM
+maxcomm.dll  MAXCOMM.DLL v2.90.1 (COMM DLL for BT-XE, Maximus etc.)
+mcp32.dll    MCP32.DLL of Maximus 3.xx
+language.txt BT-XE mixed language text: English, StarTrek, German, Swedish
+
+
+BinkleyTerm Utils:
+==================
+
+See common\ directory.
+
+btutil*.exe  BT-XE utility (replaces btctl* and btlng* and also contains
+             history importer for some back end applications)
+binkpipe.exe BT-XE PM "GUI"
+toss.exe     event semaphore driven program spawner
+
+
+CONFIGs:
+========
+
+See thomas\ directory for full and working configs of Thomas Waldmann.
+
+
+COST TABLES FOR GERMANY:
+========================
+
+Not included (they are very large). If you want the complete collection of
+inner germany cost tables, then frequest magic BTXE_CST ...
+
+
+FOR SOFTWARE DEVELOPERS:
+========================
+
+developr\*   stuff interesting for software developers
+

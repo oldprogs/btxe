@@ -1,0 +1,13 @@
+loadtranslation
+event nocarrier g end
+print "{x}"
+print "{n}"
+print "{n}"
+print "---------------------------------------------{n}"
+print "Sorry, you really called at the wrong moment.{n}"
+print "I'm currently testing a new BBS on this line,{n}"
+print "so please call back later ...                {n}"
+print "---------------------------------------------{n}"
+print "{n}"
+:END
+abort

@@ -1,0 +1,107 @@
+Canonical Binkley-XE Developers Joke List
+=========================================
+
+Maintained by tom schlangen @ 2:2450/10
+
+This list contains some jokes and stories which emerged during the
+development of BT-XE in the BINKLEY.DEVELOP conference since approx
+01/01/97. While most of them probably only make sense in the context
+of the developers conference, they certainly show that fido (and work
+upon fido-related software) may be fun :-)
+
+    tom
+
+-------+---------------------------------------------------------------------
+Number | :-)
+-------+---------------------------------------------------------------------
+#1     | this list.
+-------+---------------------------------------------------------------------
+#2     | Robert Hoerner to Thomas Waldmann on the subject of which
+       | CSD-level (at least) to use with IBM VAC++:
+       |
+       | ---[quote on]---
+       | Right.
+       | Minimum for VAC is CTC303.
+       | All prior versions sometimes produce their own code ,)
+       | depending on the wether of last week.
+       | ---[quote off]---
+-------+---------------------------------------------------------------------
+#3     | tom schlangen on what to display in a mailer screen window which 
+       | eventually became empty & useless:
+       |
+       | ---[quote on]---
+       | i would suggest something more interesting, e.g displaying strings
+       | like this randomly:
+       |
+       | "Formatting Drive C: in progress, please stand by."
+       | "All passwords of all links succesfully sent to remote."
+       | "Modem overheat warning  - fallback to 300 bps initiated."
+       | "Exporting private netmail folder to uplink."
+       | "Requesting complete remote filebase - press <ctrl-alt-del>
+       |  to terminate."
+       | "Honoring CIA-initiated user base download request."
+       |  (change CIA to BND in german language texts)
+       | ---[quote off]---
+-------+---------------------------------------------------------------------
+#252   | tom schlangen to Robert Hoerner:
+       |
+       | ---[quote on]---
+       | > HoldAfterBadConnect
+       | > Has anybody a shorter name for that?
+       |
+       | 252 ;-)
+       | ---[quote off]---
+-------+---------------------------------------------------------------------
+#MCD   | tom schlangen to Robert Hoerner on the subject of mad compilers:
+       |
+       | ---[quote on]---
+       | > the compiler completely forgot what it did before.
+       |
+       | what you reported is something commonly known as `MCD' ("Mad
+       | Compiler Disease"). british health authorities strictly deny any
+       | connection to `CJS' (the where is my "Cask of Jolt-Syndrome")
+       | which quite often happens during `MDS' ("Marathon Debug Sessions").
+       |
+       | you obviously don't read the newspapers or watch news on tv, since
+       | these medias have been full of this stuff during the last year
+       | (and probably will be full of it the next ten years, too).
+       | ---[quote off]---
+-------+---------------------------------------------------------------------
+#V7+   | tom schlangen about his tries to find a bug in V7+ code:
+       |
+       | ---[quote on]---
+       | so i prepared for a long debugging night by buying a sixpack of jolt
+       | cola (at least there is a legend to maintain about that
+       | extra caffeine added stuff) and  activated that dreaded `plus'
+       | argument behind the `version7' keyword in my mailer cfg, which
+       | guaranteed to crash my emx compiled binaries since approx a year, or
+       | something like that.
+       |
+       |     guess what? yeah, right.
+       |
+       | it worked flawlessly. no trap, no popup log, no core dump. each and
+       | everything works fine, including extended nodelist lookup/info on
+       | systems.
+       |
+       | must be by a pure accident, i though to myself, and step by step
+       | cycled thru compiling and testing the last two dozend weeks
+       | nodediffs/lists. no crash. nil. nada. and no, i didn't sell my soul
+       | to the devil since the last attemp i made with v7+ activated.
+       |
+       |     tom "feverishly awaiting this weeks nodediff" schlangen
+       |
+       | p.s.:       the only guess i still have is, that this strange
+       |             behaviour is somewhat connected to what's pending in the
+       |             outbound exactly (e.g how many files, bytes, nodes,
+       |             zones, whatever).
+       |
+       | p.p.s.:     yes, i am positively sure that there really _is_ a bug
+       |             somewhere in the v7+ handling code.
+       |
+       | p.p.p.s:    in memoriam Frank Zappa: "Now you see it - now you
+       |             don't."
+       |
+       | p.p.p.p.s:  this msg is part of the illuminati conspiration.
+       | ---[quote off]---
+-------+---------------------------------------------------------------------
+

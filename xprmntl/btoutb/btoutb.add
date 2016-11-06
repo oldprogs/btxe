@@ -1,0 +1,57 @@
+Additional comment on btoutb.doc:
+
+New "priority" stuff should be ABLE to fully replace old "flavour" stuff.
+
+But only 3 of the flavours are somewhat related to "priority" (and can be
+simulated by priority): Hold, Normal, Crash
+
+"Direct" flavour is a different thing: a routing specifier.
+Even more exactly: a routing memorizer for tosser's usage (binkley does not
+                   do any routing).
+
+So there are 2 possibilities:
+
+- either DROP routing specifiers in new outbound style
+  (like in first draft of btoutb.doc)
+
+- or add routing specifiers to new outbound style
+  Ideas:
+
+    a)  Encode priority and routing into extension:
+    
+        09aa0190.0-D = priority 0, Direct, mail
+        09aa0190.0-N = priority 0, Normal, mail
+        09aa0190.0_D = priority 0, Direct, flow file
+        09aa0190.0_N = priority 0, Normal, flow file
+
+        Pro:    - nice ;-) and can do all what has to be done
+        Contra: - needs new flow file routines and MORE changes to existing
+                  code (not only "single letter" change)
+
+
+    b)  Encode routing into extension and priority field into flow file entries:
+        09aa0190.DLO:    = direct
+          0#c:\test.dat  = file with priority 0
+        
+        Pro:    - flow file names compatible with old stuff
+        Contra: - flow file entries will make problems with old tools
+                - flow file can't be deleted after session if lower prio stuff
+                  is yet remaining
+                - priority can't be changed easily
+                - no priority for mail files (*.OUT)
+   
+        
+    c)  similar to b) but the other way: priority into extension and routing
+        into flow file entry.
+
+    d)  use some additional letters to encode priority AND routing into a
+        single character:
+        09aa0190.?LO / .?UT
+        0123456789 = prio 0..9, normal
+        ABEGJKLMPS = prio 0..9, direct (some chars ommitted for compatibility)
+
+        Pro:    - only single letter change
+        Contra: - not very "intuitive"
+        
+    Other ideas ???
+            

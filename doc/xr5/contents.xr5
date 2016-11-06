@@ -1,0 +1,42 @@
+Contents of Gamma 5 distribution archives:
+
+- BOS2_XR5.ZIP (OS/2 archive)
+  binaries and related:
+  - bt32.exe + bt32.sym, Mailer (VAC++, maxcomm version, 386)
+  - bt32asnc.exe + bt32asnc.sym, Mailer (VAC++, async version, 386)
+  - btutil32.exe, Mailer Utility (VAC++, 386)
+  - language.txt, English/Startrek/German language file
+  - getbgfax.exe, BGFAX history importer (VAC++, 386)
+  - getra.exe, Remote Access history importer (VAC++, 386)
+  - getmax3.exe, Maximus 3.xx history importer (VAC++, 386)
+  - toss.exe, event semaphore driven program spawner (VAC++, 386)
+  - maxcomm.dll, communications DLL (only needed for bt32.exe)
+  - mcp32.dll, MCP DLL
+  - bink_pm.dll + bink_pm.sym (install this for BT-XE with PM only)
+  sample configs:
+  - thomas.zip (OS/2 multiline enhanced cfg of TJW)
+  - *.zip ??? (DOS)
+  - *.zip ??? (NT)
+  misc text files:
+  - xe_user.doc, btpe_402.doc, bug_rprt.doc, v7plus.doc, join.us
+  - license.260, BT 2.60 license terms
+  - File_Id.Diz
+  BT32.Ico, Icon for BT
+  source code:
+  - version7.c (as sample code for v7plus.doc)
+  - source code of history importer programs as sample for writing others
+  
+- BDOS_XR5.ZIP (DOS archive)
+  bt.exe MSC overlayed version
+  video fossil 
+  ... ??? (Tom: please complete this)
+  
+- BW32_XR5.ZIP (Win NT archive)
+  nt exe (386 cpu)
+  needed DLLs (ntcomm.dll,...)
+  ... ??? (Alex: please complete this)
+  
+- BDOK_XR5.ZIP (manuals archive, german)
+  xe_g5_gr.inf
+  xe_g5_gr.doc
+  

@@ -1,0 +1,10 @@
+system os2v2_pm
+file   binkpipe.obj
+name   ..\..\..\os2\binkpipe.exe
+option modname=BINKPIPE
+option description 'Binkley PM pipe server'
+option manyautodata
+option heapsize=8192
+option stack=32768
+option protmode
+

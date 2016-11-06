@@ -1,0 +1,829 @@
+
+                Known Problems with BinkleyTerm 2.60XE/Gamma-5
+              -================================================-
+
+
+Description:
+
+ Bug TSSSS
+     |   |
+     |   \-- serial number
+     \------ type: R = reported misbehaviour/problem/bug - not verified yet
+                   K = known bug, known reason, not fixed yet
+                   F = fixed bug
+                   N = no bug, config/user error
+
+ Status may be:
+  - fixed   (in internal beta, developer(s) who fixed it)
+  - unfixed (developer(s) working on this problem)
+  - none    (only for bug type 'N')
+  - nofix   (there will be no fix for this problem in next release)
+
+
+
+Bug F0001
+ OS         : DOS
+ Description: in event setup you sometimes have to press a key twice, the first
+              one is ignored
+ Workaround : none
+ Status     : fixed (XGO, TS)
+
+
+Bug F0002
+ OS         : all
+ Description: UNC paths are not handled correctly, binkley's main dir is added
+              (all config files and event file)
+ Workaround : don't use UNC paths
+ Status     : fixed (XGO, MR)
+
+
+Bug F0003
+ OS         : DOS
+ Description: CALLHIST.ALL isn't always stored in Binkley's main dir
+ Workaround : set environment variable BINKLEY or use TaskDir in cfg
+ Status     : fixed (XGO, MR)
+
+
+Bug F0004
+ OS         : all
+ Description: Alt-B always tries to start screen blanker, even if ScreenBlank
+              isn't used in cfg.
+ Workaround : none
+ Status     : fixed (XGO, MR)
+
+
+Bug F0005
+ OS         : all
+ Description: SM: fixed the 'no number to dial' error ???
+ Workaround : ???
+ Status     : fixed (XGO, SM)
+
+
+Bug F0006
+ OS         : OS/2, internal async module
+ Description: hangup after spawning to SRIF processor
+ Workaround : either use maxcomm version or don't use SRIF processor
+ Status     : fixed (XGO, SM)
+
+
+Bug F0007
+ OS         : OS/2, internal async module only?
+ Description: possible handshake problems with com.sys/sio.sys
+ Workaround : use maxcomm version
+ Status     : fixed (XGO, SM)
+
+
+Bug F0008
+ OS         : all
+ Description: data on stat pages aren't always sorted correctly
+ Workaround : none
+ Status     : fixed (XGO, CFS)
+
+
+Bug F0009
+ OS         : all
+ Description: kill mail in zoomed outbound window doesn't kill or truncate
+              files when required
+ Workaround : none
+ Status     : fixed (XGO, CFS)
+
+
+Bug F0010
+ OS         : all
+ Description: Janus file request failes if called system was a point
+ Workaround : none
+ Status     : fixed (XGO, SM)
+
+
+Bug F0011
+ OS         : all
+ Description: yet another EMSI bug
+ Workaround : none
+ Status     : fixed (XGP, TJW)
+
+
+Bug F0012
+ OS         : all
+ Description: ConditionalPoll thinks caller called twice if you have several
+              ConditionalPoll or CallerID entries for one address.
+ Workaround : only use one ConditionalPoll and one CallerID entry for one
+              address and remove callerid from the ConditionalPoll entry if
+              you are using the CallerID keyword for that address
+ Status     : fixed (XGP, MR)
+
+
+Bug F0013
+ OS         : all
+ Description: ConditionalPoll doesn't create missing outbound directories when
+              creating flag files so ConditionalPoll always fails
+ Workaround : create required directories manually
+ Status     : fixed (XGP, MR)
+
+
+Bug F0014
+ OS         : all
+ Description: when using passwords from PasswordFile, RealCost field is
+              sometimes overwritten with 0 resulting to 0 costs
+ Workaround : don't use PasswordFile
+ Status     : fixed (XGQ, MR)
+
+
+Bug F0015
+ OS         : all
+ Description: call collision recovery doesn't work at all
+ Workaround : none
+ Status     : fixed (XGQ, MR)
+
+
+Bug F0016
+ OS         : all
+ Description: cost field in Today at a Glance isn't updated after session
+ Workaround : none
+ Status     : fixed (XGQ, MR)
+
+
+Bug F0017
+ OS         : all
+ Description: modem callerid (not configfile callerid) is cut if anything else
+              than a digit is seen, but also should take dashes and dots
+ Workaround : none
+ Status     : fixed (XGQ, MR)
+
+
+Bug F0018
+ OS         : all
+ Description: Strange bahavior of outbound in normal events (no C): mail on
+              hold got an '*' and req files could initiate calls
+ Workaround : only use events with C flags
+ Status     : fixed (XGQ, MR)
+
+
+Bug F0019
+ OS         : all
+ Description: pressing down arrow after doing outbound rescan jumpes to odd
+              positions
+ Workaround : none
+ Status     : fixed (XGQ, MR)
+
+
+Bug F0020
+ OS         : all
+ Description: in get window (Alt-G) you can only enter two files although
+              there's space for three files
+ Workaround : none
+ Status     : fixed (XGQ, MR)
+
+
+Bug F0021
+ OS         : OS/2, internal async module only
+ Description: possible exception in com_peek()
+ Workaround : use maxcomm version
+ Status     : fixed (XGQ, SM)
+
+
+Bug F0022
+ OS         : all
+ Description: EMSI "times out" if you try to connect to a Xenia system that
+              sends the EMSI_MD5 tag
+ Workaround : none (?)
+ Status     : fixed (XGQ, TJW)
+
+
+Bug F0023
+ OS         : OS/2
+ Description: possible crash in cFosLine
+ Workaround : don't use cFosLine
+ Status     : fixed (XGR, SM)
+
+
+Bug F0024
+ OS         : all
+ Description: DCE/DTE confusion in binkley after spawning SRIF
+ Workaround : none
+ Status     : fixed (XGR, MR)
+
+
+Bug F0025
+ OS         : all
+ Description: status sometimes showes wrong next event
+ Workaround : none
+ Status     : fixed (XGR, MR)
+
+
+Bug F0026
+ OS         : all
+ Description: binkley hangs if costvector is 0 (eurocost only)
+ Workaround : don't use costvector 0
+ Status     : fixed (XGR, MR)
+
+
+Bug F0027
+ OS         : all
+ Description: bad call counter is reset even after unsuccessful sessions
+ Workaround : none
+ Status     : fixed (XGR, MR)
+
+
+Bug F0028
+ OS         : DOS
+ Description: filename completion doesn't work correctly
+ Workaround : add "*.*" before pressing TAB
+ Status     : fixed (XGS, MR)
+
+
+Bug F0029
+ OS         : all
+ Description: Squish base is always checked even if it's invalid
+ Workaround : none
+ Status     : fixed (XGS, MR)
+
+
+Bug F0030
+ OS         : all
+ Description: RH1 flag is also send in EMSI if Hydra is disabled (we are
+              caller / called) or if remote can't do Hydra (we are called)
+ Workaround : none
+ Status     : fixed (XGS, MR)
+
+
+Bug F0031
+ OS         : all
+ Description: ZedZap sometimes didn't tell user if there was an error
+ Workaround : none
+ Status     : fixed (XGS, MR)
+
+
+Bug F0032
+ OS         : all
+ Description: WaZoo always says 'noting to send' after ZedZap Session if
+              nothing was sent even if session was aborted before we could
+              send something
+ Workaround : none
+ Status     : fixed (XGS, MR)
+
+
+Bug F0033
+ OS         : all
+ Description: year 2000 problems
+ Workaround : none
+ Status     : fixed ? (XGS + XGT + XGU, TJW + TS)
+
+
+Bug F0034
+ OS         : all
+ Description: BT says "out of memory" if no events are defined
+ Workaround : define at least one event
+ Status     : fixed (XGS, TJW)
+
+
+Bug F0035
+ OS         : all
+ Description: XCPT_SIGNAL is not processed by the system exception handler
+ Workaround : none
+ Status     : fixed (XGS, SM)
+
+
+Bug F0036
+ OS         : all
+ Description: node lookup traps if given sysop name is longer than 26 chars
+ Workaround : none
+ Status     : fixed (XGS, MR)
+
+
+Bug F0037
+ OS         : all
+ Description: timeout doesn't abort input boxes but accepts input
+ Workaround : none
+ Status     : fixed (XGS, MR)
+
+
+Bug F0038
+ OS         : Win32
+ Description: <ALT><Z> <-> <ALT><Y>
+ Workaround : none
+ Status     : fixed (XGS + XGU, HJK)
+
+
+Bug K0039
+ OS         : all
+ Description: Hydra (not xHydra) has problems if you chat when it wants to end
+              hydra batch (e.g. to invoke FREQ processor and continue sending
+              in 2nd batch)
+ Workaround : none
+ Status     : nofix
+
+
+Bug K0040
+ OS         : OS/2
+ Description: if you start from directory .\ but have BT32.EXE and BINK_PM.DLL
+              in directory .\bin binkley doesn't find BINK_PM.DLL
+ Workaround : put DLL in .\ or set environment variable BINKLEY
+ Status     : nofix
+
+
+Bug F0041
+ OS         : all
+ Description: SameRing is not implemented correctly
+ Workaround : none
+ Status     : fixed (XGY, MR)
+
+
+Bug K0042
+ OS         : OS/2
+ Description: PipeTo <remoteserver> has two problems: slows down BT startup if
+              remote is not there and hangs on BT exit if remote is not there
+ Workaround : none
+ Status     : nofix
+
+
+Bug R0043
+ OS         : all
+ Description: sized requests are sometimes not counted for outbound size
+ Workaround : none
+ Status     : nofix
+
+
+Bug F0044
+ OS         : all
+ Description: internal terminal crashes when you enter Alt-D + phonenumber
+ Workaround : only enter valid fido addresses
+ Status     : fixed (XGY, MR)
+
+
+Bug F0045
+ OS         : DOS
+ Description: performance problems of XR5 (not XR4) on 386
+ Workaround : none
+ Status     : fixed (XGX + XGY, AW)
+
+
+Bug R0046
+ OS         : all
+ Description: Zedzap is slower than Hydra (on slow machines) ???
+ Workaround : none
+ Status     : nofix
+
+
+Bug F0047
+ OS         : DOS
+ Description: File requests work with XR4 but don't work any more with XR5
+ Workaround : none
+ Status     : fixed (?, ?)
+
+
+Bug F0048
+ OS         : DOS + DesqView
+ Description: XR5 does not work with DesqView
+ Workaround : Scott McNay: use NODV (available at most sites that support DV)
+ Status     : fixed (XGZ, AW)
+
+
+Bug K0049
+ OS         : all
+ Description: skip and synchronize doesn't update CSS, total RX isn't updated
+              if we receive more than expected.
+ Workaround : none
+ Status     : nofix
+
+
+Bug R0050
+ OS         : all
+ Description: Bink crashes when using NoHydraChat <node> and calling <node>
+ Workaround : none
+ Status     : nofix
+
+
+Bug K0051
+ OS         : all
+ Description: FTS-0001 / bad connect sometimes freez Bink (100% CPU usage)
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug F0052
+ OS         : all
+ Description: modified event file isn't always compiled
+ Workaround : before modifying the event file shut down _all_ binkley tasks
+ Status     : fixed (XGW, TJW)
+
+
+Bug F0053
+ OS         : all
+ Description: if modem does set DCD after sending CONNECT and not before,
+              Binkley hangs up immediately after CONNECT
+ Workaround : none
+ Status     : fixed (XGU, TE)
+
+
+Bug F0054
+ OS         : OS/2
+ Description: sometimes snoop-pipe is closed to early and therefore not all
+              buffered lines are sent to the pipe on exit
+ Workaround : none
+ Status     : fixed (XGU, SM)
+
+
+Bug R0055
+ OS         : all
+ Description: when password failure occurs under certain situations, BT
+              attempts to use FTS-0001 and then locks up (see also Bug R0052)
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug K0056
+ OS         : all
+ Description: Alt-A no longer works after RING is detected (while waiting for
+              RingWait RINGs)
+ Workaround : none
+ Status     : nofix
+
+
+Bug F0057
+ OS         : DOS
+ Description: "Resending from nnnn" sometimes shows negative values
+ Workaround : none
+ Status     : fixed (XGY, AW)
+
+
+Bug F0058
+ OS         : DOS
+ Description: CSS displays negative values
+ Workaround : none
+ Status     : fixed (XGY, AW)
+
+
+Bug R0059
+ OS         : all
+ Description: missleading 'Lost Carrier' msg(s) after ZedZap/Zip sessions
+ Workaround : none
+ Status     : nofix
+
+
+Bug K0060
+ OS         : all
+ Description: if NoHydraChat is specified, Hydra cannot be interrupted via ESC
+ Workaround : don't use NoHydraChat
+ Status     : nofix
+
+
+Bug F0061
+ OS         : all
+ Description: send dialog doesn't handle ESC right
+ Workaround : none
+ Status     : fixed (XGV, MR)
+
+
+Bug F0062
+ OS         : OS/2
+ Description: Pipe does not disconnect and connect if client disconnects
+ Workaround : none
+ Status     : fixed (XGV, MTT)
+
+
+Bug R0063
+ OS         : reported for OS/2
+ Description: when unfreezing a frozen task, Bink crashes (before writing
+              unfrozen msg in log)
+ Workaround : none
+ Status     : nofix
+
+
+Bug R0064
+ OS         : reported for OS/2
+ Description: bink doesn't pickup waiting mail when poll is started via cmdline
+              parameter 'poll <node>' or 'mail' and only sends main aka
+ Workaround : none
+ Status     : nofix
+
+
+Bug F0065
+ OS         : OS/2
+ Description: cFos reports no fees, Binkley shows previous costs
+ Workaround : don't use cFosCost
+ Status     : fixed (XGW, MR + AW)
+
+
+Bug K0066
+ OS         : all
+ Description: Binkley might crash if it does a nodelist lookup and the
+              nodelist index is replaced at the same time (this doesn't happen
+              often, but it can happen)
+ Workaround : freeze binkley before replacing the index
+ Status     : nofix
+
+
+Bug K0067
+ OS         : all
+ Description: requests are aborted if event is overrun (e.g. calling at 23:59)
+ Workaround : none
+ Status     : nofix
+
+
+Bug F0068
+ OS         : all
+ Description: binklely does not close the inbound-files when copying
+              them to protected inbound in fts-0001-sessions
+ Workaround : shut binkley down after fts-0001 sessions
+ Status     : fixed (XGW, EH)
+
+
+Bug F0069
+ OS         : all
+ Description: bbs-users are sorted the wrong way round in statistics
+ Workaround : scroll down to see the top-caller
+ Status     : fixed (XGW, EH)
+
+
+Bug F0070
+ OS         : OS/2
+ Description: Binkley sometimes (only appeared when running unattended
+              for a long time without exit) can't read outbound-files
+              and write inbound-files.
+ Workaround : exit binkley after every session
+ Status     : fixed (XGZ, TE) ?
+
+
+Bug K0071
+ OS         : all
+ Description: file requests to (not from!) point systems may not work if not
+              both systems use bink, as bink sends/expects 0000<pntnr>.REQ and
+              not <net><node>.REQ as some other mailers do.
+ Workaround : "Well, and a point who can offer freqs could also get node,
+              couldn't he !?"
+ Status     : nofix
+
+
+Bug F0072
+ OS         : all
+ Description: cost calculation returns zero when connected with known systems
+ Workaround : none
+ Status     : fixed (XGW, TJW)
+
+
+Bug F0073
+ OS         : all
+ Description: SRIF doesn't work corretly with XOR and Allfix
+ Workaround : none
+ Status     : fixed (XGV, CE)
+
+
+Bug F0074
+ OS         : all
+ Description: ConditionalPoll: if line A was rejected, line X will dial out
+              because of missing rescan after rejection of line A
+ Workaround : none
+ Status     : fixed (XGV, CE)
+
+
+Bug F0075
+ OS         : all
+ Description: Binkley doesn't set LOCAL flag in created Netmails (some netmail
+              processors require this)
+ Workaround : none
+ Status     : fixed (XGW, MTT)
+
+
+Bug F0076
+ OS         : all
+ Description: Statistics: BBS callers are sorted the wrong way
+ Workaround : none
+ Status     : fixed (XGW, CEH)
+
+
+Bug R0077
+ OS         : all
+ Description: recent activity window doesn't show human caller events or FAX
+              events after BT restarts
+ Workaround : none
+ Status     : nofix
+
+
+Bug F0078
+ OS         : all
+ Description: Bink stoppes manual poll if busy or no carrier is received
+ Workaround : none
+ Status     : fixed (XGX, HJK)
+
+
+Bug F0079
+ OS         : OS/2
+ Description: Bink can't be killed
+ Workaround : none
+ Status     : fixed (XGX, SM)
+
+
+Bug F0080
+ OS         : all
+ Description: scripts are unusable and lead to instant or later crashes
+ Workaround : don't use scripts
+ Status     : fixed (XGY, AW)
+
+
+Bug F0081
+ OS         : DOS
+ Description: DOS callhist.all is not compatible with OS/2 or Win32 version
+ Workaround : don't mix DOS and OS/2 or Win32 versions
+ Status     : fixed (XGY, AW)
+
+
+Bug K0082
+ OS         : all
+ Description: Binkley does only dial first entry in 'Pending Outbound Mail' if
+              there is more than one entry.
+ Workaround : none
+ Status     : not completely fixed (XGY, SM)
+
+
+Bug F0083
+ OS         : Win95
+ Description: NTCOMM routines don't work correctly
+ Workaround : none
+ Status     : fixed (XGY, HJK)
+
+
+Bug F0084
+ OS         : all
+ Description: BT-XE sends "file not found" response if a requested file was
+              skipped by requester
+ Workaround : none
+ Status     : fixed (XGY, AW)
+
+
+Bug F0085
+ OS         : all
+ Description: problems with proboard request index handling
+ Workaround : none
+ Status     : fixed (XGY, AW)
+
+
+Bug F0086
+ OS         : all
+ Description: Bink has some problems when connecting to FD / PoP (?) systems
+ Workaround : none
+ Status     : fixed (XGY, HJK)
+
+
+Bug F0087
+ OS         : all
+ Description: Bink crashes with Version7+ nodelist if flags field in *.dtp is
+              longer than 63 bytes.
+ Workaround : none
+ Status     : fixed (XGY, AW)
+
+
+Bug F0088
+ OS         : all
+ Description: dialogs asking for sysop name (manual poll, get files, etc.) only
+              show nodes of the last defined domain, if Binkley is configured
+              with domains.
+ Workaround : none
+ Status     : fixed (XGY, AW)
+
+
+Bug K0089
+ OS         : DOS
+ Description: if VFossil isn't installed, screen output can become a real mess
+ Workaround : install VFossil
+ Status     : nofix
+
+
+Bug F0090
+ OS         : all
+ Description: Hydra has problems with filenames containing whitespace
+              (everything after the whitespace is striped)
+ Workaround : none
+ Status     : fixed (XGZ, TS)
+
+
+Bug K0091
+ OS         : all
+ Description: outbound has problems with filenames containing whitespace
+              (their sizes are not calculated properly in the outbound window
+              and they are not transmitted.
+ Workaround : none
+ Status     : nofix
+
+
+Bug R0092
+ OS         : all
+ Description: history screen (ALT-H) wait for the ESC-key to expire (no
+              timeout).
+ Workaround : none
+ Status     : fixed (XGY, CE)
+
+
+Bug F0093
+ OS         : all
+ Description: CSS window connection timer is not updated when timeouts occure
+ Workaround : none
+ Status     : fixed (XGZ, TS)
+
+
+Bug F0094
+ OS         : all
+ Description: if one has a domain setup but only one nodelist index, every node
+              appears multiple times in a name lookup dialog box
+ Workaround : none
+ Status     : fixed (XGZ, AW)
+
+
+Bug F0095
+ OS         : Win32
+ Description: sometimes Bink hangs until a keypress.
+ Workaround : none
+ Status     : fixed (XGZ, HJK)
+
+
+Bug F0096
+ OS         : all
+ Description: Binkley crashes if any outbound packet is older than 999 days
+ Workaround : none
+ Status     : fixed (XGZ, TE)
+
+
+Bug F0097
+ OS         : OS/2
+ Description: Binkley does not release DosFindFirst handles -> "Nothing in
+              Outbound" bug
+ Workaround : restart Bink
+ Status     : fixed (XGZ, TE)
+
+
+Bug R0098
+ OS         : all
+ Description: files with a file date before the daylight-saving-begin (29.03,
+              0200 CET) get wrong time stamp when received with Bink
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug R0099
+ OS         : DOS
+ Description: if there are more than 36 files on hold for one link, zmodem
+              protocol does not start (remote uses GS-Box)
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug K0100
+ OS         : all
+ Description: sometimes after a hang during a session only a lot of ctrl-c
+              helps bink to "continue" (one char from modem for one ctrl-c) -
+              real problem: overrun errors occurr when receiving data from com
+ Workaround : none
+ Status     : unfixed ()
+
+
+Bug F0101
+ OS         : all
+ Description: Bink crashes when a SRIF request processor did not create a
+              response file for some reason.
+ Workaround : none
+ Status     : fixed (XGZ, TE)
+
+
+Bug R0102
+ OS         : all
+ Description: problems when ifcico and Bink use ZedZap (missing ZFIN)
+ Workaround : use Hydra
+ Status     : nofix
+
+Bug K0103
+ OS         : all
+ Description: if caller doesn't send anything to Bink in a ZedZap Session, it
+              sends two ZFINs but it should only send one
+ Workaround : make sure other end sends something or ignores second ZFIN
+ Status     : nofix
+
+
+Bug K0104
+ OS         : DOS
+ Description: bink crashes if more than 640 nodes are listed in stat file
+ Workaround : choose to show shorter time
+ Status     : nofix
+
+
+Bug F0105
+ OS         : all
+ Description: AltNumber and ConditionalPoll do not work together
+ Workaround : use either AltNumber or ConditionalPoll
+ Status     : fixed (XH1, JH)
+
+
+Bug F0106
+ OS         : all
+ Description: bink crashes when spawning an OS shell (Alt-J) if prompt is too
+              long (>120 chars)
+ Workaround : reduce length of prompt
+ Status     : fixed (XH1, MR)
+
+
+Bug ?0107
+ OS         : 
+ Description: 
+ Workaround : 
+ Status     : 
+
+
+$Id: knwnbugs.xr5,v 1.2 1999/03/20 04:08:07 mr Exp $

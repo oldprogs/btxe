@@ -1,0 +1,16 @@
+
+This diff is made by : ...
+This diff is based on: ...
+This diff updates to : ...
+
+This diff already INCLUDES the following other diffs:
+ ... (this should always be "none" as INCLUDING other diffs is a faux pas)
+
+Changes made by this diff:
+ ... (a detailed description of changes that will be put in xe_hist.doc -
+      DO UPDATE xe_user.doc if you've done any changes that change the
+      behavior of bink, DO UPDATE the status of bugs if you've fixed some but
+      DO _NOT_ ADD new ones to the list to avoid duplicate numbers / entries)
+
+
+[EOF]

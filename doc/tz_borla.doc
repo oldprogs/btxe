@@ -1,0 +1,129 @@
+Borland C++ TZ setting
+======================
+
+Example (for Germany):
+
+SET TZ=CET-1CST,3,-1,0,7200,10,-1,0,10800,3600
+
+3     = starting month (1..12):      march
+-1    = starting week (-4..4):       last week of this month
+0     = starting day:                sunday
+7200  = starting time (seconds):     02:00:00
+
+10    = ending month:                october
+-1    = ending week:                 last week of this month
+0     = ending day                   sunday
+10800 = ending time (seconds):       03:00:00
+
+3600  = amount of time change (s):   01:00:00
+
+
+This variable is used to describe the timezone information that the locale
+will use. To set TZ, use the SET which has the following format: 
+ 
+зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+Ё                                                                           Ё
+Ё >>ддSETддTZдд=ддSSSддбддддддддддддддддддддддддддддддбддддддддддддддддддд> Ё 
+Ё                      юдбдддбддhддбддддддддддддддддбды                     Ё
+Ё                        цд+д╢     юд:ддmддбддддддбды                       Ё
+Ё                        юдады             юд:ддsды                         Ё
+Ё                                                                           Ё
+Ё >ддбдддддддддддддддддддддддддддддддддддддддддбддддддддддддддддддддддддд>< Ё 
+Ё    юдDDDддбддддддддддддддддддддддддддддддддбды                            Ё 
+Ё           юд,sm,sw,sd,st,em,ew,ed,et,shiftды                              Ё 
+Ё                                                                           Ё
+юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+ 
+The values for the TZ variable are defined below. The default values given
+are for the built-in "C" locale defined by the ANSI C standard. 
+ 
+зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+Ё Table 1. TZ Environment Variable Parameters                               Ё
+цдддддддддддбдддддддддддддддддддддддддддддддддддддддддддддбддддддддддддддддд╢
+Ё VARIABLE  Ё DESCRIPTION                                 Ё DEFAULT VALUE   Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё SSS       Ё Standard-timezone identifier.  It must be   Ё EST             Ё 
+Ё           Ё three characters, must begin with a letter, Ё                 Ё 
+Ё           Ё and can contain spaces.                     Ё                 Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё h, m, s   Ё The variable h specifies the difference (in Ё 5               Ё 
+Ё           Ё hours) between the standard time zone and   Ё                 Ё 
+Ё           Ё coordinated universal time (CUT), formerly  Ё                 Ё 
+Ё           Ё Greenwich mean time (GMT).  You can         Ё                 Ё 
+Ё           Ё optionally use m to specify minutes after   Ё                 Ё 
+Ё           Ё the hour, and s to specify seconds after    Ё                 Ё 
+Ё           Ё the minute.  A positive number denotes time Ё                 Ё 
+Ё           Ё zones west of the Greenwich meridian; a     Ё                 Ё 
+Ё           Ё negative number denotes time zones east of  Ё                 Ё 
+Ё           Ё the Greenwich meridian.  The number must be Ё                 Ё 
+Ё           Ё an integer value.                           Ё                 Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё DDD       Ё Daylight saving time (DST) zone identifier. Ё EDT             Ё 
+Ё           Ё It must be three characters, must begin     Ё                 Ё 
+Ё           Ё with a letter, and can contain spaces.      Ё                 Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё sm        Ё Starting month (1 to 12) of DST.            Ё 4               Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё sw        Ё Starting week (-4 to 4) of DST.  Use nega-  Ё 1               Ё 
+Ё           Ё tive numbers to count back from the last    Ё                 Ё 
+Ё           Ё week of the month (-1) and positive numbers Ё                 Ё 
+Ё           Ё to count from the first week (1).           Ё                 Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё sd        Ё Starting day of DST.                        Ё 0               Ё 
+Ё           Ё 0 to 6 if sw != 0                           Ё                 Ё 
+Ё           Ё 1 to 31 if sw = 0                           Ё                 Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё st        Ё Starting time (in seconds) of DST.          Ё 3600            Ё
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё em        Ё Ending month (1 to 12) of DST.              Ё 10              Ё
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё ew        Ё Ending week (-4 to 4) of DST.  Use negative Ё -1              Ё
+Ё           Ё numbers to count back from the last week of Ё                 Ё 
+Ё           Ё the month (-1) and positive numbers to      Ё                 Ё 
+Ё           Ё count from the first week (1).              Ё                 Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё ed        Ё Ending day of DST.                          Ё 0               Ё 
+Ё           Ё 0 to 6 if ew != 0                           Ё                 Ё 
+Ё           Ё 1 to 31 if ew = 0                           Ё                 Ё 
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё et        Ё Ending time of DST (in seconds).            Ё 7200            Ё
+цдддддддддддедддддддддддддддддддддддддддддддддддддддддддддеддддддддддддддддд╢
+Ё shift     Ё Amount of time change (in seconds).         Ё 3600            Ё
+юдддддддддддадддддддддддддддддддддддддддддддддддддддддддддаддддддддддддддддды
+
+Tip: If you're running other apps that need TZ, too, but use the other format
+     (i.e. MSC++ apps) and if you don't care about the exact time between last
+     Sunday of March and first Sunday of April, only use TZ=CET-1CST.
+
+For example:
+
+SET TZ=CET-1CST
+
+This variable is used to describe the timezone information that the
+locale will use. To set TZ, use the SET which has the following format:
+
+TZ = zzz[+/-]d[d][lll]
+
+where zzz is a three-character string representing the name of the
+current time zone. All three characters are required. For example, the
+string "PST" could be used to represent Pacific standard time.
+[+/-]d[d] is a required field containing an optionally signed number
+with 1 or more digits. This number is the local time zone's difference
+from GMT in hours. Positive numbers adjust westward from GMT. Negative
+numbers adjust eastward from GMT. For example, the number 5 = EST, +8 =
+PST, and -1 = continental Europe. This number is used in the
+calculation of the global variable _timezone. _timezone is the
+difference in seconds between GMT and the local time zone.
+
+lll is an optional three-character field that represents the local time
+zone, daylight saving time. For example, the string "PDT" could be used
+to represent pacific daylight saving time. If this field is present, it
+causes the global variable _daylight to be set nonzero. If this field
+is absent, _daylight is set to zero. If the TZ environment string isn't
+present or isn't in the preceding form, a default TZ = "EST5EDT" is
+presumed for the purposes of assigning values to the global variables
+_daylight, _timezone, and _tzname. On a Win32 system, none of these
+global variables are set if TZ is null.
+
+(Taken from Borland C++ Builder Library Reference)
+

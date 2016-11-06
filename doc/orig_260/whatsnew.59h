@@ -1,0 +1,1007 @@
+  (Hey, he took out that nasty preamble!)
+
+
+        Changes in BinkleyTerm 2.59h from 2.59g
+        ---------------------------------------
+
+        Merged in Bryan Woodruff's work to permit BinkleyTerm/32 to be
+        a WinFOSSIL application. The normal operating mode still uses
+        NT or Windows 95 communications, but by putting "WinFOSSIL"
+        into BINKLEY.CFG, BinkleyTerm/Win32 will use WinFOSSIL and
+        will be able to pass its com handle to a DOS application.
+
+        Don't send Mailnote for external FAX applications.
+
+        Minor fixes to Zmodem receive time-remaining output for OS/2.
+
+        Change delays between rescan and forced-exit checks to NOT
+        include the check time. In some LAN applications, this will
+        actually result in some delay time (the checks sometimes took
+        a second or more). Also, raise the delay time from 1 second
+        to 2, 10 if a rescan occurs.
+ 
+
+
+        Changes in BinkleyTerm 2.59g from 2.59g
+        ---------------------------------------
+
+        Fixed another problem in the delayed answer code, this one
+        would occasionally get into "RING" "RING" "RING" without
+        sending an answer string to the modem.
+
+
+
+        Changes in BinkleyTerm 2.59f from 2.59e
+        ---------------------------------------
+
+        Tweaked delayed answer code to fail out when a failure code
+        ("NO CARRIER", "OK", "ERROR", etc) comes back from the modem.
+
+        Add support for ErrLevelShell in the BTEXIT code.
+
+
+
+        Changes in BinkleyTerm 2.59e from 2.59d
+        ---------------------------------------
+
+
+        Added support for delayed answer (this mostly for support of
+        Caller-ID): "RingWait n" tells BinkleyTerm what ring to answer
+        on. Most Caller-ID systems will work just fine with a value of 2.
+
+        Fix problem where alternate numbers don't work if you have more
+        than two of them. Well, actually what you got was the first one
+        and the last one, nothing else.
+
+        Correct problem caused by NoEMSI and NoWaZOO changes which could
+        cause inbound sessions to not do EMSI or WaZOO.
+
+
+
+        Changes in BinkleyTerm 2.59d from 2.59c
+        ---------------------------------------
+
+
+        Fold in some fixes that Jim Dailey made for IBMC and to fix the
+        nagging problem with not cleaning up the session status in all
+        cases.
+
+        Add another fix for cleaning up session status. This time I've
+        gotten it once and for all.
+
+        Change makefile for use with Microsoft Visual C++ 4.0 on Win32.
+
+        Update copyright notice to 1996.
+
+        More stuff from Jim Dailey: you can now set up your "Recent
+        Activity" window to hold more lines than can be displayed on the
+        screen. Set the total scrolling area using the 
+        "RecentActivityLines" verb. Use the CTRL+(down/up arrow, 
+        pg dn/up, home, end) keys to scroll the area. DOS users should
+        use this with care since it will cost you memory (Man, was that
+        pointer arithmetic confusing the MS C compiler for DOS!!)
+
+        Change external FAX exit logic to inhibit carrier checking.
+
+        Remove redundant setting of session NoEMSI and NoWaZOO flags.
+        This should fix the problem with the inability to control these
+        flags in script files.
+
+        Spiffed up the communications code for Win32 version.
+
+
+
+        Changes in BinkleyTerm 2.59c from 2.59a/b
+        -----------------------------------------
+
+
+        Fold in the work that Scott Dudley did to get this going with
+        Watcom C 9.5.
+
+        This is sad: update the copyright notice to 1995. Sad because I
+        have four "update copyright notice" notes in here. At least we
+        can see the light at the end of the tunnel now...I expect 2.60
+        to happen by early May 1995.
+
+        Do some random cleanup.
+
+        Fold in a *bunch* of work from Jim Dailey, as below:
+
+
+        Fixed a problem where, on a long node number, the last digit was
+        orphaned in the today at a glance window after the next call.
+
+        Fixed a problem with ErrLevelShell. Bink first checks to see if
+        the E3 exit(compressed mail) criteria was met before checking
+        for E2 exit(packet).  If compressed mail and a packet was
+        received in the same session, and if E3 was an ErrLevelShell,
+        the shell would be taken in addition to whatever action was
+        required by the E2.  The fix is, if an E3 has an ErrLevelShell,
+        it will be assumed that anything for an E2 will also be
+        processed by the shell and the E2 action will not be ignored.
+
+        A new enhancement to allow retry dialing to another number.  If,
+        for example, a node you frequently call has 2 or more nodes,
+        that share the same node number, you can now call the alternate
+        numbers if the primary number (nodelisted number) is busy or
+        doesn't answer. There are 2 new keywords implemented for this
+        enhancement:
+
+        ModemRetry <modem response>
+            If you uncomment these keywords, you will want to replace
+            "ModemFailure BUSY" with "ModemRetry BUSY". This tells
+            Binkley that if a BUSY is returned and a primary number has
+            an alternate number, the alternate number will be called. If
+            these keyword could be used (with caution) in place of other
+            Modemxxxx keywords.  If you leave these keywords commented,
+            Binkley defaults to "ModemRetry BUSY".
+
+        AltNumber <primary number> <alternate number>
+            This keyword defines an alternate number to try if a call to
+            the <primary number> was unsuccessful. The alternate number
+            must have the same node number as the <primary number>.
+
+            For Example:
+                AltNumber 555-1111 555-2222
+
+            If 555-1111 was busy, Binkley would automatically call
+            555-2222. If there was more than one alternate number they
+            would be specified as follows:
+
+                AltNumber 555-1111 555-2222
+                AltNumber 555-1111 555-3333
+
+            As in the first example, if 555-1111 was busy, a call would
+            be made to 555-2222.  If that number was busy, Binkley would
+            attempt to call 555-3333.
+
+            This type of setup, multiple nodes sharing the same node
+            number, is most often used by, but not limited to, mail
+            distributors. The only limitation of the number of AltNumber
+            keywords you can specify is the amount of memory you have.
+
+            If you do not uncomment the Modemxxxx keywords, only the
+            BUSY response will be eligible for alternate dialing if
+            alternate numbers are used.  If you uncomment the Modemxxxx
+            keywords, you must change "ModemFailure BUSY" with
+            "ModemRetry BUSY" to make busy responses eligible for
+            alternate number dialing, if alternate numbrs are specified.
+
+
+        Fixed a problem where Bink would trap on a file request if the
+        requested file was password protected and the requestor did not
+        supply the password.
+
+        Missed the exit at start of an event, is now included.
+
+        Fixed a problem where after the first extent shell was taken, it
+        would always be taken if Binkley received new mail or files.
+
+        Ensured that all shells were executed prior to an exits taken. 
+
+
+        Binkley will now scan a Squish style netmail message base.  To
+        specify a Squish style netmail area, you must prefix the path
+        with a '$' and add the name of the message base (no extenison).
+
+        For example:
+            Netmail $C:\Binkley\Netmail
+
+        New configuration keyword ErrLevelShell will, instead of
+        exiting, spawn a shell for a matching exit errlevel specified in
+        the event file.  The ErrLevelShell is specified as follows:
+
+        ErrLevelShell <errlevel> <shell command>
+            <errlevel>      is an error level for a user exit.
+            <shell command> is the command to be executed.
+
+        For example, if the event file had the following:
+
+        Event ALL 08:00 12:00  E4=91,TIC A=60 T=3,10
+
+        ...and the configuration file had the following:
+    
+        ErrLevelShell 91  DOTICK
+
+        Instead of exiting with an errorlevel of 91 when a TIC file is
+        received, DOTICK.CMD will be executed.  If you are using the
+        OS/2 or Win32 (NT/Win95) version of Binkley and specify:
+
+        ErrLevelShell 91 Start /I /C "Tick Procssing" DOTICK
+
+        ...DOTICK.CMD will be started as a seperate session.
+
+
+
+        Changes in BinkleyTerm 2.59a from 2.59
+        --------------------------------------
+
+        Change another int to short in unread message detection logic.
+        This fixes one of the problems with the 32-bit OS/2 and NT versions.
+
+        Hammer out some of the dents in the dialout handshake logic.
+
+        Use putch for WRITE_ANSI in OS/2 version. This fixes another
+        problem of the 32-bit OS/2 version.
+
+        DoubleDOS detection now looks for NetWare shell first. If there's
+        a NetWare shell, we don't look for DDOS. NetWare-DOS users with
+        VLM should now work. The NetWare test will make a DDOS system stop
+        task switching. If we find DDOS we'll turn it back on (we hope).
+        DDOS and NetWare users should confirm that this works.
+
+        Some minor changes from Arjen Lentz integrated into Hydra. Code is
+        now in sync with HydraCom 1.08, according to Arjen.
+
+        Aftercall timeout adjusted so we don't sit there for an eon and
+        a half when the modem isn't talking.
+
+        Tweaks for 32-bit OS/2 sound support.
+
+        Take the '*' out of the ident line on the called-side. This will
+        get some of the aggravation out of people's EMSI logic (including
+        ours!)
+
+        Change the FAX code to handle Class 2 modems that don't assert
+        DCD while receiving the data stream. Now Vince's PPI modem can
+        receive a FAX!
+
+        This is sad: update the copyright notice to 1994. Sad because I
+        have three "update copyright notice" notes in here. At least we
+        can see the light at the end of the tunnel now...
+
+        Allow settable transmit and receive buffers in OS/2 version, using
+        environment variables TBUF and RBUF, respectively.
+
+        Minor fixes to MAXFILES.IDX handling.
+
+        Add Hydra to upload menu. Hydra uploads were already enabled, we
+        just hadn't put them in the menu.
+
+        Change external mail setting from a mask of modem type to equal
+        modem type, to keep use of modem type consistent everywhere.
+
+
+
+        Changes in BinkleyTerm 2.59 from 2.58
+        -------------------------------------
+
+        Take out the MilqueToast conditionals. Milq was a good idea and
+        we wish it had really come to term. Maybe sometime soon we'll
+        get to try this again.
+
+        Fix the famous 7200 problem.
+
+        Add ability to have "external mail sessions". This is accomplished
+        using "ExtSession mask programname". (mask) should be a hex mask
+        which corresponds to a "modem type" in the nodelist. When Bink
+        attempts to "call" a system, it will use the external mail facility
+        if the modem type masked with the mask is nonzero. Bink will then
+        turn off everything and, for every file to send to this system, it
+        will call "programname full-address tasknumber filename". When Bink
+        regains control it will look for a file in the current directory
+        named "programname.tasknumber". If this file exists it will continue
+        the mail session; if this file does not exist it will interpret this
+        as a session failure and will handle it like any other session
+        failure (bad flags, etc). When the session ends, one way or the
+        other, Bink will restart itself and proceed.
+
+        By way of example: using my nodelist compiler, let's say I define
+        my point 2 as having modem flag 64 (0x40). With a private list, I
+        could do this by putting a "UGATE" flag on the node, then with
+        XLAXNODE, "MODEMTRANS 7 UGATE". I then put 
+
+                  extsession 40 points
+
+        in BINKLEY.CFG and create points.bat as follows:
+
+                  echo %0 %1 %2 %3 >> points.log
+                  if "%1%" == "1:343/491.2@fidonet" copy %3 m:\point2
+                  if errorlevel 1 goto end
+                  touch points.%2%
+                  :end
+
+        The result: all sessions with my .2 put the mail into m:\point2.
+
+        Note that this mechanism is designed mostly for callout. However, 
+        you can poll for mail by creating a dummy packet and "sending" it,
+        and your batch file can copy files into your inbound.
+
+
+        Fix problem with exiting on FAX result code. Turned out we weren't
+        saving the modem result code for the uucp exit comparison!!
+
+        Change DOS C compiler from Visual C++ 1.0 to Visual C++ 1.5. This
+        probably won't affect the generated code much, but it does allow
+        me to build for all platforms on my Windows NT system.
+
+        Support for an additional set of baudrates, afforded by an
+        extension in Ray Gwinn's X00 driver (and hopefully soon to be
+        supported by some other FOSSIL drivers), as below:
+
+          Function 1Eh - Extended line control initialization.
+
+          This  function is intended to exactly emulate the PS/2's BIOS INT
+          14 services, function 4.  Some  or all of the functions  provided
+          here are duplicated by other X00 functions.
+
+               Input:    AH = 1Eh
+
+                         AL = Break, Where:
+                            = 00h, No break and/or turn off break
+                            = 01h, Start send of break.
+
+                         BH = Parity, where:
+                            = 00h, No parity
+                            = 01h, Odd parity
+                            = 02h, Even parity
+                            = 03h, Mark parity (always 1)
+                            = 04h, Space parity (always 0)
+
+                         BL = Stop bits, where:
+                            = 00h, One stop bit
+                            = 01h, Two stop  bits for 6,  7 and 8  bit word
+                                   length, 1  and 1/2  stop bits for  5 bit
+                                   word length.
+
+                         CH = Word length, where:
+                            = 00h, 5 bits
+                            = 01h, 6 bits
+                            = 02h, 7 bits
+                            = 03h, 8 bits
+
+                         CL = Baud rate, where:
+                            = 00h, 110 baud
+                            = 01h, 150 baud
+                            = 02h, 300 baud
+                            = 03h, 600 baud
+                            = 04h, 1200 baud
+                            = 05h, 2400 baud
+                            = 06h, 4800 baud
+                            = 07h, 9600 baud
+                            = 08h, 19200 baud
+                            = 80h, 28800 baud
+                            = 81h, 38400 baud
+                            = 82h, 57600 baud
+                            = 83h, 76800 baud (really sets 115200)
+                            = 84h, 115200 baud
+
+                         DX = Port number
+
+               Output:   AX = Port status (see function 03h)
+
+          If  locked at X00 load  time, the appropriate  parameters of this
+          function are ignored.
+
+          Once function 1Eh has been used, function 0 will no longer set the
+          baud rate.  A deinit/init sequence will reenable function 0 to set
+          the baud rate.  Also, CL set to 0FFh in function 1Eh will NOT
+          change the baud rate, but WILL reenable function 0 to change the
+          baud rate. This is to allow a fossil app that is aware of this
+          function to coexist with a less-aware fossil app, where the
+          lesser app will work with the higher baudrates without knowing
+          that it is doing so.
+
+        Using this change, BinkleyTerm can support up to 115200 baud. But
+        because it's not formally into a standard yet, we need to tell Bink
+        to do this. This is accomplished by putting "ExtBaudRates" into
+        BINKLEY.CFG. Only do this if your FOSSIL supports this function, or
+        you will regret it! PUT THIS LINE IN YOUR CONFIG FILE BEFORE ANY
+        LINE THAT DEALS WITH BAUD RATES!!!!!
+
+        Add time to dialout interval to deal with the elapsed time of
+        incoming traffic. This helps make sure we don't dial out right
+        on the heels of a call.
+
+        Did some tinkering with the Win32 async code and now have been
+        able to repeatedly call into a NT Bink, hit ESC and get to the
+        MaxNT alpha I have, and log into the BBS!!!!
+
+        Add a config to define connect suffixes for which MNP filter
+        can be disabled. "NoFilter /Arq" will disable MNP filtering
+        for any "Connect xxxxx/arq". Up to 16 of these suffixes can
+        be defined, one per line. Note that if you have a lot of strings
+        starting with /ARQ, you only need the /ARQ line.
+
+        Now that we have a kinder, gentler way of starting a session
+        without MNP filtering, make it sit on the line longer waiting
+        for it to settle. This helps with some missed session negotiation
+        problems I saw.
+
+        Doc fix: FORCEXIT doesn't work without a flags directory. The
+        original description is wrong.
+
+        Add an extended FORCEXIT capability: if there is a flags dir,
+        Bink will look there for files of the form BTEXIT??.??. Then, if
+        a file matching the task number in the extension is found, Bink
+        will exit using the hex errorlevel specified in the filename.
+        By way of example, BTEXIT10.B0 will make a Bink with tasknumber
+        176 exit with errorlevel 16. BTEXIT20.00 will make a Bink with
+        no task number exit with errorlevel 32.
+
+        Add ability to externally force rescan by putting BTRESCAN.??
+        in the flags directory. To make Bink with tasknumber 64 rescan
+        its outbound, put BTRESCAN.40 there.
+
+        Zoomed outbound includes age of oldest packet/request/arcmail
+        file (in days from current time).
+
+        Fix problem with cleanup of mail for aka's in outbound window.
+
+        Take some 32-bit fixes from Michael Buenter.
+
+        Incoming .REQ files are now automatically renamed to .Rxx, where
+        xx is the "task number" in hex.
+
+        Task numbers are automatically truncated to 2 hex digits to avoid
+        overflow in various processing scenarios.
+
+        Unblanking in the non-key case will only happen at end of event,
+        or a ring, connect or fax modem response.
+
+        "Hydra (mythology), in Greek mythology, nine-headed monster that 
+        dwelled in a marsh near Lerna, Greece. A menace to all of Argos, 
+        it had fatally poisonous breath and when one head was severed, 
+        grew two in its place; its central head was immortal. Hercules,
+        sent to kill the serpent as the second of his 12 labors, succeeded
+        in slaying it by burning off the eight mortal heads and burying 
+        the ninth, immortal head under a huge rock. The term hydra is 
+        commonly applied to any complex situation or problem that 
+        continually poses compounded difficulties."
+
+        "Hydra (mythology)," Microsoft (R) Encarta. 
+        Copyright (c) 1993 Microsoft Corporation.
+        Copyright (c) 1993 Funk & Wagnall's Corporation"
+
+        Arjen Lentz' and Joaquim Homrighausen's Hydra protocol is now in
+        the sources. Because we had to rev the com support for it, only
+        the OS/2 and DOS versions support it at present; in another alpha
+        this comment will be changed to reflect support on NT.
+
+        Config lines "NoJanus" and "NoHydra" have been added so that either
+        protocol can be explicitly disabled. The old JanusOK and JanusBaud
+        config lines are augmented by "BiDiOK" and "BiDiBaud", which do the
+        same thing -- both the old and new ones control Janus and Hydra.
+
+        Add ability to build and send a packet back instead of a .RSP file.
+        This is enabled using "pktrsp" in BINKLEY.CFG. Note that you must
+        have a flags directory for this feature to operate, as the flags
+        directory is the "staging area" for the packet as it is being built.
+
+        Add a special after-call modem string, which Bink will send after
+        any call, incoming or outgoing, and will wait for some number of
+        responses from the modem. This is specified by "aftercall n string"
+        in BINKLEY.CFG, where n is the number of responses you expect to
+        get back from the modem. For Vince's 14.4K USR DS, we find that
+        "aftercall 16 ATI6|" is a cool thing to have; we get modem stats
+        after every call, right there in the log.
+
+        Various fax modems behave differently with respect to baudrate
+        after a fax connection. BinkleyTerm's former behavior was to set
+        the baudrate to 19200 (subject to lock) on a fax connection. Now
+        Bink will leave the baudrate alone by default after a fax connect
+        but will set to a user-specified rate if "FaxBaud nnnnn" is set
+        in BINKLEY.CFG.
+
+
+
+        Changes in BinkleyTerm 2.58 from 2.57
+        -------------------------------------
+
+
+        In addition to several changes to the EMSI logic, log any EMSI
+        keyword we don't understand. This will be instrumental in
+        figuring out why we still occasionally have EMSI parsing problems
+        with some D'Bridge systems.
+
+        Adopt the costlog stuff and European-style cost calculation that
+        Holger Schurig did so long ago and which both Tobias Burchhardt
+        and Michael Buenter adopted for their versions. To do this, we
+        added a "CostLog <filename>" config command and a "CostUnit"
+        command. The European version defaults to 23 for cost unit. We
+        default to 2, which seems much more like the US value. The only
+        part of the logging which we don't fully support is the error
+        stuff. We log errors but we never accumulate any so it always
+        says zero.
+
+        Since this other cost calculation is a real departure from the
+        US per-minute tariff calculation, we left the old calculation as
+        the default. The European style is turned on using "EuroCost" in
+        BINKLEY.CFG.
+
+        We figured it adds value to put this into the history record, so
+        we did. New structure is:
+
+                typedef struct _history
+                {
+                        short which_day;        /* Day number for this record        */
+                        short bbs_calls;        /* Number of BBS callers             */
+                        short mail_calls;       /* Number of mail calls              */
+                        short calls_made;       /* Number of outgoing calls made     */
+                        short connects;         /* Number of outbound call successes */
+                        short files_in;         /* Number of files received          */
+                        short files_out;        /* Number of files sent              */
+                        short last_caller;      /* Type of last call                 */
+                        ADDR last_addr;         /* Address of last, excl. Domain     */
+                        char last_Domain[32]; /* Domain of last                  */
+                        long last_Elapsed;      /* Time of last outbound session     */
+                        ADDR next_addr;         /* Address of next, excl. Domain     */
+                        char next_Domain[32]; /* Domain of next                  */
+                        long callcost;          /* Cumulative of call costs          */
+                        long size_in;           /* Size of files received            */
+                        long time_in;           /* Time of files received            */
+                        long err_in;            /* Errors while receiving files      */
+                        long size_out;          /* Size of files sent                */
+                        long time_out;          /* Time of files sent                */
+                        long err_out;           /* Errors while sending files        */
+                } HISTORY, *HISTORYP;
+
+        Add some end-of-session reporting, leveraging the work done to
+        make the above work.
+
+        Michael Buenter found the obvious thing to do about modem result
+        codes: just take what we already have and let the user populate
+        the resultcode array. We bow to his wisdom and add the same config
+        keywords: "ModemFailure" can be used to define a result string
+        from the modem which outgoing dial should consider a failure code;
+        "ModemIgnore" to define strings to ignore; "ModemConnect" to
+        define the prefix for a modem connect string (the remainder is
+        parsed to determine connection speed, etc); "ModemRinging" to
+        identify the result code for INCOMING ring; "ModemIncoming" for
+        results which the outdialer should interpret as a collision with
+        an incoming call; "ModemFax" to identify incoming FAX connect.
+        The first prefix match will be taken, so ordering the config lines
+        so that the correct match is taken is important!
+
+        Bink will default these to the old hardcoded settings if there is
+        no user input. The values in BINKLEY.CFG which would produce the
+        defaults are:
+
+                ModemIgnore RINGING
+                ModemIgnore RING RESPONSE
+                ModemRinging RING
+                ModemConnect CONNECT
+                ModemIgnore RRING
+                ModemFailure BUSY
+                ModemFailure VOICE
+                ModemFailure ERROR
+                ModemFailure OK
+                ModemFailure NO CARRIER
+                ModemIncoming NO DIAL
+                ModemIgnore DIALING
+                ModemFailure NO ANSWER
+                ModemIgnore DIAL TONE
+                ModemFax +FCO
+
+        Change processing of FAX result codes so that you can define a
+        FAX using the UUCP stuff and a "ModemFax" line in BINKLEY.CFG. This
+        allows the creation of two modes of operation:
+
+        1) Bink receives the fax into a raw file.
+
+                ModemFax <fax connection result>
+                FaxInDir <fax directory>
+
+        This tells Bink that when it sees this result code, it should
+        receive the fax into the specified directory.
+
+        2) Bink shells out to external program for fax
+
+                ModemFax <fax connection result>
+                ExtrnMail <code> <fax connection result>
+
+                (optional)
+                Extern Spawn
+
+        When Bink gets the fax connection result and FaxInDir is not
+        set, it will try to find an external mail string and if it
+        finds one it will dispatch as specified by the user. Unlike
+        2.56, we'll do this even if DCD hasn't been set (which is the
+        usual case between +FCO and CONNECT).
+
+        Add 'K' option to zoomed outbound window. This is the same as
+        Alt-K in unattended mode -- used to "kill" all mail to a node.
+
+        Add 'K' to zoom help and 'Alt-Z' to unattended help.
+
+        Add a facility to disable callout to nodes with a particular
+        modem type. This is achieved using "ModemTrans xxx" with no
+        prefix or suffix in Binkley.Cfg. This allows sharing Bink
+        between lines with particular modem types.
+
+        Add call and bad call columns to zoomed outbound display.
+
+
+
+        Changes in BinkleyTerm 2.57 from 2.56
+        -------------------------------------
+
+        Reformat source using INDENT. Looks great if your editor supports
+        tabstops of 4.
+
+        Change all internal baudrate stuff from unsigned short to unsigned
+        long so as to better handle new modems.
+
+        Add definitions for 57600 baud and 115200 baud for NT and OS/2
+        versions. Note that for this to work with the OS/2 version, you
+        must have a version of MAXCOMM.DLL which supports 57600 and 115200.
+        I think that version 2.2 (which most people have) supports 57600;
+        you need version 2.5 or above to support 115200 baud.
+
+        Fix bug in BBS code for case where mode wasn't set by user.
+
+        Alt-P in unattended mode creates a .CLO file for polling.
+
+        Fold in some work from Bill Andrus, including a fix for mixed
+        case file extensions. Do the same thing for the Win32 version.
+
+        This is sad: update the copyright notice to 1993. Sad because I
+        have two "update copyright notice" notes in here. Time to figure
+        out what's going to get released and do it...
+
+        Finally adopt the Zoom Outbound window code. ALT-Z in unattended
+        mode will get you there. Comments welcome on format. Note that
+        this is not a BONK replacement nor is this level of functionality
+        currently planned. I'd like to hear specific comments from anyone
+        who used Michael Buenter's version (on which this is based).
+
+        Add support for 32-bitness to the code. The result is a 32-bit
+        native NT version and a 32-bit OS/2 2.0 version.
+
+        Fold in Michael Buenter's code to receive incoming Fax. Turned
+        on by adding a directory spec for fax: "FaxInDir dirname". For
+        now we've left the code as is but expect to change to PCX format.
+
+        Add a special errorlevel for fax reception. This is per-event,
+        specified as "EF=errorlevel" in the event file. In the absence of
+        this errorlevel, fax reception will be considered a received mail
+        condition for purposes of determining exit errorlevel.
+
+        Support for associating sounds with particular events. Right now
+        this only works on NT, but we'll expand it. On NT it works as
+        follows: 6 new BINKLEY.CFG parameters have been added: "MailSound"
+        is the sound that BinkleyTerm will play on a E2 mail exit,
+        "FileSound" will be played on a E3 or user-specified mail exit,
+        "BBSSound" will be played when BinkleyTerm exits to a BBS,
+        "EXTSound" will be played on exit to an external (UUCP) mailer,
+        "StartSound" will be played at the start of unattended mode.
+        "FAXSound" will be played on a FAX exit.
+
+        The parameter looks like this: 
+
+                     StartSound happy.wav
+
+        On Vince's machine, this plays the "Happy Happy Joy Joy" song when
+        BinkleyTerm starts unattended mode.
+
+        The ZModem receiver now will send ZFERR for disk-full situations.
+        The transmitter will treat this as an error. The result should be
+        that files will no longer be lost in transit due to disk-full.
+
+        Add a new event flag, '$'. This flag will cause BinkleyTerm to
+        delete all the bad-call files in the outbound areas.
+
+        Add file count to outbound window. This option works in
+        conjunction with the file size stuff, so if you have "NoSize"
+        set, you won't get it. 
+
+        Because of the amount of real estate in the outbound window, 
+        we won't display domain information when "NoSize" is off.
+
+        Correct the event logic so that the "cleanup" program isn't
+        dependent on the "packer" program.
+
+        Correct a bug in the Xmodem receiver for when we start to receive
+        a file but never open it (this happens when we start up but then
+        error out before data is received).
+
+        Correct a bug in handling of outbound area when it doesn't exist
+        and when we are running points direct instead of using privatenet.
+
+        Fix a super ugly bug in YooHoo state tables. I have no idea
+        how this one has gotten by us for so long, but it's fixed now.
+
+        Fix a REALLY long-standing bug in TeLink timestamps. We were
+        low by 10 on the year and high by 1 on the month in the
+        TeLink receiver.
+
+        State machine code finally compiles with no warnings!
+
+        Correct the 8-bit ExtMail check.
+
+        Fix bracket-escaping code in EMSI.
+
+        Substantial cleanup on EMSI code preparatory to FSM version.
+
+        Fix boundary condition in Version 7 nodelist search.
+
+        MAYBE we have fixed the "Password override" bug in EMSI.
+
+        Open FLO files in Deny-None mode when estimating mail size. This
+        helps avoid collisions with Max.
+
+
+        Changes in BinkleyTerm 2.56 from 2.55
+        -------------------------------------
+
+
+        Cleanup to make the sucker compile on Zortech and Borland
+        compilers.
+
+        Put all the mailers from FTSC product code list into table and
+        remove all the packers.
+
+        Security improvements for EMSI:
+
+          1) Password mismatch on outgoing call will only be allowed
+             on the first AKA. All others will be discarded
+
+          2) Bug fix for remote with no pickup: number of AKA's would
+             be set to 1. If all AKA's had been knocked out on password
+             errors or curmudgeon mode, this bug allowed the session to
+             proceed.
+
+        Close a hole in Curmudgeon mode where other domain wasn't known.
+
+        Shut down MOVE (Microsoft overlay facility) before swapping out
+        and start it up again after swapping back in.
+
+        Fix bug in extmail string comparison that made 8-bit characters
+        impossible.
+
+        Correct problem with 2x outbound sizes caused by outbound called
+        "mydomain[0].myzone[0]" (e.g. "OUTBOUND.001").
+
+        Support for domain kludging to zone numbers. Lines of the form
+        "DomainKludge ZoneNumber DomainName" 
+        (e.g. "DomainKludge 7 alternet.ftn") will fill in a domain if
+        addresses are without domain specification, either from local
+        entry or in FidoNet handshaking. These lines must follow the
+        "Domain" lines, and if you set a domainkludge without having 
+        previously defined a domain, it will not be processed. Here is
+        an example:
+
+        Domain fidonet.org fidonet nodex
+        Domain alternet.ftn alternet nodex
+        Domain eggnet eggnet nodex
+
+        DomainKludge 7 alternet.ftn
+        DomainKludge 99 eggnet
+
+        REMEMBER, THE DOMAINKLUDGE LINES *MUST* FOLLOW THE DOMAIN LINES!
+
+        Increase stack size. This fixed almost every inexplicable problem
+        with 2.55.
+
+        Fix crash bug with END in pending outbound window when there was
+        nothing actually pending.
+
+        Remove wrap from outbound window, and limit downward movement to
+        list end.
+
+        Fix stupid signal stuff in BT.C
+
+        Don't disable com port on shell to command prompt in terminal mode.
+
+        Set BBS default to "spawn" in OS/2.
+
+
+        Changes in BinkleyTerm 2.55 from 2.54
+        -------------------------------------
+
+
+        Fold in code from Michael Buenter to support using MAXFILES.IDX
+        for file request searches. Here is the description in his own
+        words:
+
+          * OKFile extension:                                    
+             Adding                                              
+                  *path\MAXFILES.IDX                             
+
+             in OKFILES.TXT lets BT search through this database when 
+             processing file requests.
+             This is much faster than seeking through whole a partition 
+             (and it's more "multitasking friendly", too!).
+          
+             You will have to add following keywords to your BINKLEY.CFG:
+                 FileSec  n
+                 KnownSec n   (optional)
+                 ProtSec  n   (optional)
+
+             where n is the following security level:
+               0=Disgrace, 1=Limited, 2=Normal, 3=Worthy,     4=Privil,  
+               5=Favored,  6=Extra,   7=Clerk,  8=Asstsysop, 10=Sysop,  
+              11=Hidden,  -2=Twit
+
+             Following line has to be added to your BINKLEY.CFG, too:
+                 MaxAreas d:\max\area.dat
+
+             Each caller will be assigned a "user level" (security) 
+             depending on their caller level (default, known, prot).
+             This security will be compared to the access rights in the
+             Maximus file area. If the security is too low, the caller
+             will get a password error.
+
+             Access to 5000-8000 files is very fast: it takes about _one_
+             second on my setup! This won't be very much longer on slower
+             systems because the file access time will stay about the same.
+
+             There will appear some new entries in the log with details to 
+             each search if you have LogLevel +/-5 defined in yout setup.
+
+             I got many nice comments about this new features. Some people
+             have been very happy about the fast file finds even with 
+             wildcards!
+
+        The entire "Connect" line will now be treated as a potential
+        external mail string. This allows Bink to shell out to an external
+        program for funny FAX modems. OS/2 users, don't forget to use the
+        "extern spawn" option and set up a EXTOPT.CMD file!
+
+        Add C7 time_t correction to Janus file request logic.
+
+        Turn off DEBUG flag in state machine logic. This will make state
+        table code (YooHoo, SendSync, RecvSync, all FTS-0001/7/8 code
+        including Sealink) MUCH faster.
+
+        Clean up EMSI .BSY file stuff.
+
+        Minor tweaks to domain stuff (which were needed for the EMSI
+        domain code to work right)
+
+        Clean up conflict between session elapsed time indicator and
+        new task number display in settings window.
+
+        "WinSlice" no longer needed for timeslice release in OS/2 DOS box.
+
+
+        Changes in BinkleyTerm 2.54 from 2.53
+        -------------------------------------
+
+        Fix WHATSNEW file to correct documentation error: EXTopt was
+        not the name of the option which forced a spawn. EXTern was
+        the name of the option.
+
+        Correct for differences between C7's ANSI time_t (0 is 12/31/1899) 
+        and UNIX time (0 is 1/1/1970), where transmitted values in
+        file requests, SEAlink block zero, ZMODEM headers, EMSI packets
+        are based on UNIX time but RTL is based on ANSI time_t. FYI ...
+        the difference is 2209075200L.
+
+        As you might have guessed, this means that Microsoft C 7.0 is
+        now the standard compiler for BinkleyTerm on DOS. C 6.0 is still
+        the standard for the OS/2 version.
+
+        Several fixes in EMSI.
+
+        Change language from "WaZOO method:" to "Session method:" and
+        similar changes elsewhere, to reflect dual WaZOO/EMSI state.
+
+        Michael Buenter's fix to the outbound window stuff.
+
+        Support '\s' in the language file (btlng change).
+
+        If you've defined "TaskNumber", display it along with the
+        multitasker name.
+
+        Changes to session logic as follows:
+
+          1) Nodelist lookup returns 0 for failure, -1 for curmudgeon
+             instead of performing curmudgeon disconnect
+
+          2) FTSC and YooHoo logic now perform curmudgeon disconnect
+
+          3) EMSI mods:
+
+            a) KNOWN only set on known address if no pw error
+            b) PROT only set on prot address
+            c) curmudgeon return or pw error causes aka to be skipped
+            d) failure to create flagfile causes aka to be skipped
+            e) at end of aka handling, hang up if no aka's remain
+
+        DOS version greater than or equal to 10 is considered to be
+        the OS/2 DOS box, and if so the "WinSlice" verb can be used to
+        release the timeslice to OS/2. We will probably make this the
+        default in the next beta, but I want to play it safe this time.
+
+
+
+        Changes in BinkleyTerm 2.53 from 2.51
+        -------------------------------------
+
+        NOEMSI now works on both inbound and outbound sessions.
+
+        Script verb "NoEMSI" disables EMSI for the session associated
+        with the script.
+
+        Consolidate EMSI session logic and WaZOO session logic.
+
+        Update copyright notices to 1992 and internal version refs
+        to 2.60
+
+        Bug fix in file request password checking, courtesy of Scott Dudley.
+
+        V6 support will internally truncate oversized nodelists (though
+        that code will break when nodelist reaches just under 64K nodes)
+
+
+        Changes in BinkleyTerm 2.51 from 2.50
+        -------------------------------------
+
+        Complete new YooHoo (FTS-0006 handshake) logic. Seems to work
+        much better in Belgium.
+
+        Don't flush status log prior to spawn if it's not open. This
+        gave the OS/2 side fits. Sorry, Bill.
+
+        Correction to snoop logic to handle conflict between snoop
+        specification in config file and environment variable.
+
+        Use terminal mode init for modem hang-up if in terminal mode
+        and we have a terminal mode init.
+
+        HEY!!! READ THIS!! IT MIGHT BREAK YOUR CURRENT CONFIGURATION!!
+        Bink now matches modem types exactly rather than using a bitwise
+        AND. This allows lots more modem types, but requires that you
+        change your nodelist generation and config stuff (if you're using
+        ModemTrans).
+
+        Added Ron Bemis' change to allow an external mail exit to be a
+        "spawn". This is accomplished by putting "EXTern spawn" in your
+        config file. Note: if you enable this option, all external mail
+        is spawned. The arguments to EXTMAIL are exactly the same as
+        the exit case, so you can find the "errorlevel" from the command
+        line if you need it.
+
+        Added Ron Bemis' change to allow an external process to force
+        BinkleyTerm to exit. This is enabled by putting "ForcExit n" in
+        the config file, where (n) is the errorlevel you wish to use on
+        exit. Bink will periodically check the flag directory (or the
+        directory you're running Bink from if no flag directory) for a
+        file called FORCEXIT (or FORCEXIT.xxx if task number is set).
+        When it sees the file, it will delete it and exit with the user
+        specified errorlevel.
+
+        Improved Zmodem transmitter startup (mostly important for 
+        function requests).
+
+        Merged in Tobias Burchhardt's EMSI mods. This includes some
+        additional config verbs:
+
+            NoEMSI disables EMSI
+            MyLocation defines nodelist location \
+            MyPhone            phone number       \ In nodelist
+            MyListFlags        nodelist flags     / format
+            MyMaxBaud          max baud rate     /
+            PickUpAll          enables all pick ups in EMSI
+
+        Example:
+
+        MyLocation Redmond, WA
+        MyPhone 1-206-868-7581
+        MyListFlags CM,XA,V32B,HST
+        MyMaxBaud 9600
+
+        Logs:
+
+        * 08 Dec 03:52:27 BINK Bink Beer Consumed Here (1:343/491)
+        : 08 Dec 03:52:27 BINK Aka: 1:132/491 1:141/491 7:491/0 
+        * 08 Dec 03:52:27 BINK Remote Uses BinkleyTerm 2.51/(UNREGISTERED)
+        : 08 Dec 03:52:27 BINK SysOp: Vince Perriello from Redmond, WA
+          08 Dec 03:52:27 BINK Phone: 1-206-868-7581
+          08 Dec 03:52:27 BINK Flags: CM,XA,V32B,V42B,HST,MO
+        : 08 Dec 03:52:27 BINK Tranx: 294196F9 / ACED66F8
+        : 08 Dec 03:52:27 BINK EMSI method: ZedZap
+
+        Note: This EMSI logic doesn't handle private nets for points. If
+        any of your points will be running this beta, make really sure 
+        that they all show their point addresses as AKA's. This 
+        limitation will be fixed soon.
+
+        I expect it to take us a while to sort out the implications of 
+        EMSI. We'll get it down. Hang loose and keep them problem reports
+        comin' in!
+
+        Merged in Pete Fitzsimmons' improvements to OS/2 comm code and
+        additional time_release in areas that had been overlooked. I'm
+        told that his multithreaded comm DLL really works great.

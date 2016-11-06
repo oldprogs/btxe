@@ -1,0 +1,11 @@
+
+   Portable C++ Screen Classes v0.20     written by Michael Reinsch
+
+
+Please have a look into scrntest.cpp to see how the screen classes work.
+
+If you find any bugs or have comments please contact me:
+
+  Fido : Michael Reinsch, 2:2474/141
+  eMail: mr@cc86.org or Michael.Reinsch@studbox.uni-stuttgart.de
+

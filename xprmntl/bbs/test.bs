@@ -1,0 +1,88 @@
+;
+; Small script to test the compiler/script processor
+;
+
+; GOTO/CALL/RETURN
+
+goto label1
+:testproc
+return
+:label1
+call testproc
+
+; IFSTR/IFNUM/IFCARRIER
+
+$a
+$b
+$c
+$d
+setvar $a "abcd"
+setvar $b "bc"
+setvar $c "CD"
+setvar $d "xy"
+ifstr "{$b}" i "{$a}" logfile "<{$b}> i <{$a}>"
+ifstr "{$b}" I "{$a}" logfile "<{$b}> I <{$a}>"
+ifstr "{$c}" i "{$a}" logfile "<{$c}> i <{$a}>"
+ifstr "{$c}" I "{$a}" logfile "<{$c}> I <{$a}>"
+ifstr "{$d}" i "{$a}" logfile "<{$d}> i <{$a}>"
+ifstr "{$d}" I "{$a}" logfile "<{$d}> I <{$a}>"
+ifstr "{$a}" = "{$a}" logfile "<{$a}> = <{$a}>"
+ifstr "{$a}" ~ "{$a}" logfile "<{$a}> ~ <{$a}>"
+ifstr "{$a}" ! "{$a}" logfile "<{$a}> ! <{$a}>"
+ifstr "{$a}" : "{$a}" logfile "<{$a}> : <{$a}>"
+-$a
+-$b
+-$c
+-$d
+%a
+%b
+setvar %a "42"
+setvar %b "54"
+ifnum "{%b}" < "{%a}" logfile "<{%b}> < <{%a}>"
+ifnum "{%a}" < "{%a}" logfile "<{%a}> < <{%a}>"
+ifnum "{%b}" > "{%a}" logfile "<{%b}> > <{%a}>"
+ifnum "{%a}" > "{%a}" logfile "<{%a}> > <{%a}>"
+ifnum "{%b}" ] "{%a}" logfile "<{%b}> ] <{%a}>"
+ifnum "{%a}" ] "{%a}" logfile "<{%a}> ] <{%a}>"
+ifnum "{%b}" [ "{%a}" logfile "<{%b}> [ <{%a}>"
+ifnum "{%a}" [ "{%a}" logfile "<{%a}> [ <{%a}>"
+ifnum "{%b}" = "{%a}" logfile "<{%b}> = <{%a}>"
+ifnum "{%a}" = "{%a}" logfile "<{%a}> = <{%a}>"
+ifnum "{%b}" ! "{%a}" logfile "<{%b}> ! <{%a}>"
+ifnum "{%a}" ! "{%a}" logfile "<{%a}> ! <{%a}>"
+-%a
+-%b
+ifcarrier goto endifs
+:endifs
+
+; TIMEREVENTS
+&t1
+&t2
+%end
+event &t1 g t1expired
+event &t2 c t2expired
+setvar &t1 "2"
+setvar &t2 "3"
+setvar %end "0"
+:timersloop
+  releasetime
+  logfile "waiting for t1: timer1/timer2: <{&t1}>/<{&t2}>"
+  goto timersloop
+:t1expired
+  releasetime
+  logfile "waiting for t2: timer1/timer2: <{&t1}>/<{&t2}>"
+  ifnum "{%end}" = "1" goto endtimers
+  goto t1expired
+:t2expired
+  logfile "setting %end to 1"
+  setvar %end "1"
+  return
+:endtimers
+event &t2
+event &t1
+-&t1
+-&t2
+-%end
+
+; end
+

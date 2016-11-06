@@ -1,0 +1,2431 @@
+;---------------------------------------------------------------------------
+;
+;                               BinkleyTerm
+;
+;              (C) Copyright 1987-96, Bit Bucket Software Co.
+;     For license and contact information see /doc/orig_260/license.260.
+;
+;           This version was modified by the BinkleyTerm XE Team.
+;        For contact information see /doc/team.lst and /doc/join.us.
+;  For a complete list of changes see /doc/xe_user.doc and /doc/xe_hist.doc.
+;
+; Filename    : $Source: E:/cvs/btxe/src/language.txt,v $
+; Revision    : $Revision: 1.6 $
+; Tagname     : $Name: XH6 $
+; Last updated: $Date: 1999/02/28 12:46:12 $
+; State       : $State: Exp $
+;
+; Description :
+;   BinkleyTerm Language File
+;
+;   Available Languages:
+;     *:  common entries
+;     E:  English  language text by Bit-Bucket Software
+;     S:  StarTrek language text by George Vandervort, 1:382/8
+;     G:  German   language text by Udo Heinrich, 2:2452/264
+;     V:  Swedish  language text by Peter Karlsson, 2:206/221
+;
+;---------------------------------------------------------------------------
+;
+; We really should tell you what these all correspond to, but since
+; release is imminent, we don't have the time.  In general, if there
+; is a single trailing space, it is significant.  If there are
+; multiple trailing spaces, then that field can be no longer than the
+; current line length.
+;
+; All lines starting with ';' are comments
+; Comments may be put on any individual line using ';' as leftmost character
+;
+; Compiler converts '\n' and '\r' for you.
+; Use '\b' for trailing blanks!
+;
+; You can use #??? for the message numbers before 'L' or '?'.
+; They are ignored by the compiler.
+;
+; The following line contains the record count and version number
+; Record count should be exactly the same as X_TOTAL_MSGS in MSGS.H !!
+;
+*L596 1
+;
+; Start of message text below
+;
+E#000L:Dialing %s with script '%s'.
+S#000L:Dialing %s with script '%s'.
+G#000L:Waehle %s mit Script '%s'.
+V#000L:Ringer %s med skript '%s'.
+E#001L!Could not open script %s.
+S#001L!Could not open script %s.
+G#001L!Kann Script nicht oeffnen: %s
+V#001L!Kunde inte îppna skript %s.
+E#002L+Master script timer expired.
+S#002L+Master script timer expired, Captain.
+G#002L+Hauptscript: Zeit abgelaufen.
+V#002L+Huvudskripttimern har lîpt ut.
+E#003L+Script '%s' failed at line %d.
+S#003L+Script '%s' failed at line %d.
+G#003L+Script '%s': Fehler in Zeile %d.
+V#003L+Skript '%s' misslyckades pÜ rad %d.
+E#004LMemFree:
+S#004LMemFree:
+G#004LRAMFrei:
+V#004LMinne  :
+E#005L!Too many labels in script.
+S#005L!Too many labels in script.
+G#005L!Zu viele Sprungmarken in Script.
+V#005L!Fîr mÜnga etiketter i skript.
+E#006LMacro number
+S#006LMacro number
+G#006LMakro Nummer
+V#006LMakro nummer
+E#007Lis out of range 1-9.
+S#007Lis out of range 1-9.
+G#007Lnicht innerhalb 1-9.
+V#007Lej inom 1-9.
+E#008LShell number
+S#008LShell number
+G#008LShell Nummer
+V#008LSkal nummer
+E#009Lenough
+S#009Lenough
+G#009Lgenug
+V#009Lokej
+E#010LRequests Allowed.
+S#010LRequests Allowed, Captain!
+G#010LRequests erlaubt.
+V#010LFilbegÑran tillÜtna.
+E#011Lmust be 0..7 or -1..-7 - unknown:
+S#011Lmust be 0..7 or -1..-7 - unknown:
+G#011Lmuss 0..7 oder -1..-7 sein - unbekannt:
+V#011LmÜste vara 0..7 eller -1..-7 - okÑnd:
+E#012LRidiculous value:
+S#012LRidiculous value:
+G#012LLaecherlicher Wert:
+V#012LFÜnigt vÑrde:
+E#013LIllegal port:
+S#013LIllegal port:
+G#013LUngueltiger Port:
+V#013LOgiltig port:
+E#014LIllegal mask:
+S#014LIllegal mask:
+G#014LUngueltige Maske:
+V#014LOgiltig mask:
+;
+; The following both lines represent parts of the "screenblank" statement
+; One can write "screenblank", or "screenblank key" or "screenblank call".
+; Please do not change them.
+;
+*#015Lkey
+*#016Lcall
+;
+E#017LERR: Unknown or illegal config line:\n'%s'\n
+S#017LERR: Unknown or illegal config line:\n'%s'\n
+G#017LERR: Unbekannte oder ungueltige Config-Zeile:\n'%s'\n
+V#017LERR: OkÑnd eller felaktig konfigurationsrad:\n'%'s\n
+E#018L!Invalid environment var value: %s=%s
+S#018L!Invalid environment var value: %s=%s
+G#018L!Ungueltiger Wert von Environment-Variable: %s=%s
+V#018L!Ogiltigt vÑrde pÜ miljîvariabel: %s=%s
+E#019L!Out of memory - outbound caching disabled.
+S#019L!Out of memory - outbound caching disabled.
+G#019L!Kein Speicher mehr frei - Outbound-Caching deshalb ausgeschaltet.
+V#019L!Slut pÜ minne - cachning av utlÜdan avslagen.
+E#020L\rPress <Escape> to enter BBS.\r
+S#020L\rPress <Escape> to enter BBS, Mr. Data.\r
+G#020L\rDruecke <Escape> um die Mailbox zu starten.\r
+V#020L\rTryck <Escape> fîr att starta BBSen.\r
+E#021L\r\rProcessing Mail. Please hang up.\r\r
+S#021L\r\rProcessing Mail. Please hang up NOW.\r\r
+G#021L\r\rMomentan wird nur Mail bearbeitet. Bitte lege auf.\r\r
+V#021L\r\rPosthantering pÜgÜr. Var vÑnlig lÑgg pÜ.\r\r
+E#022L+Nothing to send to %s.
+S#022L+Nothing to send to %s.
+G#022L+Nichts zu senden an %s.
+V#022L+Inget att sÑnda till %s.
+E#023L!Connection attempt aborted.
+S#023L!Connection attempt aborted, Sir.
+G#023L!Anwahlversuch abgebrochen.
+V#023L!Uppkopplingsfîrsîket avbrutet.
+E#024L#Modem hang up sequence initiated.
+S#024L#Modem hang up sequence initiated, Sir.
+G#024L#Modem legt auf.
+V#024L#Modemet lÑgger pÜ luren.
+E#025L:No outgoing file requests.
+S#025L:No outgoing file requests, Captain Picard.
+G#025L:Kein ausgehender Filerequest.
+V#025L:Ingen utgÜende filbegÑran.
+E#026L:Outbound file requests.
+S#026L:Outbound file requests, Sir.
+G#026L:Ausgehender Filerequest.
+V#026L:UtgÜende filbegÑran.
+E#027L:End of outbound file requests.
+S#027L:End of outbound file requests, Capt... She canna take anymorrre!
+G#027L:Ausgehender Filerequest beendet.
+V#027L:Slut pÜ utgÜende filbegÑran.
+E#028L*Remote doesn't allow File Requests now.
+S#028L*Remote doesn't allow File Requests now, Mr. Spock, Jump to Warp8!
+G#028L*Gegenseite hat Filerequests abgelehnt.
+V#028L*FjÑrrsystem stîder ej filbegÑran.
+E#029L\r\r+ Address %s using %s %s\r\n
+S#029L\r\r+ Address %s using %s %s\r\n
+G#029L\r\r+ Adresse %s benutzt %s %s\r\n
+V#029L\r\r+ Adress %s anvÑnder %s %s\r\n
+*#030LIntro :
+E#031L!`brightred`Remote didn't respond.
+S#031L!`brightred`Remote didn't respond, Hard to port, Sulu!
+G#031L!`brightred`Gegenseite meldet sich nicht.
+V#031L!`brightred`FjÑrrsystem svarar ej.
+E#032L*`brightred`Lost Carrier.
+S#032L*`brightred`Lost Carrier in Black Hole, Sir.
+G#032L*`brightred`Traegersignal verloren.
+V#032L*`brightred`BÑrvÜg tappades.
+E#033L*Password-protected session.
+S#033L*Password-protected session, Sir.
+G#033L*Passwort-geschuetzte Verbindung.
+V#033L*Lîsenordsskyddad session.
+E#034L!`brightred`Password Error from %s: His='%s' Ours='%s'
+S#034L!`brightred`Password Error from %s: His='%s' Ours='%s'
+G#034L!`brightred`Passwort-Fehler von %s: Sein PW='%s' Unser PW='%s'
+V#034L!`brightred`Lîsenordsfel frÜn %s: Deras='%s' VÜr='%s'
+E#035L!Called %s and got %s.
+S#035L!Called %s and got %s.
+G#035L!Angerufen bei %s und bekam %s.
+V#035L!Ringe %s och nÜdde %s.
+E#036L:Session method:
+S#036L:Session method:
+G#036L:Verbindungmethode:
+V#036L:Sessionsuppkopplingsmetod:
+E#037L*End of WaZOO/EMSI Session.
+S#037L*End of WaZOO/EMSI Session, Capt., mission complete, Sir!
+G#037L*Ende der WaZOO/EMSI-Verbindung.
+V#037L*Slut pÜ WaZOO/EMSI-uppkopplingen.
+E#038L Sending Mail Packet.
+S#038L Sending Mail Packet NOW!
+G#038L Sende Nachrichtenpaket.
+V#038L SÑnder brevpaket.
+E#039LOpen
+S#039LOpen
+G#039Loeffnen
+V#039Lîppen
+E#040L Keyboard Escape.
+S#040L Keyboard Escape.
+G#040L Tastatur-Abbruch.
+V#040L Avbrott signalerat via tangentbordet.
+E#041L File %s truncated.
+S#041L File %s truncated.
+G#041L File %s auf 0 Byte gesetzt.
+V#041L Fil %s trunkerad.
+E#042L+Dupe file renamed: %s
+S#042L+Dupe file renamed: %s
+G#042L+Doppelte Datei umbenannt: %s
+V#042L+Dublettfil omdîpt: %s
+E#043L Open Character Device
+S#043L Open Character Device
+G#043L Keine Datei, sondern ein GerÑt
+V#043L ôppen teckenenhet
+E#044L `brightred`Too many errors.
+S#044L `brightred`Too many errors, I think the Dilithium Crystals are damaged, Sir!
+G#044L `brightred`Zu viele Fehler.
+V#044L `brightred`Fîr mÜnga fel.
+E#045L File %s deleted.
+S#045L File %s deleted.
+G#045L Datei %s geloescht.
+V#045L Raderade %s.
+E#046L `brightred`Transfer cancelled.
+S#046L `brightred`Transfer cancelled, Scotty, get us out of here!
+G#046L `brightred`Transfer abgebrochen.
+V#046L `brightred`ôverfîringen avbruten.
+E#047L!Couldn't open CTL file: %s
+S#047L!Couldn't open CTL file: %s
+G#047L!Konnte CTL-File nicht oeffnen: %s
+V#047L!Kunde inte îppna CTL-fil: %s
+E#048LDarn! The FOSSIL seems to have gone away! Exiting.
+S#048LDarn! The FOSSIL seems to have gone away! Exiting.
+G#048LDer FOSSIL-Treiber ist nicht mehr geladen! Breche ab.
+V#048LFOSSIL-drivrutinen fîrsvann! Avslutar.
+E#049LCannot re-open logfile.
+S#049LCannot re-open logfile, Sir!
+G#049LKann LOG-Datei nicht wieder oeffnen.
+V#049LKan inte Üterîppna loggfilen.
+E#050L FOSSIL:
+S#050L FOSSIL:
+G#050L FOSSIL:
+V#050L FOSSIL:
+E#051L!Error=%d, reactivating incomplete request ...
+S#051L!Error=%d, reactivating incomplete request ...
+G#051L!Fehler=%d, reaktiviere unvollstaendigen Request ...
+V#051L!Error=%d, reactivating incomplete request ...
+E#052L:Starting Event %d (%s).
+S#052L:Starting Event %d (%s), Captain.
+G#052L:Starte Event %d (%s).
+V#052L:Startar systemhÑndelse %d (%s).
+E#053L#Exit at start of event with errorlevel %d.
+S#053L#Exit at start of event with errorlevel %d, Sir!
+G#053L#Exit zu Beginn des Events mit Errorlevel %d.
+V#053L#Avslutar vid bîrjan av systemhÑndelse med felnivÜ %d.
+E#054L#Running clean/pack sequence.
+S#054L#Running clean/pack sequence, Sir!
+G#054L#Starte Aufraeum/Pack-Sequenz.
+V#054L#Startar upprensnings-/pack-sekvens.
+E#055L#System re-enabled after clean/pack sequence.
+S#055L#System re-enabled after clean/pack sequence, Sir!
+G#055L#Zurueck nach Aufraeum/Pack-Sequenz.
+V#055L#èter efter upprensnings-/pack-sekvens.
+E#056L!Date rollover problem?
+S#056L!Date rollover problem? Fix it! Mr. Data!
+G#056L!Irgendwas stimmt mit dem Datum nicht?
+V#056L!Problem med datumet?
+E#057L:Exiting to BBS with errorlevel %u.
+S#057L:Exiting to BBS with errorlevel %u, Captain!
+G#057L:Starte Mailbox mit Errorlevel %u.
+V#057L:LÑmnar till BBS med felnivÜ %u.
+E#058L:Spawning BBS.
+S#058L:Spawning BBS now, Captain.
+G#058L:Starte Mailbox.
+V#058L:Startar BBS i undersession.
+E#059L:Returned from BBS.
+S#059L:Returned from BBS, watch the ComPort, Mr. Data!
+G#059L:Rueckkehr von der Mailbox.
+V#059L:èter frÜn BBS.
+E#060L:Exiting to external mailer with errorlevel %u.
+S#060L:Exiting to external mailer with errorlevel %u, Chekov.
+G#060L:Exit zu externem Mailer mit Errorlevel %u.
+V#060L:LÑmnar till extern mailer med felnivÜ %u.
+E#061L#Setting baud to %u.
+S#061L#Setting baud to %u, Sir!
+G#061L#Setze Baudrate auf %u.
+V#061L#SÑtter hastighet till %u.
+E#062L*Uses  :
+S#062L*Uses  :
+G#062L*Nutzt :
+V#062L*Mailer:
+*#063LVersion
+*#064LErr i/o/!:%9s
+E#065L*Sending mail using FTS-0001 compatible fallback.
+S#065L*Sending mail using FTS-0001 compatible fallback.
+G#065L*Sende Nachrichten mittels FTS-0001 Grundprotokoll.
+V#065L*SÑnder post med FTS-0001-kompatibelt protokoll.
+E#066L*Refusing inbound file requests.
+S#066L*Refusing inbound file requests, Sir!
+G#066L*Lehne eingehende Filerequests ab.
+V#066L*Avbîjer inkommande filbegÑran.
+E#067L!Tired of waiting for other end.
+S#067L!Tired of waiting for other end... LAUNCH PHOTON TORPEDOS!
+G#067L!Andere Seite meldet sich nicht. Passwortfehler?
+V#067L!Orkar inte vÑnta pÜ den andra sidan.
+E#068L*End of FTS-0001 compatible session.
+S#068L*End of FTS-0001 compatible session, Sir.
+G#068L*Ende der FTS-0001 Verbindung.
+V#068L*Slut pÜ FTS-0001-uppkopplingen.
+E#069L*Receiving mail using FTS-0001 compatible fallback.
+S#069L*Receiving mail using FTS-0001 compatible fallback.
+G#069L*Empfange Nachrichten mittels FTS-0001 Grundprotokoll.
+V#069L*Tar emot post med FTS-0001-kompatibelt protokoll.
+E#070L*Giving mail to %s.
+S#070L*Giving mail to %s.
+G#070L*Uebergebe Nachrichten an %s.
+V#070L*Skickar post till %s.
+E#071L*Node %s refused to pickup mail.
+S#071L*Node %s refused to pickup mail. Target his Hard Drives, Mr. Worf.. Fire!
+G#071L*Node %s nimmt seine Mail nicht an.
+V#071L*Nod %s avbîjde posthÑmtning.
+E#072L!Memory overflow error.
+S#072L!Memory overflow error, Fix it Mr. Data!
+G#072L!FEHLER: kein Speicher mehr.
+V#072L!Minesspill.
+E#073LOutbound
+S#073LOutbound
+G#073LAbgehende
+V#073LUtgÜende
+E#074LFile Attaches
+S#074LFile Attaches
+G#074LDateien
+V#074LBifogade filer
+E#075L*Making file request.
+S#075L*Making file request, from Klingon Battle Cruiser, Sir.
+G#075L*Mache Filerequest.
+V#075L*Skapar filbegÑran.
+E#076LEnd of
+S#076LEnd of
+G#076LEnde des
+V#076LSlut pÜ
+E#077L*Receiving inbound mail.
+S#077L*Receiving inbound mail, Captain.
+G#077L*Empfange Nachricht.
+V#077L*Tar emot inkommande post.
+E#078L*Pickup is turned off - refusing mail.
+S#078L*Pickup is turned off - refusing mail as ordered Sir.
+G#078L*Nachrichtenannahme gesperrt - verweigere Annahme von Nachrichten.
+V#078L*PosthÑmtning avslagen - avbîjer inkommande post.
+E#079LInbound
+S#079LInbound
+G#079LAnkommendes
+V#079LInkommande
+E#080LMail Packet
+S#080LMail Packet
+G#080LNachrichtenpaket
+V#080LBrevpaket
+E#081L!Password Error assumed.
+S#081L!Password Error assumed.
+G#081L!Vermutlich Passwortfehler.
+V#081L!Antagligen lîsenordsfel.
+E#082L!Mail Packet '%s' cannot be renamed.
+S#082L!Mail Packet '%s' cannot be renamed.
+G#082L!Nachrichtenpaket '%s' kann nicht umbenannt werden.
+V#082L!Brevpaket '%s' kan inte omdîpas.
+E#083L!Mail Packet renamed to '%s'.
+S#083L!Mail Packet renamed to '%s'.
+G#083L!Nachrichtenpaket umbenannt in '%s'.
+V#083L!Brevpaket omdîpt till '%s'.
+E#084LCan't find protocol module:
+S#084LCan't find protocol module:
+G#084LKann Protokollmodul nicht finden:
+V#084LHittar inte protokollmodul:
+E#085LDuplicate protocol name:
+S#085LDuplicate protocol name:
+G#085LDoppelter Protokollname:
+V#085LDuplicerat protokollnamn:
+E#086L*Processing node %s (%s)
+S#086L*Processing node %s (%s)
+G#086L*Bearbeite Node %s (%s)
+V#086L*Bearbetar nod %s (%s)
+E#087L!Couldn't find Address: %s
+S#087L!Couldn't find Address: %s
+G#087L!Kann Adresse %s nicht finden!
+V#087L!Hittar inte adress: %s
+E#088L!Disconnecting nuisance caller.
+S#088L!Disconnecting Nuisance Caller, Worf...KAPLAHH!
+G#088L!Plagegeist rausgeworfen.
+V#088L!Kopplar ner plÜgoringare.
+E#089L!No BOSS in the nodelist.
+S#089L!No BOSS in the Nodelist, Sir.
+G#089L!Kein BOSS in der Nodeliste.
+V#089L!Ingen BOSS i nodlistan.
+E#090L!Unable to open %s.
+S#090L!Unable to open %s.
+G#090L!Kann %s nicht oeffnen.
+V#090L!Kan inte îppna %s.
+E#091L!Unable to allocate memory for Nodelist Index.
+S#091L!Unable to allocate memory for Nodelist Index, Scotty to the Bridge!
+G#091L!Nicht genug Speicher fuer den Nodelisten-Index.
+V#091L!OtillrÑckligt minne fîr nodlisteindex.
+E#092L!Read error in %s.%s.
+S#092L!Read error in %s.%s.
+G#092L!Lesefehler in %s.%s
+V#092L!LÑsfel i %s.%s
+E#093L!Seek error in %s.%s.
+S#093L!Seek error in %s.%s.
+G#093L!Positionierfehler in %s.%s.
+V#093L!Sîkfel i %s.%s
+E#094L!`yellow`--- New Day: %02u/%02u/%02u
+S#094L!`yellow`--- New Day, Stardate: %02u%02u%02u
+G#094L!`yellow`--- Neuer Tag: %02u/%02u/%02u
+V#094L!`yellow`--- New Day: %02u/%02u/%02u
+E#095LFile Requests
+S#095LFile Requests
+G#095LFilerequests
+V#095LFilbegÑran
+E#096L:%d matching files sent.
+S#096L:%d matching Files sent, Sir!
+G#096L:%d uebereinstimmende Dateien gesendet.
+V#096L:%d matchande filer sÑnda.
+E#097L!Bad Bark Request Data - streaming garbage.
+S#097L!Bad Bark Request Data - streaming Garbage, Sir.
+G#097L!Schlechte Bark-Request-Daten - ueberspringe Muell.
+V#097L!Felaktig bark-filbegÑrandata - hoppar îver skrÑp.
+E#098L!Bad CRC - trying again.
+S#098L!Bad CRC - trying again, Try another frequency Uhura!
+G#098L!Falsche CRC - wiederhole.
+V#098L!Felaktig CRC - fîrsîker igen.
+E#099L!System misconfigured (Sysop,System,Netfile,Hold?) or no nodelist entry.
+S#099L!System misconfigured (Sysop,System,Netfile,Hold?) or no nodelist entry, Mr. Data!
+G#099L!System fehlconfiguriert (Sysop,System,Netfile,Hold?) oder kein Nodelist-Eintrag.
+V#099L!System felkonfigurerat (Sysop,System,Netfile,Hold?) eller saknad nodlistepost.
+E#100L!Invalid online time flag: %s
+S#100L!Invalid online time flag: %s
+G#100L!Ungueltiges Online-Zeit-Flag: %s
+V#100L!Ogiltig îppettidsflagga: %s
+E#101L:NO DIALTONE, dial aborted.
+S#101L:NO DIALTONE, dial aborted, Sir.
+G#101L:NO DIALTONE, ankommender Anruf? Anwahl abgebrochen.
+V#101L:NO DIALTONE, uppringning avbruten. (Inkommande samtal?)
+E#102LDynamic Event
+S#102LDynamic Event
+G#102LDynamischen Events
+V#102LDynamisk systemhÑndelse
+E#103L:Exit requested from keyboard.
+S#103L:Exit requested from keyboard, Captain, Slowing to sub-light speed.
+G#103L:Abbruch ueber Tastatur.
+V#103L:Avslut begÑrt frÜn tangentbordet.
+E#104L:Function key exit - errorlevel %d.
+S#104L:Function key exit - errorlevel %d.
+G#104L:Funktionstaste - Errorlevel %d.
+V#104L:Funktionstangentsavslutning - felnivÜ %d.
+E#105L Disabling Modem.
+S#105L Disabling Modem, Captain.
+G#105L Schalte Modem ab.
+V#105L StÑnger av modem.
+E#106L:Invoking Message Reader.
+S#106L:Invoking Message Reader, Sir.
+G#106L:Starte Nachrichtenleser.
+V#106L:Startar brevlÑsare.
+E#107L:Message Reader returned to BinkleyTerm.
+S#107L:Message Reader returned to BinkleyTerm, Sir.
+G#107L:Von Nachrichtenleser zurueck in BinkleyTerm.
+V#107L:èter frÜn brevlÑsare till BinkleyTerm.
+E#108L Enabling Modem.
+S#108L Enabling Modem, Sir.
+G#108L Modem wieder aktiviert.
+V#108L Aktiverar modem.
+E#109L!No Message Reader to invoke.
+S#109L!No Message Reader to invoke! LaForge to the Bridge!
+G#109L!Kein Nachrichtenleser konfiguriert.
+V#109L!Ingen brevlÑsare att startaa.
+E#110L!Could not do GET.
+S#110L!Could not do GET.
+G#110L!Kann GET nicht ausfuehren.
+V#110L!Kan inte utfîra GET.
+E#111L!Could not do KILL.
+S#111L!Could not do KILL.
+G#111L!Kann KILL nicht ausfuehren.
+V#111L!Kan inte utfîra KILL.
+E#112L:Entering POLL Mode.
+S#112L:Entering POLL Mode.
+G#112L:Starte POLL-Modus.
+V#112L:Startar POLLningslÑge.
+E#113L:Poll completed.
+S#113L:Poll completed, Sir.
+G#113L:Poll beendet.
+V#113L:Pollning avslutad.
+E#114L!Could not do SEND.
+S#114L!Could not do SEND StarFleet Mail!
+G#114L!Kann SEND nicht ausfuehren.
+V#114L!Kan inte utfîra SEND.
+E#115L:Keyboard request to enter terminal mode.
+S#115L:Keyboard request to enter Terminal mode, Sir!
+G#115L:Terminalmodus von Tastatur angefordert.
+V#115L:TerminallÑge anropat frÜn tangentbordet.
+*#116L:Launched keyboard shell %d in an other window.
+E#117L:Executing keyboard shell %d.
+S#117L:Executing keyboard shell %d, ENGAGE!
+G#117L:Fuehre Tastatur-Shell %d aus.
+V#117L:Utfîr tangentbordsskal %d.
+E#118L:Returning from keyboard shell.
+S#118L:Returning from keyboard shell, Sir.
+G#118L:Zurueck von Tastatur-Shell.
+V#118L:èter frÜn tangentbordsskal.
+E#119L!No keyboard shell %d.
+S#119L!No keyboard shell %d, Sir. Possible Ferengi Sabotage!
+G#119L!Keine Tastatur-Shell %d.
+V#119L!Inget tangentbordsskal %d.
+E#120L>Junk character from keyboard - continuing.
+S#120L>Ferengi pounding on keyboard, Sir.
+G#120L>Unbekannte Taste - fahre fort.
+V#120L>SkrÑptecken frÜn tangentbordet - fortsÑtter.
+E#121L:Shelling to Command Interpreter.
+S#121L:Shelling to Command Interpreter, Sir.
+G#121L:Shelle zum Kommando-Interpreter.
+V#121L:GÜr till kommandotolksskal.
+E#122L\r\nType EXIT to return to BinkleyTerm.\r\n
+S#122L\r\nType EXIT to return to BinkleyTerm.\r\n
+G#122L\r\nGebe EXIT ein, um zu Binkley zurueckzukehren.\r\n
+V#122L\r\nSkriv EXIT fîr att ÜtervÑnda till BinkleyTerm.\r\n
+E#123L:BinkleyTerm Reactivated.
+S#123L:BinkleyTerm Reactivated... Data Notify StarFleet.
+G#123L:BinkleyTerm wieder aktiv.
+V#123L:BinkleyTerm Üteraktiverat.
+E#124L!Calls not permitted during this event.
+S#124L!Calls not permitted during this event, Sir.
+G#124L!Dieser Event erlaubt keine Anrufe.
+V#124L!Denna systemhÑndelse tillÜter inga samtal.
+E#125L Immediate call requested.
+S#125L Immediate call requested, Jim! I'm a Doctor, not a Polling System!
+G#125L Sofortiger Anruf verlangt.
+V#125L Direktsamtal fîrfrÜgat.
+E#126L\rPlease enter a net/node number:\b
+S#126L\rPlease Enter a net/node number:\b
+G#126L\rBitte gib eine Netz/Node-Nummer ein:\b
+V#126L\rVÑnligen ange ett nÑt/nod-nummer:\b
+E#127LCurrently Polling Node\b
+S#127LCurrently Polling Node\b
+G#127LPolle gerade Node\b
+V#127LPollar nod\b
+*#128LInit
+E#129LIdle
+S#129LIdle
+G#129LWarte
+V#129LVÑntar
+E#130LDialing
+S#130LDialing
+G#130LWaehle
+V#130LRinger
+E#131LHangUp
+S#131LHangUp
+G#131LLege auf
+V#131LLÑgger pÜ
+E#132LConnect
+S#132LConnect
+G#132LVerbunden
+V#132LUppkopplad
+E#133L:Dialing %s (%s -- %s)
+S#133L:Dialing %s (%s -- %s)
+G#133L:Waehle %s (%s -- %s)
+V#133L:Ringer %s (%s -- %s)
+E#134LEnding time wraps through midnight - not allowed.\n
+S#134LEnding time wraps through midnight - not allowed.\n
+G#134LEndzeit geht ueber Mitternacht - nicht erlaubt.\n
+V#134LSluttid gÜr runt midnatt - ej tillÜtet.\n
+E#135L'%s' has an invalid START-TIME.\n
+S#135L'%s' has an invalid START-TIME.\n
+G#135L'%s' hat ungueltige Startzeit.\n
+V#135L'%s' har ogiltig starttid.\n
+E#136L'%s' has an invalid END-TIME.\n
+S#136L'%s' has an invalid END-TIME.\n
+G#136L'%s' hat ungueltige Endzeit.\n
+V#136L'%s' har ogiltig sluttid.\n
+E#137L'%s' has bad AvgWait (higher than max of 655 or less than min of 0).\n
+S#137L'%s' has bad AvgWait (higher than max of 655 or less than min of 0).\n
+G#137L'%s' hat ungueltige Anwahlpausenzeit (hoeher als 655 oder weniger als 0).\n
+V#137L'%s' har ogiltig 'AvgWait' (hîgre Ñn 655 eller mindre Ñn 0).\n
+E#138L'%s' has a bad errorlevel code.\n
+S#138L'%s' has a bad errorlevel code.\n
+G#138L'%s' hat ungueltigen Errorlevel-Wert.\n
+V#138L'%s' har ogiltig felnivÜ.\n
+E#139L'%s' has a bad number of Tries.\n
+S#139L'%s' has a bad number of Tries.\n
+G#139L'%s' hat ungueltige Anzahl von Wahlversuchen.\n
+V#139L'%s' har fel antal fîrsîk.\n
+E#140L'%s' has something indecipherable.\n
+S#140L'%s' has something indecipherable.\n
+G#140L'%s' hat etwas Unentzifferbares.\n
+V#140L'%s' har nÜgonting otydbart.\n
+E#141L'%s' has an invalid DAY field.\n
+S#141L'%s' has an invalid DAY field.\n
+G#141L'%s' hat ungueltiges Tag-Feld.\n
+V#141L'%s' har ogiltigt dagfÑlt.\n
+E#142LNothing in Outbound Area
+S#142LNothing in Outbound Area
+G#142L-- Nichts im Outbound --
+V#142LIngen utgÜende post alls
+E#143LAddress           Files Size Age  State
+S#143LAddress           Files Size Age  State
+G#143LAdresse           Anz. Groe Alt  Status
+V#143LAdress            Filer Byte èld Status
+E#144L!Insufficient data for session.
+S#144L!Insufficient data for session.
+G#144L!Daten reichen fuer Verbindung nicht aus.
+V#144L!OtillrÑckliga data fîr session.
+E#145L+End of connection attempt.
+S#145L+End of connection attempt, Scotty... More Power!
+G#145L+Ende des Verbindungsversuchs.
+V#145L+Slut pÜ anropsfîrsîket.
+E#146L!Still have mail for %s.
+S#146L!Still have mail for %s, Sir.
+G#146L!Habe immer noch Nachrichten fuer %s.
+V#146L!Har fortfarande post fîr %s.
+E#147L:Exit after compressed mail with errorlevel %d.
+S#147L:Exit after compressed mail with errorlevel %d.
+G#147L:Exit nach komprimierten Nachrichten mit Errorlevel %d.
+V#147L:LÑmnar med felnivÜ %s dÜ komprimerad post inkommit.
+E#148L:Exit after file extension '%s' with errorlevel %d.
+S#148L:Exit after file extension '%s' with errorlevel %d.
+G#148L:Exit nach File-Endung '%s' mit Errorlevel %d.
+V#148L:LÑmnar efter filtyp '%s' med felnivÜ %d.
+E#149L:Exit after receiving mail with errorlevel %d.
+S#149L:Exit after receiving mail with errorlevel %d.
+G#149L:Exit nach empfangenen Nachrichten mit Errorlevel %d.
+V#149L:LÑmnar med felnivÜ %s dÜ post inkommit.
+E#150L:Received mail, running 'AfterMail' program.
+S#150L:Received mail, running 'AfterMail' program.
+G#150L:Eingegangene Nachrichten, starte 'AfterMail'-Programm.
+V#150L:Inkommen post, startar 'AfterMail'-program.
+E#151L#Re-enabling system following 'AfterMail' program.
+S#151L#Re-enabling system following 'AfterMail' program.
+G#151L#Reaktiviere System nach 'AfterMail'-Programm.
+V#151L#èterstartar system efter 'AfterMail'-program.
+E#152LSetting
+S#152LSetting
+G#152LSetze
+V#152LSÑtter
+E#153L to initial speed of\b
+S#153L to initial speed of\b
+G#153L auf anfaengliche Geschwindigkeit von\b
+V#153L till fîrsta hastighet\b
+E#154L baud. Press Alt-F10 for HELP.\r\n
+S#154L baud. Press Alt-F10 for HELP.\r\n
+G#154L Baud. Druecke Alt-F10 fuer HILFE.\r\n
+V#154L baud. Tryck Alt-F10 fîr HJéLP.\r\n
+*#155L:Launched 'Aftermail'-program in other window.
+E#156LCurrent Settings
+S#156LCurrent Settings
+G#156LEinstellungen
+V#156LInstÑllningar
+E#157LToday at a Glance
+S#157LToday at a Glance
+G#157LTagesueberblick
+V#157LDagsîverblick
+E#158LPending Outbound Mail
+S#158LOutbound Mail to StarFleet
+G#158LAusgangsfach
+V#158LVÑntande utgÜende post
+E#159LInitializing System
+S#159LInitializing System
+G#159LInitialisierung
+V#159LInitierar system
+E#160LRecent Activity
+S#160LCaptain's Personal Log
+G#160LLetzte Aktivitaeten
+V#160LSystemlogg
+E#161LStatus
+S#161LStarFleet Status
+G#161LStatus
+V#161LStatus
+*#162LEvent:
+*#163LPort:
+*#164LStatus: Init
+*#165LIn M/B/F: %9s
+*#166LOut:%15s
+*#167LRx #/Vol.:%9s
+*#168LTx #/Vol.:%9s
+*#169LLast:%14s
+E#170L Hit Alt-F10 For Help
+S#170L Hit Alt-F10 For Help
+G#170L Alt-F10 fuer Hilfe
+V#170L ALT-F10 ger hjÑlp
+*#171L-%02x-  Node: %s
+E#172L!Password override for outgoing call.
+S#172L!Password override for outgoing call.
+G#172L!Passwortfehler ignoriert fuer ausgehenden Anruf.
+V#172L!LîsenordsfelsÜsidosÑttning fîr utgÜende samtal.
+E#173L\r**Zmodem Autodownload initiated.\r\n
+S#173L\r**Zmodem Autodownload initiated.\r\n
+G#173L\r**Zmodem Autodownload begonnen.\r\n
+V#173L\r**Zmodem Autodownload pÜbîrjad.\r\n
+E#174L\r**Zmodem Autodownload finished.\r\n
+S#174L\r**Zmodem Autodownload finished.\r\n
+G#174L\r**Zmodem Autodownload beendet.\r\n
+V#174L\r**Zmodem Autodownload avslutad.\r\n
+E#175L\r\nBinkleyTerm now communicating at\b
+S#175L\r\nBinkleyTerm now communicating at\b
+G#175L\r\nBinkleyTerm arbeitet nun mit\b
+V#175L\r\nBinkleyTerm kommunicerar nu i\b
+E#176L\r\nPlease Enter a Phone (or net/node) number:\b
+S#176L\r\nPlease Enter a Phone (or net/node) number:\b
+G#176L\r\nBitte gebe Telefon- oder Nodenummer an:\b
+V#176L\r\nAnge telefon- eller nodnummer:\b
+E#177L\r\nUnable to force carrier drop by dropping DTR!\r\n
+S#177L\r\nUnable to force carrier drop by dropping DTR!\r\n
+G#177L\r\nKann Traegersignal nicht unterdruecken!\r\n
+V#177L\r\nLyckas inte lÑgga pÜ genom att slÑppa DTR!\r\n
+E#178L\r\nWelcome back!\r\n
+S#178L\r\nWelcome back, Captain, I didn't think you'd make it!\r\n
+G#178L\r\nWillkommen zurueck!\r\n
+V#178L\r\nVÑlkommen Üter!\r\n
+E#179L\r\nLog file name:\b
+S#179L\r\nLog file name:\b
+G#179L\r\nLogdatei-Name:\b
+V#179L\r\nLoggfilsnamn:\b
+E#180LAnswering
+S#180LIncoming
+G#180LAntworte
+V#180LAnswering
+E#181LBinkleyTerm now in MANUAL mode.\r\n
+S#181LBinkleyTerm now in MANUAL mode.\r\n
+G#181LBinkleyTerm ist jetzt im manuellen Modus.\r\n
+V#181LBinkleyTerm Ñr nu i manuellt lÑge.\r\n
+E#182L\r\nBinkleyTerm now using
+S#182L\r\nBinkleyTerm now using
+G#182L\r\nBinkleyTerm benutzt jetzt
+V#182L\r\nBinkleyTerm anvÑnder nu
+E#183L\r\nBinkleyTerm is ready to SEND a file...\r\n
+S#183L\r\nBinkleyTerm is ready to SEND a file...\r\n
+G#183L\r\nBinkleyTerm ist bereit das File zu versenden...\r\n
+V#183L\r\nBinkleyTerm Ñr redo att sÑnda en fil...\r\n
+E#184LWhich Protocol do you want BinkleyTerm to use?\r\n
+S#184LWhich Protocol do you want BinkleyTerm to use?\r\n
+G#184LWelches Protokoll soll BinkleyTerm benutzen?\r\n
+V#184LVilket protokoll ska BinkleyTerm anvÑnda?\r\n
+E#185L\r\nBinkleyTerm is ready to RECEIVE a file...\r\n
+S#185L\r\nBinkleyTerm is ready to RECEIVE a file...\r\n
+G#185L\r\nBinkleyTerm ist bereit eine Datei zu empfangen...\r\n
+V#185L\r\nBinkleyTerm Ñr redoa att ta emot en fil...\r\n
+E#186L\r\nSending BREAK signal.\r\n
+S#186L\r\nSending BREAK signal.\r\n
+G#186L\r\nSende BREAK Signal.\r\n
+V#186L\r\nSÑnder avbrottssignal.\r\n
+E#187LDone.\r\n
+S#187LDone.\r\n
+G#187LFertig.\r\n
+V#187LKlar.\r\n
+E#188L\r\nYou are using\b
+S#188L\r\nYou are using\b
+G#188L\r\nDu benutzt\b
+V#188L\r\nDu anvÑnder\b
+E#189LSorry. I don't know that protocol, returning to terminal mode.\r\n
+S#189LSorry. I don't know that protocol, returning to terminal mode.\r\n
+G#189LDieses Protokoll ist nicht bekannt, zurueck ins Terminal.\r\n
+V#189LOkÑnt protokoll, ÜtervÑnder till terminallÑge.\r\n
+E#190LFilename to SEND:\b
+S#190LFilename to SEND:\b
+G#190LDateiname zum Senden:\b
+V#190LFilnamn att sÑnda:\b
+E#191LOK....Choose!\b
+S#191LOK....Choose!\b
+G#191LOK....Waehle!\b
+V#191LOK....vÑlj!\b
+E#192LFilename to GET:\b
+S#192LFilename to GET:\b
+G#192LDateiname zum Holen:\b
+V#192LFilnamn att ta emot:\b
+E#193L\r\nLogfile %s closed.\r\n
+S#193L\r\nLogfile %s closed.\r\n
+G#193L\r\nLogdatei %s geschlossen.\r\n
+V#193L\r\nLoggfil %s stÑngd.\r\n
+E#194L\r\nCould not open logfile %s.\r\n
+S#194L\r\nCould not open logfile %s.\r\n
+G#194L\r\nKann Logdatei %s nicht oeffnen.\r\n
+V#194L\r\nKan inte îppna loggfil %s.\r\n
+E#195L\r\nLogfile %s open.\r\n
+S#195L\r\nLogfile %s open.\r\n
+G#195L\r\nLogdatei %s offen.\r\n
+V#195L\r\nLoggfil %s îppen.\r\n
+E#196L:Connection terminated.
+S#196L:Connection terminated.
+G#196L:Verbindung beendet.
+V#196L:Uppkoppling avbruten.
+E#197LSwitching back to
+S#197LSwitching back to
+G#197LSchalte zurueck auf
+V#197LètervÑnder till
+E#198LPolling:
+S#198LPolling:
+G#198LPolle:
+V#198LPollar:
+E#199LGET a File
+S#199LGET a File
+G#199LGET - Hole eine Datei
+V#199LGET - HÑmta en fil
+E#200LAddress to GET from:
+S#200LAddress to GET from:
+G#200LVon welcher Adresse:
+V#200LFrÜn vilken adress:
+E#201LPassword to use:
+S#201LPassword to use:
+G#201LWelches Passwort:
+V#201LLîsenord fîr filen:
+E#202LAre you sure (Y/N)?
+S#202LAre you sure, Mr. Data (Y/N)?
+G#202LSind Sie sicher (J/N)?
+V#202Lér du sÑker (J/N)?
+E#203LYes
+S#203LYes
+G#203LJa
+V#203LJa
+E#204LNo
+S#204LNo
+G#204LNein
+V#204LNej
+E#205LSEND a File
+S#205LSEND a File
+G#205LSEND - Eine Datei versenden
+V#205LSEND - SÑnda en fil
+E#206LAddress to SEND to:
+S#206LAddress to SEND to:
+G#206LAn welche Adresse:
+V#206LTill vilken adress:
+E#207LKILL outbound mail
+S#207LKILL outbound mail
+G#207LKILL - Loeschen ausgehender Nachrichten
+V#207LKILL - radera utgÜende post
+E#208LAddress to KILL:
+S#208LAddress to KILL:
+G#208LAdresse eingeben:
+V#208LFîr vilken adress:
+E#209LKill ALL mail?\b
+S#209LKill ALL mail?\b
+G#209LALLE Nachrichten loeschen?\b
+V#209LTa bort ALL post?\b
+E#210L!drats
+S#210L!SHIT, SHIT... FIRE PHAZERS NOW!!!
+G#210L!drats
+V#210L!attans
+E#211L!No Send - Remote Hung Up.
+S#211L!No Send - Remote Hung Up.
+G#211L!Nichts gesendet - Gegenstelle hat aufgehaengt.
+V#211L!Ingen sÑndning - andra sidan lade pÜ.
+E#212L+Corrected %d errors in %ld blocks.
+S#212L+Corrected %d errors in %ld blocks.
+G#212L+Korrigierte %d Fehler in %ld Bloecken.
+V#212L+Korrigerade %d fel i %ld block.
+*#213L+Sent
+E#214L+`brightred`Synchronizing to Offset %ld.
+S#214L+`brightred`Synchronizing to Offset %ld.
+G#214L+`brightred`Synchronisiere auf Position %ld.
+V#214L+`brightred`Synkroniserar till position %ld.
+E#215L!Temporary receive file '%s' could not be opened.
+S#215L!Temporary receive file '%s' could not be opened.
+G#215L!Temporaere Empfangsdatei '%s' kann nicht erstellt werden.
+V#215L!TemporÑr mottagningsfil '%s' kunde inte îppnas.
+E#216L+Already have %s.
+S#216L+Already have %s, Captain.
+G#216L+%s ist schon vorhanden.
+V#216L+%s finns redan.
+E#217L+Synchronizing to End of File.
+S#217L+Synchronizing to End of File.
+G#217L+Synchronisiere auf Dateiende.
+V#217L+Synkroniserar vid filslut.
+*#218Lunused218
+E#219L+Received
+S#219L+Received
+G#219L+Received
+V#219L+Mottagen
+E#220L!Original name of %s could not be used.
+S#220L!Original name of %s could not be used.
+G#220L!Originalname %s kann nicht benutzt werden.
+V#220L!Originalnamnet %s kunde inte anvÑndas.
+E#221L!EOT not expected until block %ld.
+S#221L!EOT not expected until block %ld.
+G#221L!EOT nicht erwartet bis Block %ld.
+V#221L!EOT fîrvÑntades inte fîrrÑn vid block %ld.
+E#222L*Remote System
+S#222L*Remote System
+G#222L*Gegenseite
+V#222L*FjÑrrsystem
+E#223LUNKNOWN - FTS-0001 Mailer.
+S#223LUNKNOWN - FTS-0001 Mailer.
+G#223LUnbekannt - FTS-0001-Mailer.
+V#223LOkÑnd - FTS-0001-mailer.
+E#224LSystem Initializing. Please wait...\n
+S#224LSystem Initializing, Captain... Please wait...\n
+G#224LInitialisierung. Bitte warten...\n
+V#224LInitierar. Var god vÑnta...\n
+E#225L\r\nUnrecognized option: %s\r\n
+S#225L\r\nUnrecognized option: %s\r\n
+G#225L\r\nWas bedeutet '%s'?\r\n
+V#225L\r\nOkÑnd parameter: %s\r\n
+E#226L\r\nThanks for using %s,\r\n
+S#226L\r\nThanks for using %s,\r\n
+G#226L\r\nDanke fuer die Benutzung von %s,\r\n
+V#226L\r\nTack fîr att du anvÑnder %s,\r\n
+E#227LAnother fine User-DEVELOPED software package!\r\n
+S#227LAnother fine User-DEVELOPED software package!\r\n
+G#227LEin Softwarepaket, von Anwendern entwickelt!\r\n
+V#227LYtterligare ett fins anvÑndarutvecklat mjukvarupaket!\r\n
+E#228L+Remote refused %s.
+S#228L+Remote refused %s.
+G#228L+Gegenstelle hat %s abgelehnt.
+V#228L+FjÑrrsystem avbîjde %s.
+E#229L!`brightred`Error
+S#229L!`brightred`Error
+G#229L!`brightred`Fehler
+V#229L!`brightred`Fel
+E#230LCan't
+S#230LCan't
+G#230LKann nicht
+V#230LKan inte
+E#231L+CPS: %lu (%lu bytes)  Efficiency: %lu%%
+S#231L+CPS: %lu (%lu bytes)  Efficiency: %lu%%
+G#231L+CPS: %lu (%lu Bytes)  Effektivitaet: %lu%%
+V#231L+CPS: %lu (%lu byte)  Effektivitet: %lu%%
+E#232LCompressed Mail
+S#232LCompressed Mail
+G#232LGepackte Nachrichten
+V#232Lkomprimerad post
+E#233LNet File
+S#233LNet File
+G#233LDatei
+V#233Lfil
+*#234Lunused234
+E#235L`brightred`Trouble?
+S#235L`brightred`Trouble?
+G#235L`brightred`Probleme?
+V#235L`brightred`Problem?
+E#236L`brightred`Resending from %d.
+S#236L`brightred`Resending from %d.
+G#236L`brightred`Wiederhole ab %d.
+V#236L`brightred`FortsÑtter frÜn %d.
+E#237LSend %ld blks of %s (%ld bytes).
+S#237LSend %ld blks of %s (%ld bytes).
+G#237LSende %ld Bloecke von %s (%ld Bytes).
+V#237LSÑnder %ld block av %s (%ld byte).
+E#238LUpdate
+S#238LUpdate
+G#238LUpdate
+V#238LUppdaterings
+E#239LFile
+S#239LFile
+G#239LDatei
+V#239LFil
+E#240LRequest
+S#240LRequest
+G#240LRequest
+V#240LbegÑran
+E#241L:Executing
+S#241L:Executing
+G#241L:Fuehre aus
+V#241L:Exekverar
+E#242L!Carrier lost, request(s) aborted.
+S#242L!Carrier lost, request(s) aborted.
+G#242L!Traegersignal verloren, Request(s) abgebrochen.
+V#242L!BÑrvÜg tappad, filbegÑran avbruten.
+E#243L!File Request limit exceeded.
+S#243L!File Request limit exceeded.
+G#243L!Filerequest-Begrenzung ueberschritten.
+V#243L!FilbegÑransbegrÑnsning îverskriden.
+E#244L!Event Overrun - requests aborted.
+S#244L!Event Overrun - requests aborted.
+G#244L!Event ueberschritten - Requests abgebrochen.
+V#244L!Systemevent îverskriden - filbegÑran avbruten.
+E#245LNo AVAIL list.
+S#245LNo AVAIL list, Contact StarFleet!
+G#245LKeine AVAIL-Liste.
+V#245LIngen AVAIL-lista.
+E#246LNo template file
+S#246LNo template file, Contact StarFleet!
+G#246LKein Templatefile.
+V#246LSaknar mallfil.
+E#247L!`brightred`OKFILE Error '%s'.
+S#247L!`brightred`OKFILE Error '%s'.
+G#247L!`brightred`OKFILE-Fehler '%s'.
+V#247L!`brightred`OKFILE-fel: %s.
+E#248L!Request password error: Ours='%s' His='%s'
+S#248L!Request password error: Ours='%s' His='%s'
+G#248L!Request Passwort-Fehler: Unser PW='%s' Sein PW='%s'
+V#248L!Lîsenordsfel vid filbegÑran: '%s' '%s'
+E#249LRcv %ld blks of %s from %s (%ld bytes).
+S#249LRcv %ld blks of %s from %s (%ld bytes).
+G#249LEmpfange %ld Bloecke aus %s von %s (%ld Bytes).
+V#249LMottar %ld block av %s frÜn %s (%ld byte).
+E#250L`brightred`Timeout
+S#250L`brightred`Timeout
+G#250L`brightred`Zeit ueberschritten
+V#250L`brightred`Timeout
+E#251LChecksum
+S#251LChecksum
+G#251LPruefsumme
+V#251LKontrollsumma
+E#252L`brightred`CRC
+S#252L`brightred`CRC
+G#252L`brightred`CRC
+V#252L`brightred`CRC
+E#253LJunk Block
+S#253LJunk Block
+G#253LSchlonz
+V#253LSkrÑpblock
+E#254Lon block
+S#254Lon block
+G#254Lauf Block
+V#254Lvid block
+E#255Lfind
+S#255Lfind
+G#255Lfinden
+V#255Lhitta
+E#256LRead
+S#256LRead
+G#256LLese
+V#256LLÑser
+E#257LSeek :
+S#257LSeek :
+G#257LSuche:
+V#257LSîker:
+E#258LRecent Activity Search
+S#258LSearch thru Captain's Personal Log
+G#258LSuche in Letzte Aktivitaeten
+V#258LSîker Systemlogg
+E#259LUse keys HOME, END, UP, DOWN to seek and ESC to quit
+S#259LUse commands HOME, END, UP, DOWN to seek and ESC to quit
+G#259LDrÅcke Pos1, Ende, Hoch, Runter zum Suchen und ESC zum Abbrechen
+V#259LUse keys HOME, END, UP, DOWN to seek and ESC to quit
+*#260Lunused260
+E#261LWrite
+S#261LWrite
+G#261LSchreibe
+V#261LSkriver
+E#262L SKIP command received.
+S#262L SKIP command received... ENGAGE!
+G#262L SKIP empfangen.
+V#262L SKIP-kommando mottaget.
+E#263LF1 ... F10 = input phone number, (ENTER) = start, (ESC) = abort\r\n
+S#263LF1 ... F10 = input phone number, (ENTER) = start, (ESC) = abort\r\n
+G#263LF1 ... F10 = Telefonnummer eingeben, (ENTER) = Starten, (ESC) = Abbruch\r\n
+V#263LF1 ... F10 = ange telefonnummer, (ENTER) = starta, (ESC) = avbryt\r\n
+E#264LALT-Fn = load saved set (n), Shift-Fn = save into set (n)\r\n
+S#264LALT-Fn = load saved set (n), Shift-Fn = save into set (n)\r\n
+G#264LALT-Fn = Lade Einstellung (n), Shift-Fn = Speichere Einstellung (n)\r\n
+V#264LALT-Fn = ladda instÑllning (n), Shift-Fn = skriv instÑllning (n)\r\n
+E#265LUser set last loaded/saved: %d\r\n
+S#265LUser set last loaded/saved: %d\r\n
+G#265LLetzte Benutzereinstellung geladen/gespeichert: %d\r\n
+V#265LSenaste sparade/laddade instÑllning: %d\r\n
+E#266LPhone Numbers currently selected:\r\n\r\n
+S#266LPhone Numbers currently selected:\r\n\r\n
+G#266LAusgewaehlte Telefonnummern:\r\n\r\n
+V#266LValda telefonnummer:\r\n\r\n
+E#267L\r\nInput Command:\b
+S#267L\r\nInput Command:\b
+G#267L\r\nIhre Eingabe:\b
+V#267L\r\nAnge kommando:\b
+E#268LElement Chosen = %2d\r\n
+S#268LElement Chosen = %2d\r\n
+G#268LGewaehltes Element = %2d\r\n
+V#268LValda element = %2d\r\n
+E#269LCurrently contains %s\r\n
+S#269LCurrently contains %s\r\n
+G#269LAktueller Inhalt %s\r\n
+V#269LInnehÜller nu %s\r\n
+E#270L(ENTER) = save, (space)(ENTER) = delete, or enter new number:\r\n
+S#270L(ENTER) = save, (space)(ENTER) = delete, or enter new number:\r\n
+G#270L(ENTER) = Speichern, (space)(ENTER) = Loeschen, oder Eingabe neuer Nummer:\r\n
+V#270L(ENTER) = spara, (space)(ENTER) = radera, eller ange nytt nummer:\r\n
+E#271L(ENTER) or (space)(ENTER) = cancel, or enter new number:\r\n
+S#271L(ENTER) or (space)(ENTER) = cancel, or enter new number:\r\n
+G#271L(ENTER) oder (space)(ENTER) = Abbruch, oder Eingabe neuer Nummer:\r\n
+V#271L(ENTER) eller (space)(ENTER) = avbryt, eller ange nytt nummer:\r\n
+E#272LError reading data from set %d.\r\n
+S#272LError reading data from set %d.\r\n
+G#272LFehler beim Lesen der Einstellung %d.\r\n
+V#272LFel vid lÑsning av instÑllning %d.\r\n
+E#273LError closing file for set %d.\r\n
+S#273LError closing file for set %d.\r\n
+G#273LFehler beim Schliessen der Einstellung %d.\r\n
+V#273LFel vid stÑngning av instÑllning %d.\r\n
+E#274LSet %d successfully loaded.\r\n
+S#274LSet %d successfully loaded.\r\n
+G#274LEinstellung %d erfolgreich geladen.\r\n
+V#274LLaddade instÑllning %d utan problem.\r\n
+E#275LError writing data to set %d.\r\n
+S#275LError writing data to set %d.\r\n
+G#275LFehler beim Speichern der Einstellung %d.\r\n
+V#275LFel vid sparande av instÑllning %d.\r\n
+E#276LCurrent list of numbers saved to set %d.\r\n
+S#276LCurrent list of numbers saved to set %d.\r\n
+G#276LAktuelle Telefonliste gespeichert in Einstellung %d.\r\n
+V#276LAktuell telefonlista sparad i instÑllning %d.\r\n
+E#277LPress ENTER to continue...
+S#277LPress ENTER to Scan Planet Surface...
+G#277LDruecke ENTER zum fortfahren...
+V#277LTryck ENTER fîr att fortsÑtta...
+E#278L#Starting Phone List Scan.
+S#278L#Starting Phone List Scan.
+G#278L#Starte Suche in Telefonliste.
+V#278L#Startar sîkning i telefonlista.
+E#279L#Connected to list element %d.
+S#279L#Connected to list element %d.
+G#279L#Verbunden mit Listenelement %d.
+V#279L#Uppkopplad till listelement %d.
+E#280LDebris
+S#280LDebris
+G#280LSchutt
+V#280LSkrÑp
+E#281LLong pkt
+S#281LLong pkt
+G#281LLanges Pkt
+V#281LLÜngt pkt
+E#282L!Ignoring '%s'.
+S#282L!Ignoring '%s'.
+G#282L!Ignoriere '%s'.
+V#282L!Ignorerar '%s'.
+E#283L!Out of disk space.
+S#283L!Out of disk space... Captain.
+G#283L!Festplatte voll.
+V#283L!Slut pÜ diskutrymme.
+E#284LReceiving
+S#284LReceiving
+G#284LEmpfange
+V#284LTar emot
+E#285L!Zmodem Init Problem %s.
+S#285L!Zmodem Init Problem %s.
+G#285L!Zmodem Init-Problem %s.
+V#285L!Zmodem-initieringsproblem %s.
+E#286Lbad position
+S#286Lbad position
+G#286LFalsche Position
+V#286LFelaktig position
+E#287L!Zmodem Recv Problem %s.
+S#287L!Zmodem Recv Problem %s.
+G#287L!Zmodem Empfangsproblem %s.
+V#287L!Zmodem-mottagningsproblem %s.
+E#288L!`brightred`Bad packet at %ld.
+S#288L!`brightred`Bad packet at %ld.
+G#288L!`brightred`Schlechtes Packet bei %ld.
+V#288L!`brightred`Felaktigt paket vid %ld.
+*#289L!Offset=%ld Retries=%d
+*#290L!Offset=%ld Retries=%d (SK: %d)
+E#291L!`brightred`Other end died.
+S#291L!`brightred`Other end died.
+G#291L!`brightred`Andere Seite ist gestorben.
+V#291L!`brightred`Andra sidan dog.
+E#292L!Dropping to one-way xfer.
+S#292L!Dropping to one-way xfer.
+G#292L!Wechsle zu Transfer in jeweils nur einer Richtung.
+V#292L!VÑxlar till envÑgsîverfîring.
+E#293L+Refusing %s.
+S#293L+Refusing %s.
+G#293L+Lehne %s ab.
+V#293L+Avbîjer %s.
+E#294L!Unknown packet type %d.
+S#294L!Unknown packet type %d.
+G#294L!Unbekannter Packet-Typ %d.
+V#294L!OkÑnd pakettyp %d.
+E#295L!`brightred`Session aborted.
+S#295L!`brightred`Session aborted.
+G#295L!`brightred`Verbindung abgebrochen.
+V#295L!`brightred`Session avbruten.
+E#296L#Sending %s.
+S#296L#Sending %s.
+G#296L#Sende %s.
+V#296L#SÑnder %s.
+E#297L!Can't decode file length.
+S#297L!Can't decode file length.
+G#297L!Kann Dateilaenge nicht herausfinden.
+V#297L!Kan inte avkoda fillÑngd.
+E#298L*Finished partial file %s.
+S#298L*Finished partial file %s.
+G#298L*Beende unvollstaendige Datei %s.
+V#298L*Avslutade ofullstÑndig fil %s.
+E#299L*Saving partial file %s.
+S#299L*Saving partial file %s.
+G#299L*Speichere unvollstaendige Datei %s.
+V#299L*Sparar ofullstÑndig fil %s.
+E#300L*Remote can't handle file requests.
+S#300L*Remote can't handle file requests.
+G#300L*Gegenstelle kann keine Filerequests bearbeiten.
+V#300L*FjÑrrsystem kan inte hantera filbegÑran.
+E#301LYou now have BinkleyTerm in DUMB TERMINAL mode.\r\n
+S#301LYou now have BinkleyTerm in DUMB TERMINAL mode.\r\n
+G#301LBinkleyTerm ist jetzt im TERMINAL-Modus.\r\n
+V#301LBinkleyTerm Ñr nu i TERMINAL-lÑge.\r\n
+;
+; Help for dumb terminal.
+;
+E#302LIn DUMB TERMINAL mode the following special keys are enabled:\r\n\r\n
+S#302LIn DUMB TERMINAL mode the following special keys are enabled:\r\n\r\n
+G#302LIm TERMINAL-Modus gilt folgende Tastenbelegung:\r\n\r\n
+V#302LI TERMINAL-lÑge Ñr fîljande specialtangenter aktiva:\r\n\r\n
+E#303LAlt-B   Cycle baud rate              Alt-C   Change communications parameters\r\n
+S#303LAlt-B   Cycle Warp Speed Rate        Alt-C   Change Communications parameters\r\n
+G#303LAlt-B   Wechsle Baudrate             Alt-C   Wechsle COM-Parameter\r\n
+V#303LAlt-B   VÑxla baudhastighet          Alt-C   KommunikationsinstÑllningar\r\n
+E#304LAlt-D   Dial a system                Alt-E   Erase the current screen\r\n
+S#304LAlt-D   Dial a StarFleet System      Alt-E   Erase the Current Screen\r\n
+G#304LAlt-D   Waehle ein System an         Alt-E   Loesche aktuellen Bildschirm\r\n
+V#304LAlt-D   Ring ett system              Alt-E   Tîm skÑrmen\r\n
+E#305LAlt-H   Hang up by dropping DTR      Alt-I   Initialize the modem\r\n
+S#305LAlt-H   Hang up by dropping DTR      Alt-I   Initialize the modem\r\n
+G#305LAlt-H   Auflegen mittels DTR-Low     Alt-I   Initialisiere das Modem\r\n
+V#305LAlt-H   LÑgg pÜ (slÑpp DTR)          Alt-I   Initiera modemet\r\n
+E#306LAlt-J   Jump to Command Shell        Alt-L   Start/stop logging to a file\r\n
+S#306LAlt-J   Jump to Command Shell        Alt-L   Start/stop logging to a file\r\n
+G#306LAlt-J   Springe ins Betriebssystem   Alt-L   Start/Stop LOG-File benutzung\r\n
+V#306LAlt-J   Starta ett kommandoskal      Alt-L   Starta/stoppa loggning\r\n
+E#307LAlt-M   Manually Poll a Node         Alt-P   Cycle Communications port\r\n
+S#307LAlt-M   Manually Poll a Node         Alt-P   Cycle Communications port\r\n
+G#307LAlt-M   Manueller Poll               Alt-P   Wechsle COM-Port\r\n
+V#307LAlt-M   Manuell pollning             Alt-P   Byt COM-port\r\n
+E#308LAlt-R   Redial from a 'scan list'    Alt-S   Send BREAK signal to port\r\n
+S#308LAlt-R   Redial from a 'scan list'    Alt-S   Send BREAK signal to port\r\n
+G#308LAlt-R   WÑhle mithilfe einer Liste   Alt-S   Sende BREAK Signal\r\n
+V#308LAlt-R   Ring frÜn lista              Alt-S   SÑng avbrottssignal\r\n
+E#309LAlt-U   Go to UNATTENDED MAILER mode Alt-V   Show BinkleyTerm version\r\n
+S#309LAlt-U   Go to UNATTENDED MAILER mode Alt-V   Show BinkleyTerm version\r\n
+G#309LAlt-U   Zurueck zum MAILER Modus     Alt-V   Zeige BinkleyTerm Version\r\n
+V#309LAlt-U   ètergÜ till MAILER-lÑge      Alt-V   Visa BinkleyTerm-version\r\n
+E#310LAlt-X   Exit BinkleyTerm             Alt-Y   Call boss node for mail\r\n
+S#310LAlt-X   Exit BinkleyTerm NOW!        Alt-Y   Call Boss Node for Mail\r\n
+G#310LAlt-X   Beende BinkleyTerm           Alt-Y   Rufe Boss Node an\r\n
+V#310LAlt-X   Avsluta BinkleyTerm          Alt-Y   Polla bossnod\r\n
+E#311LPgUp    Send a file (UPLOAD)         PgDn    Receive a file (DOWNLOAD)\r\n
+S#311LPgUp    Send a file (UPLOAD)         PgDn    Receive a file (DOWNLOAD)\r\n
+G#311LPgUp    Datei senden (UPLOAD)        PgDn    Datei empfangen (DOWNLOAD)\r\n
+V#311LPgUp    SÑnd fil (UPLOAD)            PgDn    Ta emot fil (DOWNLOAD)\r\n
+E#312LAlt-F%-2d Macro string '%s'\r\n
+S#312LAlt-F%-2d Macro string '%s'\r\n
+G#312LAlt-F%-2d Makro-String '%s'\r\n
+V#312LAlt-F%-2d MakrostrÑng '%s'\r\n
+E#313L\r\nPress a key to continue...
+S#313L\r\nPress a key to continue...
+G#313L\r\nDruecke eine Taste zum Fortfahren...
+V#313L\r\nTryck en tangent fîr att fortsÑtta...
+;
+; Help for unattended mailer.
+;
+E#314LIn UNATTENDED MAILER mode the following special keys are enabled:\r\n\r\n
+S#314LIn UNATTENDED MAILER mode the following special keys are enabled:\r\n\r\n
+G#314LIm MAILER Modus gilt folgende Tastaturbelegung:\r\n\r\n
+V#314LI MAILER-lÑge Ñr fîljande specialtangenter aktiva:\r\n\r\n
+E#315LC       Make next call (if any) now   Alt-C   Enter Hydra chat mode\r\n
+S#315LC       Make next call (if any) now   Alt-C   Enter Hydra chat mode\r\n
+G#315LC       Mache naechsten Anruf         Alt-C   Beginne Hydra-Chat\r\n
+V#315LC       Utfîr nÑsta anrop             Alt-C   PÜbîrjar Hydra-chat\r\n
+E#316LAlt-B   Blank the screen immediately  Alt-W   Redraw screen\r\n
+S#316LAlt-B   Blank the screen immediately  Alt-W   Redraw screen\r\n
+G#316LAlt-B   Bildschirmschoner sofort an   Alt-W   Bildschirm neu aufbauen\r\n
+V#316LAlt-B   Startar skÑrmslÑckaren        Alt-W   Ritar om skÑrmen\r\n
+E#317LAlt-I   Initialize the modem          Alt-A   Send answer string to modem\r\n
+S#317LAlt-I   Initialize the modem          Alt-A   Send answer string to modem\r\n
+G#317LAlt-I   Initialisiere das Modem       Alt-A   Sende Antwortstring an Modem\r\n
+V#317LAlt-I   Initierar modemet             Alt-A   SÑnd svarsstrÑng till modemet\r\n
+E#318LAlt-M   Manually POLL a node          Alt-Y   Poll Boss Node\r\n
+S#318LAlt-M   Manually POLL a node          Alt-Y   Poll Boss Node\r\n
+G#318LAlt-M   Manuelles POLLEN              Alt-Y   Polle Boss-Node an\r\n
+V#318LAlt-M   Manuell POLLning av nod       Alt-U   Polla bossnod\r\n
+E#319LAlt-Q   Quit the current event        Alt-R   Restart nonforced events\r\n
+S#319LAlt-Q   Quit the current event        Alt-R   Restart nonforced events\r\n
+G#319LAlt-Q   Abbruch des aktuellen Events  Alt-R   Neustart nichterzwungener Events\r\n
+V#319LAlt-Q   Avslutar aktuell syst.hÑnd.   Alt-R   Starta om otvingade event\r\n
+E#320LAlt-T   Shift to DUMB TERMINAL mode   Alt-X   Exit BinkleyTerm, errorlevel 1\r\n
+S#320LAlt-T   Shift to DUMB TERMINAL mode   Alt-X   Exit BinkleyTerm, errorlevel 1\r\n
+G#320LAlt-T   Wechselt zum TERMINAL-Modus   Alt-X   Beendet BinkleyTerm, errorlevel 1\r\n
+V#320LAlt-T   GÜr till TERMINAL-lÑge        Alt-X   Avsluta BinkleyTerm felnivÜ 1\r\n
+E#321LAlt-J   Push to Command Shell         Alt-Z   Zoom Outbound window\r\n
+S#321LAlt-J   Push to Command Shell         Alt-Z   Zoom Outbound window\r\n
+G#321LAlt-J   Springe ins Betriebssystem    Alt-Z   Ausgangsfach Zoomen\r\n
+V#321LAlt-J   Starta ett kommandoskal       Alt-Z   Zooma utlÜdan\r\n
+E#322LAlt-O   Outbound rescan               Alt-D   Clear \"Today at a Glance\"\r\n
+S#322LAlt-O   Outbound rescan               Alt-D   Clear \"Today at a Glance\"\r\n
+G#322LAlt-O   Durchsuchen des Outbound      Alt-D   Loesche \"Tagesueberblick\"\r\n
+V#322LAlt-O   OmlÑsning av utlÜdan          Alt-D   Rensar \"Dagsîverblick\"\r\n
+E#323LAlt-S   Send file(s) to a node        Alt-G   Get(Request) file(s) from node\r\n
+S#323LAlt-S   Send file(s) to a node        Alt-G   Get(Request) file(s) from node\r\n
+G#323LAlt-S   Sende Datei(en) an Node       Alt-G   Get(Requeste) Dateien von Node\r\n
+V#323LAlt-S   SÑnd fil(er) till nod         Alt-G   BegÑr filer frÜn nod\r\n
+E#324LAlt-K   Kill all mail to a node       Alt-P   Queue a poll to node\r\n
+S#324LAlt-K   Kill all mail to a node       Alt-P   Queue a poll to node\r\n
+G#324LAlt-K   Loesche Nachrichten an Node   Alt-P   Lege Poll fuer Node an\r\n
+V#324LAlt-K   Radera all post till en nod   Alt-P   Kîa poll fîr nod\r\n
+E#325LAlt-L   Toggle debug mode             Alt-N   Event behaviour setup\r\n
+S#325LAlt-L   Toggle debug mode             Alt-N   Event behaviour setup\r\n
+G#325LAlt-L   Debugmodus ein/aus            Alt-N   Event-Einstellungen\r\n
+V#325LAlt-L   VÑxla avlusningslÑge          Alt-N   SystemeventinstÑllningar\r\n
+*#326LAlt-H   History screen                Ctrl-T  Stats screen\r\n
+*#327LAlt-V   Toggle Modem Activity Window  Ctrl-R  Recent activity search\r\n
+;
+E#328LPGUP/PGDN, UP/DOWN ARROW, HOME, and END scroll the 'Pending' window\r\n
+S#328LPGUP/PGDN, UP/DOWN ARROW, HOME, and END scroll the 'Pending' window\r\n
+G#328LBild/Bild, /, Pos1, und Ende scrollt das 'Pending' Fenster\r\n
+V#328LPgUp/PgDn, ^X/^Y, Home, och End skrollar 'VÑntande'-fînstret\r\n
+E#329LAlt-E   Execute '%s' as message editor\r\n
+S#329LAlt-E   Execute '%s' as message editor\r\n
+G#329LAlt-E   Starte '%s' als Nachrichteneditor\r\n
+V#329LAlt-E   Startar '%s' som breveditor\r\n
+E#330LAlt-F%-2d Execute '%s'\r\n
+S#330LAlt-F%-2d Execute '%s'\r\n
+G#330LAlt-F%-2d Starte '%s'\r\n
+V#330LAlt-F%-2d Startar '%s'\r\n
+E#331L\r\n
+S#331L\r\n
+G#331L\r\n
+V#331L\r\n
+E#332L\r\n
+S#332L\r\n
+G#332L\r\n
+V#332L\r\n
+;
+; Linux:
+;
+*#333?LNXL\nCouldn't initialize '%s' (%d). Maybe the device is locked\n
+*#334?LNXLor you don't have r/w permission to it or /var/lock/. Look at the\n
+*#335?LNXLlines above and/or contact your administrator.\n\n
+;
+; The following 3-line message is system dependent.
+; For OS/2 the message should look like:
+;
+E#333?OS2LCouldn't initialize '%s%d'. Check config.sys for COM.SYS\r\n
+E#334?OS2Lor make sure the network is started if you are using a modem\r\n
+E#335?OS2Lon another computer.\r\n
+S#333?OS2LCouldn't initialize '%s%d'. Check config.sys for COM.SYS\r\n
+S#334?OS2Lor make sure the network is started if you are using a modem\r\n
+S#335?OS2Lon another computer.\r\n
+G#333?OS2LKonnte '%s%d' nicht initialisieren. Pruefe CONFIG.SYS auf COM.SYS\r\n
+G#334?OS2Loder vergewissere Dich, dass das Netzwerk gestartet ist wenn Du ein Modem\r\n
+G#335?OS2Lauf einen anderen Rechner benutzt.\r\n
+V#333?OS2LKunde inte initiera '%s%d'. Kontrollera CONFIG.SYS angÜende COM.SYS\r\n
+V#334?OS2Leller se till att nÑtverket Ñr startat om du anvÑnder ett modem\r\n
+V#335?OS2LpÜ en annan dator.\r\n
+;
+; Following is the DOS version of the message:
+;
+E#333?DOSLI'm sorry, there doesn't appear to be a FOSSIL driver loaded.\r\n
+E#334?DOSLBinkleyTerm requires a FOSSIL driver. Please take care of this before\r\n
+E#335?DOSLattempting to run BinkleyTerm again.\r\n
+S#333?DOSLI'm sorry, there doesn't appear to be a FOSSIL driver loaded.\r\n
+S#334?DOSLBinkleyTerm requires a FOSSIL driver. Please take care of this before\r\n
+S#335?DOSLattempting to run BinkleyTerm again.\r\n
+G#333?DOSLKein Fossil-Treiber geladen.\r\n
+G#334?DOSLBinkleyTerm benoetigt einen FOSSIL-Treiber. Bitte beachte das vor\r\n
+G#335?DOSLdem naechsten Startversuch von BinkleyTerm.\r\n
+V#333?DOSLDu verkar inte ha nÜgon FOSSIL-drivrutin installerad.\r\n
+V#334?DOSLBinkleyTerm krÑver en FOSSIL-drivrutin. Var vÑnlig ordna detta innan\r\n
+V#335?DOSLdu fîrsîker kîra BinkleyTerm igen.\r\n
+;
+; For Windows the message should look like:
+;
+E#333?W32LCouldn't initialize %s%d. Make sure the port isn't in use\r\n
+E#334?W32Lby another process, that you are permitted access to it, and if\r\n
+E#335?W32Lyou are using a modem on another computer make sure it's online.\r\n
+S#333?W32LCouldn't initialize %s%d. Make sure the port isn't in use\r\n
+S#334?W32Lby another process, that you are permitted access to it, and if\r\n
+S#335?W32Lyou are using a modem on another computer make sure it's online.\r\n
+G#333?W32LKonnte den %s%d nicht inialisieren. Achte darauf das der Port\r\n
+G#334?W32Lnicht von einer anderen Anwendung benutzt wird. Du solltest exclusiven\r\n
+G#335?W32LZugriff auf das Geraet haben. Ist das Modem eingeschaltet?\r\n
+V#333?W32LKunde inte initiera %s%d. Kontrollera att porten inte anvÑnds\r\n
+V#334?W32Lav en annan process, att du har rÑtt att anvÑnda den, och ifall\r\n
+V#335?W32Ldu anvÑnder ett modem pÜ en annan dator, se till att det Ñr inkopplat.\r\n
+;
+; This illustrates the use of the ? construction in the language file.
+;
+E#336L!Could not create temp flagfile %s.
+S#336L!Could not create temp flagfile %s.
+G#336L!Kann temporaeres Flagfile %s nicht anlegen.
+V#336L!Kan inte skapa temporÑr flaggfil %s.
+E#337L>Created flagfile %s.
+S#337L>Created flagfile %s.
+G#337L>Erzeuge Flagfile %s.
+V#337L>Skapade flaggfil %s.
+E#338L Other node sending to %s.
+S#338L Other node sending to %s.
+G#338L Anderer Node sendet an %s.
+V#338L Annan lina sÑnder till %s.
+E#339L!Erroneous attempt to clear flag for %s.
+S#339L!Erroneous attempt to clear flag for %s.
+G#339L!Fehlerhafter Versuch ein Flagfile fuer %s zu loeschen.
+V#339L!Felaktigt fîrsîk att radera flagga fîr %s.
+E#340L>Deleted flagfile %s.
+S#340L>Deleted flagfile %s.
+G#340L>Flagfile %s geloescht.
+V#340L>Flaggfil %s raderad.
+E#341L!Unable to delete flag file %s.
+S#341L!Unable to delete flag file %s.
+G#341L!Nicht moeglich Flagfile %s zu loeschen.
+V#341L!Kan inte radera flaggfil fîr %s.
+E#342L!Exceeded file request byte limit.
+S#342L!Exceeded file request byte limit.
+G#342L!Filerequest Mengenbegrenzung ueberschritten.
+V#342L!FilbegÑransbytegrÑns îverskriden.
+E#343L Nodelist index refresh necessary.
+S#343L Nodelist index refresh necessary.
+G#343L Nodelisten-Index muss neu angelegt werden!
+V#343L Nodlistindex mÜste omskapas.
+E#344LCouldn't set SIGINT.
+S#344LCouldn't set SIGINT.
+G#344LKann SIGINT nicht setzen.
+V#344LKan inet sÑtta SIGINT.
+E#345L Modem protocol negotiation filtered.
+S#345L Modem protocol negotiation filtered.
+G#345L Modem Protokoll-Aushandlung gefiltert.
+V#345L Modemprotokollfîrhandling filtrerad.
+E#346LEvent %2d (%s) starts in %d hrs %02d min.
+S#346LEvent %2d (%s) starts in %d hrs %02d min.
+G#346LEvent %2d (%s) beginnt in %d Std %02d Min.
+V#346LEvent %2d (%s) bîrjar om %dh %02dmin.
+E#347LEvent %2d (%s) is running.
+S#347LEvent %2d (%s) is running.
+G#347LEvent %2d (%s) laeuft.
+V#347LEvent %2d (%s) aktiv.
+*#348LNetmail:
+E#349L*Session with %s Time: %02ld:%02ld:%02ld Cost: $%ld.%02ld
+S#349L*Session with %s Time: %02ld:%02ld:%02ld Cost: $%ld.%02ld
+G#349L*Verbindung mit %s Dauer: %02ld:%02ld:%02ld Kosten: $%ld.%02ld
+V#349L*Session mot %s Tid: %02ld.%02ld.%02ld Kostnad: %ld,%02ld
+E#350L!Exceeded file request time limit.
+S#350L!Exceeded file request time limit.
+G#350L!Filerequest Zeitbegrenzung ueberschritten.
+V#350L!FilbegÑranstidsgrÑns îverskriden.
+E#351L'%s' has a bad Queue Size code.\n
+S#351L'%s' has a bad Queue Size code.\n
+;
+; Kîstlich:
+;  '%s' hat falsche Warteschlangengroesse.\n
+; Eigentlich mÅsste es ja heissen:
+;  '%s' hat falschen Warteschlangengroessencode.\n
+; Aber sagen wir doch einfach:
+;
+G#351L'%s' hat falschen 'Q'-Wert.\n
+V#351L'%s' har felaktig kîstorlekskod.\n
+E#352LUnable to allocate space for event records, exiting!\r\n
+S#352LUnable to allocate space for event records, exiting!\r\n
+G#352LNicht genug Speicher fÅr Event-Daten. Abbruch!\r\n
+V#352LKan inte allokera minne fîr systemeventdata, avslutar!\r\n
+E#353L+begin, %s
+S#353L+begin, %s
+G#353L+starte, %s
+V#353L+Start, %s
+E#354L+end, %s
+S#354L+end, %s
+G#354L+beende, %s
+V#354L+Slut, %s
+E#355LPoll a Node
+S#355LPoll a Node
+G#355LPolle einen Node an
+V#355LPollar en nod
+E#356LPoll:\b
+S#356LPoll:\b
+G#356LPolle:\b
+V#356LPollar:\b
+E#357L!No common session protocol, attempting FTS-0001.
+S#357L!No common session protocol, attempting FTS-0001.
+G#357L!Kein gemeinsames Verbindungsprotokoll, versuche FTS-0001.
+V#357L!Gemensamt sessionsprotokoll saknas, fîrsîker FTS-0001.
+E#358L:Spawning external mailer.
+S#358L:Spawning external mailer.
+G#358L:Spawning zu externem Mailer.
+V#358L:Startar extern mailer i undersession.
+E#359L:Returned from external mailer.
+S#359L:Returned from external mailer.
+G#359L:Zurueck vom externen Mailer.
+V#359L:èter frÜn extern mailer.
+E#360L#Forced exit - errorlevel %u.
+S#360L#Forced exit - errorlevel %u.
+G#360L#Erzwungener Abbruch - Errorlevel %u.
+V#360L#PÜtvingat avslut - felnivÜ %u.
+*#361Lunused361
+;
+; This is the prompt in outbound.c. When you change the letters
+; For Crash, Hold, Direct and Normal, change the appropriate letters
+; in the following string.
+;
+*#362LCHDN
+*#363Lunused363
+*#364Lunused364
+E#365L>Processing: %s (%s)
+S#365L>Processing: %s (%s)
+G#365L>Bearbeite: %s (%s)
+V#365L>Bearbetar: %s (%s)
+E#366L Scanning %ld files (step %d) in %s.
+S#366L Scanning %ld files (step %d) in %s.
+G#366L Suche %ld Files (step %d) in %s.
+V#366L Sîker %ld filer (steg %d) i %s.
+E#367L!Security mismatch: %d < %d
+S#367L!Security mismatch: %d < %d
+G#367L!Sicherheitsfehler: %d < %d
+V#367L!ètkomstfel: %d < %d
+E#368LSending EMSI     \b
+S#368LSending EMSI     \b
+G#368LSende EMSI       \b
+V#368LSÑnder EMSI      \b
+E#369LReceiving EMSI   \b
+S#369LReceiving EMSI   \b
+G#369LEmpfange EMSI    \b
+V#369LTar emot EMSI    \b
+E#370LWaiting for EMSI \b
+S#370LWaiting for EMSI \b
+G#370LWarte auf EMSI   \b
+V#370LVÑntar pÜ EMSI   \b
+E#371LEMSI-Recv
+S#371LEMSI-Recv
+G#371LEMSI-Empfang
+V#371LEMSI-mottagning
+E#372LEMSI-Send
+S#372LEMSI-Send
+G#372LEMSI-Senden
+V#372LEMSI-sÑndning
+E#373L>EMSI-Packet incomplete.
+S#373L>EMSI-Packet incomplete.
+G#373L>EMSI-Packet unvollstaendig.
+V#373L>EMSI-paket ofullstÑndigt.
+E#374L?Packet doesn't start with 'EMSI'.
+S#374L?Packet doesn't start with 'EMSI'.
+G#374L?Packet beginnt nicht mit 'EMSI'.
+V#374L?Paket bîrjar inte med 'EMSI'.
+E#375L:Exit after FAX reception with errorlevel %d.
+S#375L:Exit after FAX reception with errorlevel %d.
+G#375L:Ende nach Faxempfang mit Errorlevel %d.
+V#375L:LÑmnar med felnivÜ %d vid faxmottagning.
+E#376LPlease wait...     \b
+S#376LPlease wait...     \b
+G#376LBitte warten...    \b
+V#376LVar god vÑnta...   \b
+E#377L Address                          Files     Bytes Age Calls   Bad Status
+S#377L Address                          Files     Bytes Age Calls   Bad Status
+G#377L Adresse                          Dateien   Groe  Alt Anrufe  Bad Status
+V#377L Adress                           Filer      Byte èld Samtal  Fel Status
+E#378LZoomed Pending Outbound Mail
+S#378LZoomed Pending Outbound Mail
+G#378LAusgangsfach im Grossformat
+V#378LZoomad utlÜda
+E#379LNode is busy...          \b
+S#379LNode is busy...          \b
+G#379LNode ist in Bearbeitung...
+V#379LNod Ñr upptagen...       \b
+E#380LChange Mail for %s to %s
+S#380LChange Mail for %s to %s
+G#380LAendere Nachrichten fuer %s auf %s
+V#380Léndrar post fîr %s till %s
+E#381LStop mail for %s
+S#381LStop mail for %s
+G#381LStoppt die Nachrichten fuer %s
+V#381LStoppar post fîr %s
+E#382LDelete call count for %s
+S#382LDelete call count for %s
+G#382LLoesche Anrufzaehler fuer %s
+V#382LRaderar samtalsrÑknare fîr %s
+E#383LPoll Node
+S#383LPoll StarFleet Node
+G#383LPolle Node
+V#383LPollar nod
+E#384LDelete requests for %s
+S#384LDelete requests for %s
+G#384LLoesche Requests fuer %s
+V#384LRaderar filbegÑran fîr %s
+E#385LChange Destination
+S#385LChange Destination
+G#385LAendere Zieladresse
+V#385Léndra mottagaradress
+E#386LAppending %s...
+S#386LAppending %s...
+G#386L%s wird angefuegt.
+V#386LLÑgger till till %s.
+E#387LRenaming %s...\b
+S#387LRenaming %s...\b
+G#387L%s wird umbenannt.\b
+V#387LDîper om %s...\b
+E#388LError appending %s!
+S#388LError appending %s!
+G#388LFehler beim Anhaengen von %s!
+V#388LFel vid tillÑggning av %s!
+E#389LDeleted old call count!
+S#389LDeleted old call count!
+G#389LLoesche alten Anrufzaehler!
+V#389LRaderar gammal samtalsrÑknare!
+E#390LMarking as a no-send!
+S#390LMarking as a no-send!
+G#390LMarkiere als 'nicht versenden'!
+V#390LMarkerar 'ingen sÑndning'!
+E#391LCant' open $$5 file!
+S#391LCant' open $$5 file!
+G#391LKann $$5-Datei nicht oeffnen!
+V#391LKan inte îppna $$5-fil!
+*#392Lunused392
+*#393Lunused393
+*#394Lunused394
+E#395LCan't delete requests!
+S#395LCan't delete requests!
+G#395LKann Requests nicht loeschen!
+V#395LKan inte radera filbegÑran!
+E#396LRequests deleted!
+S#396LRequests deleted!
+G#396LRequests geloescht!
+V#396LFilbegÑran raderad!
+E#397LNew Address:
+S#397LNew Address:
+G#397LNeue Adresse:
+V#397LNy adress:
+E#398Lmail attach
+S#398Lmail attach
+G#398LNachricht angehaengt
+V#398Lpost bifogad
+*#399Lunused399
+E#400Lmail packet
+S#400Lmail packet
+G#400LNachrichten-Paket
+V#400Lpostpaket
+E#401LCrash, Direct, Normal, Quit (C/D/N/Q)?
+S#401LCrash, Direct, Normal, Quit (C/D/N/Q)?
+G#401LCrash, Direkt, Normal oder Q fuer Ende (C/D/N/Q)?
+V#401LCrash, Direct, Normal, Quit(avsluta) (C/D/N/Q)?
+E#402LCrash, Hold, Direct, Normal, Quit (C/H/D/N/Q)?
+S#402LCrash, Hold, Direct, Normal, Quit (C/H/D/N/Q)?
+G#402LCrash, Halten, Direkt, Normal oder Q fuer Ende (C/H/D/N/Q)?
+V#402LCrash, Hold, Direct, Normal, Quit(avsluta) (C/H/D/N/Q)?
+E#403LMore requests? (Y/N) (O)ther node
+S#403LMore requests? (Y/N) (O)ther node
+G#403LMehr Requests? (J/N) (O)ther node
+V#403LBegÑra fler? (J/N) (O)Annan nod
+E#404LMore sends? (Y/N) (O)ther node
+S#404LMore sends? (Y/N) (O)ther node
+G#404LMehr Sends? (J/N) (O)Anderen Node
+V#404LSÑnda fler? (J/N) (O)Annan nod
+E#405LA           Readdress mail             [Alt/] G   Get (request) File(s)
+S#405LA           Readdress mail             [Alt/] G   Get (request) File(s)
+G#405LA           Zieladresse aendern        [Alt/] G   Get (request) File(s)
+V#405LA           Omadressera post           [Alt/] G   BegÑr fil(er)
+E#406LC/D/H/N     Crash/Direct/Hold/Normal   [Alt/] S   Send File(s)
+S#406LC/D/H/N     Crash/Direct/Hold/Normal   [Alt/] S   Send File(s)
+G#406LC/D/H/N     Crash/Direkt/Halten/Normal [Alt/] S   Sende File(s)
+V#406LC/D/H/N     Crash/Direct/Hold/Normal   [Alt/] S   SÑnd fil(er)
+E#407LI           Reset Dial Tries           [Alt/] P   Poll a node
+S#407LI           Reset Dial Tries           [Alt/] P   Poll a node
+G#407LI           Loesche Anrufzaehler       [Alt/] P   Polle Node an
+V#407LI           Radera samtalsfîrsîk       [Alt/] P   Polla nod
+E#408LR           Kill requests              T          Stop mail
+S#408LR           Kill requests              T          Stop mail
+G#408LR           Loesche Requests           T          Stoppe Nachricht
+V#408LR           Radera filbegÑran          T          Stoppa post
+E#409LK           Kill all mail to node      Alt-I      Nodelist info
+S#409LK           Kill all mail to node      Alt-I      Nodelist info
+G#409LK           Loesche alles fuer Node    Alt-I      Nodelisten info
+V#409LK           Radera all post till nod   Alt-I      Nodlisteinformation
+E#410L                                       Alt-E      Set/Reset runtime flags
+S#410L                                       Alt-E      Set/Reset runtime flags
+G#410L                                       Alt-E      Verbindungsflags editieren
+V#410L                                       Alt-E      SÑtt/nollstÑll flaggor
+E#411LPGUP/PGDN, UP/DOWN ARROW, HOME, and END scroll window
+S#411LPGUP/PGDN, UP/DOWN ARROW, HOME, and END scroll window
+G#411LBild/Bild, /, Pos1, und Ende scrollt das Fenster
+V#411LPgUp/PgDn, ^X/^Y, Home, och End skrollar fînstret
+E#412LCannot re-open costfile.
+S#412LCannot re-open costfile.
+G#412LKann Kosten-Datei nicht wieder oeffnen.
+V#412LKan inte Üterîppna kostnadsfilen.
+E#413L Received: %d/%ldK Sent: %d/%ldK Total: %d/%ldK CPS: %ld
+S#413L Received: %d/%ldK Sent: %d/%ldK Total: %d/%ldK CPS: %ld
+G#413L Bekommen: %d/%ldK Gesendet: %d/%ldK Summe: %d/%ldK CPS: %ld
+V#413L Mottaget: %d/%ldK SÑnt: %d/%ldK Summa: %d/%ldK CPS: %ld
+E#414L*Seconds: %ld  Tariff: %d  Fee: %ld  RFee: %ld  System: %s
+S#414L*Seconds: %ld  Tariff: %d  Fee: %ld  RFee: %ld  System: %s
+G#414L*Sekunden: %ld Tarif: %d Kosten: %ld AKosten: %ld System: %s
+V#414L*Sekunder: %ld  Tariff: %d  Kostnad: %ld  Deras: %ld  System: %s
+E#415L:Inbound request file %s.REQ received as %s.R%02x.
+S#415L:Inbound request file %s.REQ received as %s.R%02x.
+G#415L:Eingehendes Requestfile %s.REQ umbenannt in %s.R%02x.
+V#415L:Inkommande filbegÑran %s.REQ namnÑndrad till %s.R%02x.
+E#416L\r**Hydra session initiated (AutoStart).\r\n
+S#416L\r**Hydra session initiated (AutoStart).\r\n
+G#416L\r**Hydra session gestartet (AutoStart).\r\n
+V#416L\r**Hydrasession startad (autostart).\r\n
+E#417L\r**Hydra session finished.\r\n
+S#417L\r**Hydra session finished.\r\n
+G#417L\r**Hydra session beendet.\r\n
+V#417L\r**Hydrasession avslutar.\r\n
+E#418L*Start external mail session with %s.
+S#418L*Start external mail session with %s.
+G#418L*Starte externe Mail-Session mit %s.
+V#418L*Startar extern postsession med %s.
+E#419L*End external mail session with %s.
+S#419L*End external mail session with %s.
+G#419L*Beende externe Mail-Session mit %s.
+V#419L*Avslutar extern postsession med %s.
+E#420L:Shelling after FAX with ErrLevelShell %d.
+S#420L:Shelling after FAX with ErrLevelShell %d.
+G#420L:Shelling nach FAX mit ErrLevelShell %d.
+V#420L:Anropar FAX-program i skal med ErrLevelShell %d.
+E#421L:Shelling after compressed mail with ErrLevelShell %d.
+S#421L:Shelling after compressed mail with ErrLevelShell %d.
+G#421L:Shelling nach gepackter Mail mit ErrLevelShell %d.
+V#421L:Startar skal med ErrLevelShell %d efter inkommen komprimerad post.
+E#422L:Shelling after file extension \'%s\' with ErrLevelShell %d.
+S#422L:Shelling after file extension \'%s\' with ErrLevelShell %d.
+G#422L:Shelling nach Dateiendung \'%s\' mit ErrLevelShell %d.
+V#422L:Startar skal fîr filtyp \'%s\' med ErrLevelShell %d.
+E#423L:Shelling after mail with ErrLevelShell %d.
+S#423L:Shelling after mail with ErrLevelShell %d.
+G#423L:Shelling nach Mail mit ErrLevelShell %d.
+V#423L:Startar skal med ErrLevelShell %d efter inkommen post.
+E#424L:Starting session for ErrLevelShell %d.
+S#424L:Starting session for ErrLevelShell %d.
+G#424L:Starte Session fuer ErrLevelShell %d.
+V#424L:Startar session fîr ErrLevelShell %d.
+E#425L:Returning from ErrLevelShell.
+S#425L:Returning from ErrLevelShell.
+G#425L:Zurueck von ErrLevelShell.
+V#425L:èter efter ErrLevelSehell.
+E#426L>Could not open %s for scanning.
+S#426L>Could not open %s for scanning.
+G#426L>Konnte %s nicht zum Scannen oeffnen.
+V#426L>Kunde inte îppna %s fîr avsîkning.
+E#427L!Seek error scanning %s.
+S#427L!Seek error scanning %s.
+G#427L!Seek-Fehler beim Scannen von %s.
+V#427L!Sîkfel vid avsîkning av %s.
+E#428L!Read error scanning %s.
+S#428L!Read error scanning %s.
+G#428L!Lese-Fehler beim Scannen von %s.
+V#428L!LÑsfel vid avsîkning av %s.
+E#429L!Trashed header found while scanning %s.
+S#429L!Trashed header found while scanning %s.
+G#429L!Muell-Header beim Scannen gefunden %s.
+V#429L!Skadat huvud funnet vid sîkning %s.
+E#430L#Shell at start of event with ErrLevelShell %d.
+S#430L#Shell at start of event with ErrLevelShell %d.
+G#430L#Shell am Anfang des Events mit ErrLevelShell %d.
+V#430L#Startar skal med ErrLevelShell %d vid bîrjan av systemevent.
+E#431LERR: ErrLevelShell: number %d out of range 1 - 255.\n
+S#431LERR: ErrLevelShell: number %d out of range 1 - 255.\n
+G#431LERR: ErrLevelShell: Nummer %d ausserhalb von 1 - 255.\n
+V#431LERR: ErrLevelShell: nummer %d utanfîr 1 - 255.\n
+E#432L:Dialing AltNumber %s (%s)
+S#432L:Dialing AltNumber %s (%s)
+G#432L:Waehle AltNumber %s (%s)
+V#432L:Ringer AltNumber %s (%s)
+E#433LPrimary number missing
+S#433LPrimary number missing
+G#433LPrimaere Nummer fehlt
+V#433LPrimÑrt nummer saknas
+E#434LAlternate number missing
+S#434LAlternate number missing
+G#434LAlternative Nummer fehlt
+V#434LAlternativt nummer saknas
+E#435L#Forced shell - errorlevel %u.
+S#435L#Forced shell - errorlevel %u.
+G#435L#Erzwungene Shell mit Errorlevel %u.
+V#435L#PÜtvingad start av skal med felnivÜ %u.
+E#436LNo environment variable TASK defined (use e.g.: BT32.EXE TASK=1). Aborting.\n
+S#436LNo environment variable TASK defined (use e.g.: BT32.EXE TASK=1). Aborting.\n
+G#436LKeine Environment-Variable TASK definiert (z.B.: BT32.EXE TASK=1). Abbruch.\n
+V#436LMiljîvariabeln TASK ej definierad (ex.: BT32.EXE TASK=1). Avbryter.\n
+E#437L:Synchronizing my clock to %02d/%02d/%02d %02d:%02d:%02d.
+S#437L:Synchronizing my clock to %02d/%02d/%02d %02d:%02d:%02d.
+G#437L:Synchronisiere meine Uhr auf %02d/%02d/%02d %02d:%02d:%02d.
+V#437L:Synkroniserar min klocka till %02d/%02d/%02d %02d.%02d.%02d.
+E#438L:Acceptance of %s. 2nd call within %ld s. [%s TRUE]
+S#438L:Acceptance of %s. 2nd call within %ld s. [%s TRUE]
+G#438L:Akzeptanz von %s. 2ter Anruf innerhalb %ld s. [%s TRUE]
+V#438L:Acceptans av %s. Andra anrop inom %lds. [%s SANN]
+E#439L:No acceptance of %s. KB Hold: %ld < min. %ld. [%s FALSE]
+S#439L:No acceptance of %s. KB Hold: %ld < min. %ld. [%s FALSE]
+G#439L:Keine Akzeptanz von %s. KB Hold: %ld < min. %ld. [%s FALSE]
+V#439L:Ingen acceptans av %s. VÑntande KB: %ld < min. %ld. [%S FALSK]
+E#440L:Acceptance of %s. KB Hold: %ld >= min. %ld. [%s TRUE]
+S#440L:Acceptance of %s. KB Hold: %ld >= min. %ld. [%s TRUE]
+G#440L:Akzeptanz von %s. KB Hold: %ld >= min. %ld. [%s TRUE]
+V#440L:Acceptans av %s. VÑntande KB: %ld >= min. %ld. [%s SANN]
+E#441L:Invoking SRIF ERP: %s
+S#441L:Invoking SRIF ERP: %s
+G#441L:Rufe SRIF-ERP auf: %s
+V#441L:Startar SRIF-ERP: %s
+E#442L:Accepting call. [Total acceptance = TRUE]
+S#442L:Accepting call. [Total acceptance = TRUE]
+G#442L:Akzeptiere Anrufer. [Gesamt-Akzeptanz = TRUE]
+V#442L:Accepterar samtal. [Totalacceptans = SANN]
+E#443L:Rejecting call. [Total acceptance = FALSE]
+S#443L:Rejecting call. [Total acceptance = FALSE]
+G#443L:Lehne Anrufer ab. [Gesamt-Akzeptanz = FALSE]
+V#443L:Avbîjer samtal. [Totalacceptans = FALSK]
+E#444L:Acceptance of %s. First call. [%s TRUE]
+S#444L:Acceptance of %s. First call. [%s TRUE]
+G#444L:Akzeptanz von %s. Erster Anruf. [%s TRUE]
+V#444L:Acceptans av %s. Fîrsta samtal. [%s SANN]
+E#445L*Call rejected.
+S#445L*Call rejected.
+G#445L*Ruf abgewiesen.
+V#445L*Samtal avbîjt.
+E#446L#%s is write protected.
+S#446L#%s is write protected.
+G#446L#%s ist schreibgeschuetzt.
+V#446L#%s Ñr skrivskyddad.
+E#447L Local: %s\b
+S#447L Local: %s\b
+G#447L Lokal: %s\b
+V#447L HÑr: %s\b
+E#448L Remote: %s\b
+S#448L Remote: %s\b
+G#448L Fern: %s\b
+V#448L DÑr: %s\b
+*#449L ???
+*#450LModem Activity
+E#451L:Flagfile %s found and deleted.
+S#451L:Flagfile %s found and deleted, Sir.
+G#451L:Flagfile %s gefunden und gelîscht.
+V#451L:Flagfile %s found and deleted.
+*#452Lunused452
+*#453Lunused453
+*#454LYooHoo
+*#455LYooHoo/2u2
+*#456LEMSIsend
+*#457LEMSIwait
+*#458LEMSIrecv
+*#459LEMSIrcvd
+*#460LProtcol:
+*#461LxHydra
+*#462LExtern
+*#463LFTS-1
+*#464LSession:
+*#465LEMSI
+*#466LHydra
+*#467LJanus
+*#468LZedZap
+*#469LZedZip
+*#470LDTE:
+*#471LOFFLINE
+*#472LSession
+*#473LDCE:
+*#474LXmodem
+*#475Lunused475
+*#476Lunused476
+*#477Lunused477
+*#478Lunused478
+*#479Lunused479
+E#480LFilename to Get !Password $Size    Flavour (Crash,Direct,Norm,Quit)
+S#480LFilename to Get !Password $Size    Flavour (Crash,Direct,Norm,Quit)
+G#480LRequestfilename !Passwort $Groesse Art (Crash,Direkt,Normal,Quit)
+V#480LBegÑranfilnamn  !Lîsenord $Storlek Typ (Crash,Direct,Normal,Quit)
+E#481L Select a nodeentry [Alt-I for info]
+S#481L Select a nodeentry [Alt-I for info]
+G#481L Nodeeintrag auswaehlen [Alt-I fÅr Infos]
+V#481L VÑlj en nodpost [Alt-I fîr info]
+E#482LSysop name                 Address           Flag  Speed  Mdm  Pwd
+S#482LSysop name                 Address           Flag  Speed  Mdm  Pwd
+G#482LSysopname                  Adresse           Flag  Baud   Mdm  PW\b
+V#482LSysopnamn                  Adress            Flag. Bps    Mdm  Lîs
+E#483L - System not found!
+S#483L - System not found!
+G#483L - System nicht gefunden!
+V#483L - System ej funnet!
+E#484LShould I really use [%s] ?
+S#484LShould I really use [%s] ?
+G#484LSoll ich wirklich [%s] benutzen ?
+V#484LSka jag verkligen anvÑnda [%s] ?
+*#485Lunused485
+*#486Lunused486
+*#487Lunused487
+*#488LDialing%3d
+*#489LAnswer%4d
+E#490LRescanning
+S#490LRescanning
+G#490LRescanne
+V#490LOmlÑsning
+E#491L:Rescanning outbound
+S#491L:Rescanning outbound
+G#491L:Ausgangsfach wird neu gelesen
+V#491L:OmlÑsning av utlÜdan
+E#492L:Rejecting human caller.
+S#492L:Rejecting human caller.
+G#492L:Weise Mailbox-Benutzer ab.
+V#492L:Avvisar BBS-samtal.
+E#493L:Invalid definition of Cost Event (!=...).
+S#493L:Invalid definition of Cost Event (!=...).
+G#493L:Ungueltige Kosten-Event-Definition (!=...).
+V#493L:Ogiltig kostnadseventdefinition (!=...).
+E#494LReading
+S#494LReading
+G#494LLese
+V#494LLÑser
+E#495L:Reading outbound dump.
+S#495L:Reading outbound dump.
+G#495L:Lese Outbound-Dump.
+V#495L:LÑser utlÜdedumpning.
+E#496L'%s' has an invalid event name field.\n
+S#496L'%s' has an invalid event name field.\n
+G#496L'%s' hat ein ungueltiges Event-Namens-Feld.\n
+V#496L'%s' har oglitigt eventnamnsfÑlt.\n
+E#497L'%s' has invalid Lx event.\n
+S#497L'%s' has invalid Lx event.\n
+G#497L'%s' enthaelt ungueltigen Lx-Event.\n
+V#497L'%s' har ogiltigt Lx-event.\n
+;
+; Fossil Announcement / Translation (DOS version only)
+;
+*#498LVX00:VX00,X00:X00,BNU:BNU,CFOS:cFos,OPUS:Opus!Comm,FCI:FCI,DRCOMM:DrComm,ANDAN:ADF,WINFOS:WinFOSSIL
+;
+*#499LTerminal
+*#500Lunused500
+*#501Lunused501
+*#502Lunused502
+*#503Lunused503
+*#504Lunused504
+;
+; Ticker string - DO NOT USE COLOURS HERE!
+;
+; syntax: <4 chars>{1|2<4 chars>}
+; DON'T CHANGE THEM, IF YOU DON'T UNDERSTAND THIS!!!
+;
+; some alternative tickers: 
+;  *#505L-\\|/1        - only use one ticker at the left (note: Backslash must be translated...)
+;  *#505L-\\|/2-/|\\   - use dual ticker
+;  *#505L-/|\\2-\\|/   - use dual ticker
+;  *#505L-+*+1         - only use one ticker at the left
+;  *#505L-+*+2-+*+     - use dual ticker
+;
+*#505L-==2-==
+;
+; CSS strings
+;
+; some alternative progress bars - DO NOT USE COLOURS HERE!
+;  *#506L[*+-]
+;  *#506L[=- ]
+;  *#507L[€› ]
+;  *#507L[€ﬂ ]
+;  *#507L[€±∞]
+;  *#507L[˛˘ ]
+;
+*#506L[*+-]
+*#507L[˛˘ ]
+;
+*#508LTx File
+*#509LRx File
+E#510LCurrent Session Statistics
+S#510LCurrent Transfer Engine Status
+G#510LStatistik aktuelle Verbindung
+V#510LAktuell sessionsstatistik
+E#511LTx current
+S#511LTx current
+G#511LTx aktuell
+V#511LAktuell Tx
+E#512LTx total
+S#512LTx total
+G#512LTx gesamt
+V#512LTotal Tx
+E#513LRx current
+S#513LRx current
+G#513LRx aktuell
+V#513LAktuell Rx
+E#514LRx total
+S#514LRx total
+G#514LRx gesamt
+V#514LTotal Rx
+;
+; Max MCP strings part 1
+;
+*#515L*FROZEN*
+*#516LInitializing
+*#517LWaiting for Call
+*#518LOS Shell
+*#519LSpawned
+*#520LHanging Up
+*#521LAnswering
+*#522LConnecting
+*#523LReceiving FAX
+*#525LDialing %s
+*#524LMail Xfer with %s
+*#526LBinkleyTerm XE
+*#527LExiting
+*#528LReturning
+*#529L!Couldn't open %s.
+;
+; Fax
+;
+*#530L FAX Received %d pages.
+*#531L FAX Error during transmission.
+*#532L!FAX Couldn't create output file %s.
+*#533LFAX Rcv
+*#534L FAX Connect with %s.
+*#535L FAX File received %s (%lub).
+*#536L!FAX Error receiving page.
+*#537Lunused537
+*#538Lunused538
+*#539Lunused539
+;
+*#540L:Ignoring %s. It is %lu minutes old.
+*#541L:Binkley frozen until %s goes away.
+*#542L:Binkley unfrozen - reinitializing.
+*#543L:Modem not responding OK. Spawning SpawnNoOK command.
+*#544L:Rescanned: %d.%02d seconds, %ld KB cache. Average %d.%02d seconds.
+*#545L!Could not rename '%s' to '%s'.
+*#546L:RemMOH: %ldb
+*#547L Remote refused mail-pickup.
+*#548L:LocMOH: %ldb
+*#549L!No YOOHOO/2U2.
+*#550L*no mail on hold, disabling Janus/Hydra
+*#551L!Addresses skipped after %u:%u/%u.%u@%s
+*#552Lunused552
+*#553Lunused553
+*#554Lunused554
+*#555Lunused555
+*#556Lunused556
+;
+; Max MCP strings part 2
+;
+*#557LRescanning outbound
+*#558LReading outbound dump
+*#559LTerminal
+;
+E#560L:Posting Event Semaphore for ErrLevelShell %d.
+S#560L:Posting Event Semaphore for ErrLevelShell %d.
+G#560L:Poste Event Semaphore fuer ErrLevelShell %d.
+V#560L:Postar eventsemafor fîr ErrLevelShell %d.
+E#561L!Event Semaphore %s does not exist.
+S#561L!Event Semaphore %s does not exist.
+G#561L!Event Semaphore %s existiert nicht.
+V#561L!Eventsemafor %s existerar inte.
+*#562Lunused562
+*#563L#Creating Poll for %s at start of event completed.
+*#564L!Creating Poll for %s at start of event failed.
+;
+*#565L (Main Help reserved 1)
+*#566L (Main Help reserved 2)
+*#567L (Main Help reserved 3)
+*#568L (Main Help reserved 4)
+*#569L (Main Help reserved 5)
+*#570L (Main Help reserved 6)
+*#571L (Main Help reserved 7)
+*#572L (Main Help reserved 8)
+E#573LF1..F10 Exit BinkleyTerm with errorlevel (10*n) (F1=10,etc)\r\n
+S#573LF1..F10 Exit BinkleyTerm with errorlevel (10*n) (F1=10,etc)\r\n
+G#573LF1..F10 Bende BinkleyTerm mit Errorlevel (10*n) (F1=10,etc)\r\n
+V#573LF1..F10 Avslutar BinkleyTerm med felnivÜ (10*n) (F1=10,osv)\r\n
+*#574L\r\n
+*#575L*System:
+*#576L Aka   :
+*#577L       :
+*#578L:Sysop :
+*#579L Flags :
+*#580L Phone :
+*#581Lunused581
+*#582Lunused582
+*#583L:RemTim: %s %+3.02d%02d
+*#584L:LocTim: %s %+3.02d%02d
+*#585L:UTCdif: %+ld
+*#586L>Addon :
+*#587L!Out of EMSI-space! Last AKA %s.
+*#588Lunused588
+*#589Lunused589
+*#590Lunused590
+*#591Lunused591
+*#592Lunused592
+*#593Lunused593
+*#594Lunused594
+
+*#595L/unreg.
+;
+;
+; First Product Code must be -1 and the Unknown product. Put -1 Unknown
+; somewhere else, and you are sure to screw things up
+;
+*P-1 Unknown
+*P0 Fido/Unknown
+*P1 Rover
+*P2 SEAdog
+*P3 WinDog
+*P4 Slick-150
+*P5 Opus
+*P6 Dutchie
+*P7 WPL_Library
+*P8 Tabby
+*P9 SWMail
+*P10 Wolf/68k
+*P11 QMM
+*P12 FrontDoor
+*P17 MailMan
+*P19 GS-Point
+*P20 BGMail
+*P21 ComMotion
+*P22 OurBBS
+*P24 WimpLink
+*P26 D'Bridge
+*P27 BinkleyTerm
+*P30 Daisy
+*P31 Polar Bear
+*P32 The-Box
+*P33 STARGate/2
+*P35 TCOMMail
+*P38 Apple-Netmail
+*P39 Chameleon
+*P40 Majik Board
+*P47 Domain
+*P49 Rose
+*P50 Paragon
+*P51 Binkley/ST
+*P52 StarNet
+*P56 PBBS
+*P57 TrapDoor
+*P58 Welmat
+*P60 Odie
+*P61 Quick Gimme
+*P62 dbLink
+*P64 Beagle
+*P65 Igor
+*P66 TIMS
+*P67 Phoenix
+*P68 FrontDoor_APX
+*P74 BIX-Mail
+*P78 Lora-CBIS
+*P79 TDCS
+*P80 InterMail
+*P84 QBoxMail
+*P85 Number_4
+*P86 Number_5
+*P88 Merlin
+*P91 Outpost
+*P94 rfmail
+*P100 PC-RAIN
+*P101 Truffle
+*P103 White Pointer
+*P105 Portal of Power
+*P106 MacWoof
+*P109 HandyMail
+*P113 Benjamin
+*P114 RiBBS
+*P117 Door2Europe
+*P118 SWIFT
+*P121 Harry the Dirty Dog
+*P148 Fone-Link
+*P152 DoorMan
+*P154 SCREAM
+*P155 MoonMail
+*P157 MailLink
+*P159 Black Star
+*P161 PT
+*P162 UltiMail
+*P166 Foodo
+*P168 Boston BBS
+*P169 XenoMail
+*P170 XenoLink
+*P172 MilqueToast
+*P181 CommLink
+*P185 MHS
+*P191 NextBBS
+*P196 ProMailer
+*P197 MegaMail
+*P202 Arc-Binkley
+*P205 NMS
+*P206 BBCSCAN
+*P208 LoTek Vzrul
+*P214 Hercules
+*P215 AMPRGATE
+*P216 BinkEMSI
+*P222 Paradise
+*P223 DogMatic-ACB
+*P224 T-Mail
+*P226 MainDoor
+*P227 Starnet_Products
+*P230 MailMaster
+*P233 CrossPoint
+*P236 NetWay
+*P240 Bert
+*P248 TP_Kom
+*P250 !!MessageBase
+;
+;
+; Note: Don't mess with the ordering of the table below. To remap a
+;       key, change the scan code (leaving the "U" or "T" alone). It
+;       would also be wise to change the "Key" description so you
+;       can figure out what on earth you did later on.
+;
+;       Don't forget to change the help screen text above.
+;
+;                 Unattended mode key mappings
+;Scan Function
+;Code Code  lnx          Description             Key
+;
+*U1e00 fe00              answer                  ALT-A
+*U1700 fe01              modem reinit            ALT-I
+*U0043 fe02              immediate call          C
+*U0063 fe02              immediate call          C
+*U1500 fe03              poll bossnode           ALT-Y
+*U3200 fe04              poll specified node     ALT-M
+*U1900 fe05              poll packet for node    ALT-P
+*U1800 fe06              outbound rescan         ALT-O
+*U2600 fe07              toggle debug mode       ALT-L
+*U2f00 fe08              toggle modem window     ALT-V
+;
+*U1400 fe10              to terminal mode        ALT-T
+*U1200 fe11              to user's editor        ALT-E
+*U2d00 fe12              exit BinkleyTerm        ALT-X
+;
+*U3b00 fe21              exit with status 10     PF1
+*U3c00 fe22              exit with status 20     PF2
+*U3d00 fe23              exit with status 30     PF3
+*U3e00 fe24              exit with status 40     PF4
+*U3f00 fe25              exit with status 50     PF5
+*U4000 fe26              exit with status 60     PF6
+*U4100 fe27              exit with status 70     PF7
+*U4200 fe28              exit with status 80     PF8
+*U4300 fe29              exit with status 90     PF9
+*U4400 fe2a              exit with status 100    PF10
+;
+*U2400 fe30              shell to OS prompt      ALT-J
+*U6800 fe31              invoke user shell 1     ALT-F1
+*U6900 fe32              invoke user shell 2     ALT-F2
+*U6a00 fe33              invoke user shell 3     ALT-F3
+*U6b00 fe34              invoke user shell 4     ALT-F4
+*U6c00 fe35              invoke user shell 5     ALT-F5
+*U6d00 fe36              invoke user shell 6     ALT-F6
+*U6e00 fe37              invoke user shell 7     ALT-F7
+*U6f00 fe38              invoke user shell 8     ALT-F8
+*U7000 fe39              invoke user shell 9     ALT-F9
+;
+*U2200 fe40              get (request) a file    ALT-G
+*U1f00 fe41              send a file             ALT-S
+*U2500 fe42              kill outbound for node  ALT-K
+;
+*U2c00 fe43              zoom outbound           ALT-Z
+;
+;
+*U0041 fe65              readdress mail          A
+*U0061 fe65
+;
+;This conflicts with "immediate call" above, making these entries
+;redundant. We have them here for completeness and also support the
+;"immediate call" key for crash.
+;
+*U0043 fe66              crash                   C
+*U0063 fe66
+;
+*U0044 fe67              direct                  D
+*U0064 fe67
+*U0047 fe68              get file                G
+*U0067 fe68
+*U0048 fe69              hold                    H
+*U0068 fe69
+*U0049 fe6a              kill dial tries         I
+*U0069 fe6a
+*U004b fe64              kill node's mail        K
+*U006b fe64
+*U004e fe6b              normal                  N
+*U006e fe6b
+*U0050 fe6c              poll node               P
+*U0070 fe6c
+*U0052 fe6d              kill requests           R
+*U0072 fe6d
+*U0053 fe6e              send files              S
+*U0073 fe6e
+*U0054 fe6f              stop mail               T
+*U0074 fe6f
+;
+*U7100 fe50              mailer help screen      ALT-F10
+*U3000 fe51              blank the screen        ALT-B
+*U1100 fe52              refresh the screen      ALT-W
+;
+*U2e00 fe60              enter chat mode         ALT-C
+*U1300 fe61              restart events          ALT-R
+*U1000 fe62              quit this event         ALT-Q
+*U2000 fe63              reset daily history     ALT-D
+;
+*U5000 fe70              scroll outbound down 1  DN ARROW
+*U4800 fe71              scroll outbound up 1    UP ARROW
+*U5100 fe72              scroll outbound down 4  PG DN
+*U4900 fe73              scroll outbound up 4    PG UP
+*U4700 fe74              scroll outbound to top  HOME
+*U4f00 fe75              scroll outbound to end  END
+;
+*U9100 fe76              scroll recent activity down 1 CTRL-DN ARROW
+*U7400 fe76              scroll recent activity down 1 CTRL-RIGHT ARROW
+*U8d00 fe77              scroll recent activity up 1   CTRL-UP ARROW
+*U7300 fe77              scroll recent activity up 1   CTRL-LEFT ARROW
+;
+;TE 960613: Ctrl+Dn/Up does not work in some environments, while
+;           Ctrl+Left/Right does
+;
+*U7600 fe78              scroll recent activity down 9 CTRL-PG DN
+*U8400 fe79              scroll recent activity up 9   CTRL-PG UP
+*U7700 fe7a              scroll recent activity to top CTRL-HOME
+*U7500 fe7b              scroll recent activity to end CTRL-END
+*U3100 fe7c              Event behaviour setup         ALT-N
+*U2300 fe7d              Call history window           ALT-H
+*U0014 fe7e              Stats window                  CTRL-T
+*U0002 fe7f              internal BBS local mode       CTRL-B
+*U0012 fe80              recent activity search        CTRL-R
+;
+;
+;
+;                 Terminal mode key mappings
+;Scan Function
+;Code Code              Description             Key
+;
+*T3000 fd00              set baud rate           ALT-B
+*T2e00 fd01              set data and stop bits  ALT-C
+*T1f00 fd02              start/stop break        ALT-S
+*T1900 fd03              change comm port        ALT-P
+;
+*T1700 fd10              re-init the modem       ALT-I
+*T2300 fd11              hang up the modem       ALT-H
+;
+*T2000 fd20              dial a specified number ALT-D
+*T1300 fd21              dial a hunt group       ALT-R
+*T1500 fd22              poll the bossnode       ALT-Y
+*T3200 fd23              poll a specified node   ALT-M
+;
+*T5100 fd30              download a file         PG DN
+*T4900 fd31              upload a file           PG UP
+*T2600 fd32              open/close capture file ALT-L
+*T8300 fd33              gateway (no map) toggle ALT-=
+;
+*T6800 fd41              send macro 1 to remote  ALT-F1
+*T6900 fd42              send macro 2 to remote  ALT-F2
+*T6a00 fd43              send macro 3 to remote  ALT-F3
+*T6b00 fd44              send macro 4 to remote  ALT-F4
+*T6c00 fd45              send macro 5 to remote  ALT-F5
+*T6d00 fd46              send macro 6 to remote  ALT-F6
+*T6e00 fd47              send macro 7 to remote  ALT-F7
+*T6f00 fd48              send macro 8 to remote  ALT-F8
+*T7000 fd49              send macro 9 to remote  ALT-F9
+;
+*T1200 fd50              clear the screen        ALT-E
+*T7100 fd51              terminal help screen    ALT-F10
+*T2f00 fd52              display Bink version    ALT-V
+;
+;
+*T1600 fd60              to unattended mode      ALT-U
+*T2d00 fd61              exit BinkleyTerm        ALT-X
+*T2400 fd62              shell to OS prompt      ALT-J
+;
+;
+;                Terminal mode ANSI key mappings
+;
+; What you are looking at here is a table of strings that
+; will be sent out the comm port if you use a particular
+; FUNCTION key.
+;
+; You have lots of leeway in these definitions. In fact,
+; the code will even handle nulls (\0). However, because
+; we want to be able to comment this, we don't allow imbedded
+; blanks. Use \b to get a blank if you want one.
+;
+; Note: keyboard remapping precedes ANSI output mapping.
+; If you map Fkey1 to Fkey2, don't be too surprised that
+; Bink uses Fkey2's value when addressing this table.
+;
+;Scan ANSI
+;Code String            Description             Key
+;
+*A3b00 \033OP            PF1                     F1
+*A3c00 \033OQ            PF2                     F2
+*A3d00 \033Ow            keypad '7'              F3
+*A3e00 \033Ox            keypad '8'              F4
+*A3f00 \033Ot            keypad '4'              F5
+*A4000 \033Ou            keypad '5'              F6
+*A4100 \033Oq            keypad '1'              F7
+*A4200 \033Or            keypad '2'              F8
+*A4300 \033Op            keypad '0'              F9
+*A4400 \033Op            keypad '0'              F10
+*A4800 \033[A            Up Arrow                Up Arrow
+*A4b00 \033[D            Left Arrow              Left Arrow
+*A4d00 \033[C            Right Arrow             Right Arrow
+*A5000 \033[B            Down Arrow              Down Arrow
+*A5400 \033OR            PF3                     Shift-F1
+*A5500 \033OS            PF4                     Shift-F2
+*A5600 \033Oy            keypad '9'              Shift-F3
+*A5700 \033Om            keypad '-'              Shift-F4
+*A5800 \033Ov            keypad '6'              Shift-F5
+*A5900 \033Ol            keypad ','              Shift-F6
+*A5a00 \033Os            keypad '3'              Shift-F7
+*A5b00 \033OM            keypad 'Enter'          Shift-F8
+*A5c00 \033On            keypad '.'              Shift-F9
+*A5d00 \033OM            keypad 'Enter'          Shift-F10
+;
+;
+; Below are the changes that Bob makes to this file in order to use
+; Bink's terminal mode with the TBBS full screen editor and with
+; TDBS. He uses CTRL-PGUP and CTRL-PGDN for upload/download so that
+; PGUP and PGDN can be converted to control characters and sent out
+; to TBBS.
+;
+; The codes that TBBS uses are approximately those that WordStar would
+; like to see, with the exception of CTRL-S. For some reason, that
+; character seems to foul things up <grin>. So CTRL-O is used.
+;
+;
+;  Terminal mode command changes: replace download and upload
+;  lines with the following two (uncommented, of course:
+;
+;T7600 fd30              download a file         Ctrl-PG DN
+;T8400 fd31              upload a file           Ctrl-PG UP
+;
+;  Terminal mode key mapping: replace ANSI table above with the
+;  following:
+;
+;  TBBS/TDBS cursor control keys
+;
+;A4800 \005              TBBS FSE Up Arrow       Up Arrow
+;A5000 \030              TBBS FSE Down Arrow     Down Arrow
+;A4b00 \017              TBBS FSE Left Arrow     Left Arrow
+;A4d00 \004              TBBS FSE Right Arrow    Right Arrow
+;
+;  TBBS/TDBS paging keys
+;
+;A4900 \022              TBBS FSE Page Up        PG UP
+;A5100 \003              TBBS FSE Page Dn        PG DN
+;A4700 \027              TBBS FSE Home           Home
+;A4f00 \020              TBBS FSE End            End
+;
+;  TBBS/TDBS editing keys
+;
+;A5200 \026              TBBS FSE Ins            Ins
+;A5300 \007              TBBS FSE Del            Del
+;
+;  TBBS/TDBS addtional keys
+;
+;A3b00 \032              TBBS FSE Help           F1
+;A4400 \033              TBBS FSE Exit           F10
+;
+; $Id: language.txt,v 1.6 1999/02/28 12:46:12 hjk Exp $ 

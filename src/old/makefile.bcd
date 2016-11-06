@@ -1,0 +1,64 @@
+# Makefile for Borland for DOS
+
+SRC_DIR  = .
+INCL_DIR = ..\include
+
+CC  = bcc
+COPTS = -w -ml -c -DMSDOS -DBTPE_DEBUG -I..\include
+ASM = tasm
+AOPTS = -mx
+
+COBJS = bt.obj   btconfig.obj langload.obj timer.obj    misc.obj     \
+        b_help.obj   file_dos.obj dosfuncs.obj keymap.obj   b_today.obj  \
+        mdm_proc.obj b_script.obj b_fuser.obj  nodeproc.obj version7.obj \
+        b_proto.obj  b_bbs.obj    b_search.obj b_sessio.obj recvbark.obj \
+        yoohoo.obj   b_wazoo.obj  b_wzsend.obj ftsc.obj     mailer.obj   \
+        sendbark.obj sched.obj    fossil.obj   b_passwo.obj b_frproc.obj \
+        zreceive.obj zsend.obj    zmisc.obj    sendsync.obj recvsync.obj \
+        data.obj     vfossil.obj  b_termov.obj b_banner.obj b_initva.obj \
+        b_sbinit.obj b_flofil.obj mailovly.obj evtparse.obj b_whack.obj  \
+        sbuf.obj     b_rspfil.obj b_term.obj   b_faxrcv.obj emsi.obj     \
+        xmsend.obj   m7send.obj   bsend.obj    brec.obj     xmrec.obj    \
+        m7rec.obj    janus.obj    statetbl.obj outbound.obj squish.obj   \
+        mailroot.obj upload.obj   download.obj aglcrc.obj   hydra.obj \
+        b_spawn.obj
+
+INCL_FILES = $(INCL_DIR)\includes.h $(INCL_DIR)\bink.h                   \
+             $(INCL_DIR)\defines.h $(INCL_DIR)\com.h                     \
+             $(INCL_DIR)\com_dos.h $(INCL_DIR)\xfer.h                    \
+             $(INCL_DIR)\msgs.h $(INCL_DIR)\zmodem.h $(INCL_DIR)\keybd.h \
+             $(INCL_DIR)\keyfncs.h $(INCL_DIR)\sbuf.h                    \
+             $(INCL_DIR)\sched.h $(INCL_DIR)\timer.h                     \
+             $(INCL_DIR)\vfossil.h $(INCL_DIR)\externs.h                 \
+             $(INCL_DIR)\prototyp.h $(INCL_DIR)\squish.h
+
+COBJ1 = btctl.obj
+
+COBJ2 = btlng.obj get_lang.obj put_lang.obj
+
+MOBJS = spawn.obj bink_asm.obj
+
+.c.obj:
+  $(CC) $(COPTS) $<
+
+.asm.obj:
+  $(ASM) $(AOPTS) $<
+
+all:     btlng.exe binkley.lng btctl.exe bt.exe
+
+bt.exe: $(COBJS) $(MOBJS)
+  del btctl.obj
+  del btlng.obj
+  del get_lang.obj
+  del put_lang.obj
+  $(CC) -ml -ebt.exe *.obj
+
+binkley.lng : btlng.exe $(SRC_DIR)\english.txt
+  btlng $(SRC_DIR)\english.txt binkley.lng
+
+btctl.exe: $(COBJ1)
+  $(CC) -ml -ebtctl.exe $(COBJ1)
+
+btlng.exe: $(COBJ2)
+  $(CC) -ml -ebtlng.exe $(COBJ2)
+

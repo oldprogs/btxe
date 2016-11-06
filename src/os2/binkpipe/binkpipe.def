@@ -1,0 +1,15 @@
+;
+; module definition file
+;
+NAME       BinkPipe WindowApi
+Protmode
+
+stacksize 32768
+heapsize   1024
+
+description 
+'
+ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+³ Named pipe server for Binkley ³
+ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ'
+

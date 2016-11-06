@@ -1,0 +1,1516 @@
+
+            (very detailed) History of BinkleyTerm 2.60XE/Gamma-6
+           =======================================================
+
+
+
+Beta XGO:
+---------
+
+TJW:
+
+- fixed minor bug in find_addr in misc.c
+
+xgm_ts1:
+
+-   fixes double keypress bug in event setup
+
+xgm_mr1:
+
+ - bug fix: UNC paths were not handled correctly, binkley's main dir was added
+   (all config files and event file)
+ - bug fix: BINKpath didn't contain current dir under DOS, if env.var. BINKLEY
+   wasn't set; CALLHIST.ALL now should be put in binkley's main dir if no
+   task dir was defined
+ - using getcwd() now for all OSes to get current dir upon startup if no
+   env.var. BINKLEY could be found
+
+xgm_mr2:
+
+ - updated xe_user.doc
+ - little bugfix: Alt-B tried always to start screen blanker, even if
+   ScreenBlank wasn't used in cfg.
+
+SM060821:
+
+- fixed the 'no number to dial' error
+
+SM060822:
+
+- should fix problem with SRIF and async_os.c
+  (bug was reported by Thomas Mueller)
+
+SM061120:
+
+- should fix possible handshake-problems with com.sys/sio.sys
+
+SM061300:
+
+- fixed bug in stats.c : If (e.g) filesout/(callsin+callsout) was smaller
+  than 1 then stats.c could not maintain the correct sort-order of ndata.
+  Now filesout gets presorted to prevent this (qsort is a stable sorting
+  algorithm). This caused empty lines (on page 7).
+
+SM061922:
+
+- removed obsolete pragma from async_os.c
+- added timeout for ComTXBlockTimeout
+- changed the rest of the DosCreateThread() to _beginthread()
+
+SM062316:
+
+- should fix the 100 % CPU-load bug with 2.97 teles-capi
+
+cf970614:
+
+stats.c is provided as a drop-in rather than as part of the diff. Mainly
+because someone (Steffen I think) provided a fix for a small bug in page 7
+and I have fixed it in a more proper way, i.e. by fixing the comparison
+function instead of presorting the data to workaround the problem.
+Anyway the dif would have been bigger than the full file.
+
+From XE_USER.DOC:
+
+CFS: Expanded NodeExtraDir. New syntax is
+
+     NodeExtraDir address directory [Hold] [Notify]
+
+     Hold makes BT-XE *not* send the files when calling (obvious, uh?)
+     Notify makes BT-XE generate a message on the fly, notifying the remote of
+     the files being sent. Usually helps the remote to keep his inbound clean,
+     or at least without unknown files.
+
+CFS: The stats screen nows support going up and down in all lists, by using
+     the arrow keys. This way you can see the complete lists instead of the
+     top systems only.
+     Also, left and right may be used to go to the previous/next screen.
+
+cf970622:
+
+- Several changes in stats.c. On ties, bt-xe now sorts either by address or
+  alphabetically (whatever applies) so the result is always the same.
+  Also, the top BBS users list wasn't being sorted correctly.
+- Added a random system, read xe_user.doc for details.
+
+cf970628:
+
+  - Improved history screen.
+
+cf970629:
+
+- Fix: Minor bug in history.
+- Fix: Stats now ignore 'unknown mailer' entries for the top mailers.
+- Fix: Kill mail in zoomed outbound window now kills and truncates files when
+  required.
+
+jk970616:
+
+- fixed/added NoZedZip
+
+sm063001:
+
+- small changes in async_os.c
+
+SM070119:
+
+- janus-filerequest failed, if the called system was a point.
+
+MT970003:
+
+-  added additional AKA in SRIF-file
+
+CF970792:
+
+- Improved stats.
+
+
+
+Beta XGP:
+---------
+
+TJW:
+
+- fixed SERIOUS EMSI bug
+- reviewed ZedZap (comparing to BTR) and implemented DZA capability
+  new keyword "NoDirZap" to disable DirectZap
+  you may specify "DZA" in ProtocolPreference
+- new keywords DebugFlags <hex value> sets the variable debugflags
+  to value - see top of debug.h for bit flags
+
+sm070916:
+
+- fixed small bug in async_os.c
+
+xgo_ts1:
+
+- this is mainly a `clean-up' diff for emx and usoft compilers to get
+  rid of some warnings and type-inconsistencies.
+
+xgo_mr1:
+
+ - moved XR5 announcements to doc\xr5
+ - Created XR5 history (doc\xr5\xe_hist.doc). This is a complete history of
+   changes made to each beta between XR4 and XR5 made from the diff docs, like
+   Carlos recently suggested.
+ - Started with XR6 history (dos\xe_hist.doc). Please do NOT modify this file
+   because only the one creating the betas (TJW ;) should add the diff docs of
+   every beta to this history. This file does NOT replace xe_user.doc, because
+   xe_hist.doc is for us, the developers, and xe_user.doc is for the users. But
+   there will be a new history index replacing xe_user.doc soon...
+ - xe_user.doc: changed "ErrorLevelShell" to "ErrLevelShell"
+ - updated watcom.mif
+ - os2\ and dos\: renamed all those m.cmd and c.cmd to match <compiler>.cmd (or
+   .bat). So you don't have to search through all cmds to find the one starting
+   the make for your compiler.
+ - fixed missing bottom line after bink startup
+ - added screen classes (ideas.cpp\screen)
+
+xgo_mr2:
+
+ - environment variable OS will be set to OS2 for Bink/2, to W32 for Bink/W32
+   or DOS for Bink/DOS, this can be used for [%OS%==???] sections (so e.g. we
+   could provide one sample config file for all OSs)
+ - environment variable BTXEVER will be set to current version (next beta: GP,
+   next release: 6)
+ - changed error messages of btconfig.c to look all the same:
+   "ERR: keyword: error text"
+ - bugfix to freepoll: TRX file was checked for every freepoll entry. If you
+   had several freepoll entries or several matching CallerIDs for one Address
+   only the first freepoll entry was checked correctly; the other entries were
+   always true, because TRX file was touched only some msecond before. Now
+   checking will be done only once for each address.
+ - bugfix to freepoll: TRX checking routine didn't create outbound directories
+ - new function: mkdirs() - creates all directories necessary (only used in
+   ctl_slash_string() by now)
+ - some changes for DOS version
+ - someone changed all global node flags (no_zedzap and so on) to long, but
+   they are only supposed to keep 0 or 1; changed them back to int to save some
+   space in DOS version
+
+
+
+Beta XGQ:
+---------
+
+xgp_ts1:
+
+-   reintroduced MemAvail display for DOS
+-   added MemAvail display for OS/2 (IBM and emx compilers). first
+    value displayed is available private memory, second value displayed
+    is the total virtual memory available. the first value displayed will
+    be changed later on to the somewhat more informative former
+    `Dos16MemFree()' value - when i get an idea how to emulate this
+    outdated function ...
+
+xgp_mr1:
+
+ - added version_opts to display XGP(async) or XGP(mxcom) for OS/2 - can also
+   be used to display additional information like TJW's DebugFlags
+ - bugfix: when using passwords from PasswordFile RealCost field was sometimes
+   overwritten with 0
+ - bugfix: call collision recovery didn't work at all
+ - bugfix: cost field in Today at a Glance wasn't updated after session
+
+xgp_eh1:
+
+- BBS: added gosub/return
+- BBS: fixed some minor things in bbs-source/doc
+
+xgp_eh2:
+
+- work on bbs-system
+
+xgp_mr2:
+
+ - some work on the window classes; new colour class
+ - added keyword NoOKCkeck to disable OK ckecking after modem initialization
+
+xgp_mr3:
+
+ - Callerid from modem (not from configfile!) was cut if anything else than a
+   digit was seen. Now it also allows dashes "-" and dots ".".
+ - enhanced window classes and colour class
+
+xgp_mr4:
+
+ - removed message "!error=1, reactivating incomplete REQ ..." in b_wazoo.c
+ - removed some old unused (commented out) code from mailer.c
+ - fixed strange behavior of outbound in normal events (no C):
+    - mail on hold got an '*'
+    - req files could initiate calls
+ - cosmetical bugfix: pressing down arrow after doing outbound rescan jumped
+   to odd positions
+ - cosmetical bugfix: in get window (Alt-G) you could only enter two
+   files although there's space for three files.
+ - new defaults (only enter/return) for get window's "More?" question:
+     - if user entered less than three files "no" is assumed
+     - if user entered three files "yes" is assumed
+ - little mistake in watcom.mif: linker created always overlayed version
+ - enhanced screen classes
+
+sm071916:
+
+- changed the last DosCreateThread() in binkdlg.c to _beginthread()
+- added 2 new procedures :
+
+  smp_init(void)
+  query_cpu(double *idle,double *busy, double *intr)
+
+  cpuload.c uses DosPerfSysCall (DOSCALLS.976) to calculate the CPU-load.
+  You need OS/2 3.0 + FP29 , OS/2 4.0 or OS/2 SMP to use this api.
+
+sm071920:
+
+- DosPerfSysCall (DOSCALLS.976) is now dynamically loaded. This makes Binkley
+  compatible with OS/2 Warp 2.x and OS/2 Warp 3.0 (without PF29) again.
+
+sm072022:
+
+- rewrote com_getchar() and com_peek() in async_os.c .This should fix 
+  the exception in com_peek() that was reported by Uwe Schenk.
+
+sm072223:
+
+- removed obsolete NO_THREAD in async_os.c
+- fixed bug in OUT_EMPTY() that could cause a deadlock (or delays in emsi.c)
+  (async_os.c)
+
+sm072317:
+
+- removed obsolete com_out_full() and com_putc_now() in async_os.c
+- modified com_getbuf() in async_os.c : memmove() is now called not so many
+  times
+
+TJW:
+
+- fixed multiple "reactivating req" message and moved it to language.txt
+- merged zmisc.c+zreceive.c+zsend.c -> zmodem.c
+- fixed EMSI_MD5 timeout problem with Xenia
+
+
+
+Beta XGR:
+---------
+
+xgp_eh3:
+
+- work on bbs-system
+
+xgq_mr1:
+
+ - Watcom + OS/2: you can now create BT-XE DOS even if no MDOS is installed
+ - memory display for OS/2 now is also enabled when compiled with Watcom
+
+xgq_ts1:
+
+-   misc changes for emx & usoft compilers
+
+sm073014:
+
+- fixed async_os.c : last changes caused a much to high cpu-load
+- fixed do_get in outbound.c : it was not possible anymore to abort
+  the dialog with 'N'
+
+xgq_eh1:
+
+- work on bbs-system
+
+xgq_mr2:
+
+ - bugfixes to watcom makefile
+
+sm080216:
+
+- fixed possible crash in CFOSMonitorThread() : localtime() returned NULL
+
+xgq_eh2:
+
+- work on bbs-system
+
+xgq_mr3:
+
+ - removed calls of opening_banner() and mailer_banner() from come_back()
+   (should fix DCE/DTE confusion in binkley after spawning to freq proc.)
+ - changed msg "No ABOUT or template file" to "No template file" in
+   language.txt
+ - cosmeticle bugfix: Status sometimes showed wrong next event
+ - bugfix: binkley got into an endless loop if costvector was 0 (eurocost)
+
+sm080313:
+
+- modified capi.c
+
+xgq_mr4:
+
+ - WaZoo sessions: bad call counter was reset even after unsuccessful sessions
+
+
+
+Beta XGS
+--------
+
+XGR_HK1:
+
+- Fixes for running under Windows 95
+  (TJW: Fixes ???)
+
+XGR_MR1:
+
+ - language.txt: changed error msg "Could not open for scanning" to debug msg
+ - filename completion didn't work correctly under DOS (silly DOS requires
+   '*.*' to list all files and was not satisfied with '*')
+ - if Squish base was declared invalid it's no longer checked now
+
+sm080618:
+
+- some small changes in async_os.c
+
+Roland Schiradin (no diff):
+
+- updated manual (german only)
+
+xgr_eh1:
+
+- work on bbs-system
+
+xgr_eh2:
+
+- work on bbs-system
+- added SC_IBS (=4): displays "Binkley interal BBS" instead of "Maximus"
+  in history/detailed view (if internal bbs was used for that call)
+
+xgr_mr2:
+
+ - bugfix (?): RH1 flag isn't send any more in EMSI if either Hydra is
+   disabled (we are caller / called) or remote can't do Hydra (we are called)
+ - added optional parameter to ConditionalPoll:
+    {and|or} <aka> <minsize> <maxdeltatime> [<mindeltatime>] [<flav>] [<cid>]
+                                              ^^^^^^^^^^^^
+   Use <mindeltatime> to define the minimum time (must be lower than
+   maxdeltatime and max. 99) the caller must wait before the next call can
+   override freepoll. So only if mindeltatime < deltatime < maxdeltatime is
+   true the next call overrides freepoll.
+   You have to use <mindeltatime> if you want to use FreePoll in a multiline
+   environment where multiple mailers hear on one single phone number.
+   Otherwise if your first mailer rejects a call, the second one will accept
+   it.
+   BTW: if you are neither using <mindeltatime> nor <flav>, <cid> must be at
+        least 3 digits long, otherwise it will interpreted as <mindeltatime>!
+ - changed some debug msgs of ZedZapZip() to error msgs (problems, lost
+   carrier)
+ - WaZoo now only says 'noting to send' if we didn't send anything _AND_ if
+   session was ok.
+
+MR (no diff):
+
+ - edited 3 error msgs in zmodem to tell user if zmodem was cancelled, carrier
+   was lost or we got a timeout.
+
+TJW:
+
+- fixed minor year 2000 problem in bt.c
+- included swedish language text from Peter Karlsson  
+
+
+
+Beta XGT
+--------
+
+TJW:
+
+- BT now gives error msg if no events are defined. Also fixed weird error
+  msg ("out of memory") if no events were defined.
+- made error msg "System misconfigured ..." more precise
+
+xgs_ts1:
+
+-   emx / os2 version only: changed to -Zcrtdll dynamic runtime lib
+    binding. the resulting binary is down to 410k now.
+
+xgs_ts2:
+
+-   corrects two minor errors in makefile for EMX compiler
+
+SM081115:
+
+- stringrep (and stringrepmodem) can now also replace strings containing
+  blanks :
+
+  stringrep "string containing blanks" replacement string
+    
+SM091721:
+
+- XCPT_SIGNAL was not processed by the system-exceptionhandler
+
+XGS_MR1:
+
+ - updated my fido addr
+ - bugfix to node lookup: if given sysop name was longer than 26 chars -> trap
+ - bugfix to input boxes: timeout didn't remove input boxes but accept the
+   input.
+ - rewrote parts of sb_input_chars
+ - added Pos1, End, PgUp and PgDn to nodelist lookup window
+
+XGS_EH1:
+
+- work on bbs-system
+
+cf970907:
+
+- Telegard support, also a few bugfixes.
+
+HK081513:
+
+-   AfterMail function now uses ExecSession under Win32
+-   added MemAvail display for Win32. Displayed values have the same
+    meaning as under OS/2 (i guess). 
+
+HK081522:
+
+-   fixed a small bug in MemAvail display for Win32. Sometimes it behaved
+    strangly.
+-   fixed bug with <ALT><Z> <-> <ALT><Y>. Assumed it was an old compiler bugfix.
+
+HK091117:
+
+-   changed MemAvail display again. Was not quite happy with it. Removed display
+    of Total Virtual memory, because 9 out of 10 times the size ran out of its
+    box on my computer.
+-   cleaned up ASYNC_NT WinFOSSIl part, hydra must work without problems now
+-   fixed some other small things, p.e. the % to much in the display when
+    prompting file transfer statistics
+
+
+
+Beta XGU:
+---------
+
+xgt_ts1:
+
+-   removes 100+ warnings by supplying correct typecasts
+
+xgt_ts2:
+
+-   some further typecast corrections
+
+xgt_ts3:
+
+-   first preparations for the recent activity window search function.
+    - adjust your makefiles to compile new module `callwin.c' !
+
+xgt_ts4:
+
+-   fixes quite some `year 2000' related bugs
+
+NOTE:   someone else should have a look at the _pkthdrXX structs
+        and their usage in e.g XMREC.C; i suspect there are more
+        year overrun bugs lurking, since upper boundary of the
+        year value in these structs is defined to be 99 ...
+
+xgt_ts5:
+
+-   DOS/usoft/overlay only: reduced number of inter-overlay calls by
+    nearly 30%
+
+xgt_ts6 + xgt_ts7:
+
+-   further work on `recent activity search'
+
+xgt_te1:
+
+ -  Made BTXE compilable with Borland C++ 2.0 for OS/2 again. I did not supply
+    new .PRJ files, but will create .MAK-files for the Borland command line
+    compiler in the future. Distributing binary .PRJ-files is somewhat
+    senseless, IMHO, especially as they can't handle relative pathnames.
+    BC/2 version of BT32.EXE seems to be more stable now than when I tried it
+    last time, at least.
+ -  Probably fixed a bug in B_FLOFIL.C.
+
+xgt_te2:
+
+ - Makes Binkley more tolerant with hardware/software that sets DCD
+   *after* it sends the CONNECT string. (Problem: Binkley hung up immediately
+   after CONNECT, because DCD was not yet up). See mailroot.c.
+ - Supplies makefile for Borland C++ 2.0 for OS/2. Please remove
+   /doc/borland.doc and /os2/*.prj from the source code archives!
+   You can now use "make -fborland.mak" to create Borland executables without
+   having to adjust paths manually.
+ - Adds Borland C (DOS,OS/2,Win32) characteristics to /misc/typesize.h
+ - Fixes a "quick hack" from XGT+TE1, now functions from capi.c should work
+   reliably with Borland OS/2 executables
+
+xgt_te3:
+
+ - Added keyword IPRepChar to replace dashes with points for IP nodes.
+   See XE_USER.DOC.
+
+xgt_te4:
+
+ - Bugfix for XGT+TE3. Seems I have learned to hate the _Seg16 statement. ;)
+
+xegt_ns1:
+
+- switch off mouse cursor in Win95 version
+
+mt970004:
+
+- ideas for c++ outbound
+
+xgt_hk1:
+
+- Set Windows application title
+- Fixed bug <ALT><Y> and <ALT><Z> definitly
+
+xgt_hk2:
+
+- Some things to make Bink work better in Windows MT-environment: ExecSession
+  is now just called to create a new window while leaving Bink untouched and
+  ready to answer the phone. Changed some things in SENDSYNC.C because Bink
+  sometimes didn't recieve the sync's right when working in a MT-environment
+  so mailer on called system (mostly FD) passed to BBS and no session was
+  established.
+
+XGT_DR1:
+
+-  Added hint file (os2/watcom11.txt) on compiling bink with watcom 11
+-  Changed the cosmetic output of display_life ().  hopefully, this has a
+   better looking output.
+-  Commented out a stray variable that wasn't commented out when some src in
+   vt100.c was commented out.
+
+SM101122:
+
+- snoop_close() sometimes closed the snoop-pipe to early and therefore
+  prevented the thread to write all buffered lines to the pipe on exit.
+
+XGT_MR1:
+
+ - added knwnbugs.xr5 (doc\xr5\)
+ - removed buglist from xe_user.doc
+
+xgt_rs1:
+
+- PassWordFile now is full FastLst-style. The "Password" string can omitted.
+[Comment of TJW: I think this change wasn't really in the diff !?]
+- BinkPipe looks now XE5-style.
+
+TJW:
+
+- made some bugfixes related to "year 2000" problems and also to pkthdr
+  format (year is FULL specified there: 19xx..20xx.., month: JAN=0, DEC=11 !)
+- completed search functions of tom's recent activity search
+
+
+
+Beta XGV:
+---------
+
+xgu_rs1:
+
+- PassWordFile now is full FastLst-style. The "Password" string can omitted.
+
+xgu_dr1:
+
+- Added callwin.c to watcom10.mif in /os2 to enable watcom to compile XGU.
+- Added "Answering" status when modem is answering.  If you know German or
+    Swedish, please translate "Answering" for language entry 180.
+- When spawning external msg editor (alt-e), the screen is now cleared.  It
+    looks better when going into Msged (and probably others).
+- Binkley now should rescan the outbound after exiting the message editor.
+
+xgu_ce1:
+
+- fixed bug in freepoll on multiline installations. If line A is rejected
+  line X will dial out because it is not rescaned after rejecet of line A
+
+xgu_mr1:
+
+ - updated watcom's makefile
+ - updated knwnbugs.xr5
+
+xgu_mr2:
+
+ - added some more bugs to the bug list
+ - bugfix: send dialog doesn't handle ESC right
+
+xgu_mt1:
+
+- Pipe now disconnects and reconnects if client disconnects
+
+xgu_ts1:
+
+-   implemented found string highlighting for
+    recent activity search function
+-   updated emx & usoft makefiles
+
+xgu_ts2:
+
+-   fixes version-announcement bug present only with
+    post-XR5 DOS/usoft beta versions
+
+xgu_eh1:
+
+- work on bbs-system
+- filled empty line in taag-window with error-line:
+  <in-errors>/<out-errors>/<number of lines starting with ! in log>
+  data for !-counter is saved in dummy (now: total_errors) in history-struct.
+  in- and out-errors seem to be always zero.
+
+xgu_ce2:
+
+ - another fix for rejects on multiline systems
+
+xgu_dr2:
+
+- Added new config verb: Ticker.  This verb lets you change the ticker to any
+    thing you want it to.  The verb accepts 4 characters, any more are
+    ignored.  Any less will display a NULL in place of the missing
+    character(s). If the verb does not exist, it will display the default
+    ticker in XGU+DR1 (a spinner).
+
+    Example:
+    Ticker -\|/
+
+    Similar to pre XGU+DR1:
+    Ticker -=ð=
+    Ticker _xXx
+
+    When I have time, I'll add a DualTicker keyword that will enable someone
+    to make it look like XR5.
+
+    [ use your imagination, posibilities are endless =) ]
+
+xgu_ts3:
+
+-   DOS only: fixed a stupid keyboard remapping bug in the
+    recent activity search function. only DOS version, too:
+    please note that the search function sometimes seems to
+    misbehave at the upper (oldest) end of the recent activity
+    buffer.
+
+xgu_rs2:
+
+PassWordFile now is full FastLst-style. The "Password" string can
+be omitted. Correct a small bug.
+BinkPipe now back to VA C++ Makefile
+
+xgu_mt2:
+
+- added NoHydraChat-Esc bug to knwnbugs.xr5
+
+xgu_mt3:
+
+- adds a start of day Msg to the recent-window to help keep the overview
+  when browsing through the recent-activity.
+
+xgu_hk1:
+
+- Preparations to use the NTCOMM.DLL routines again
+- Some WinFOSSIL routine updates
+
+xgu_hk2:
+
+-Compiler now directly reads Unix time structure in stead of
+translating ANSI-time to Unix-time.
+-Fixed wrong month entry in 'New day'.
+
+MR (without diff):
+
+ - moved new day message to language file
+ - recent activity search will display 'Use blablabla' only when this gets
+   available (after the user entered the search string) to avoid confusion.
+ - Restored default dual ticker as wished ;) and moved it to language file, msg
+   no. 505. (I don't think it's necessary to introduce an extra keyword...).
+   The syntax is: <4 chars>{1|2<4 chars>}
+   i.e.: the first four chars are required (used as left ticker), then you can
+   choose between one or two tickers and if you want two tickers you have to
+   add another four chars (used as the right ticker).
+   I've included some examples to show how it's working.
+   Note: There is NO syntax check!
+
+xgu_ce3:
+
+ - SRIF bugfix for XOR request processors
+
+xgu_hk3:
+
+- Changes to the NTCOMM section to make it work under Windows 95 too
+- Corrected an entry in language file
+
+
+
+Beta XGW:
+---------
+
+xgv_aw1:
+
+-   request via maxfiles.idx: files with full paths in compiled Maximus
+    filebase will be found and sent, if files.dat+files.dmp are present.
+    Previously only the files in the main filearea path could be found.
+
+xgv_ce1:
+
+- checkroutines for not existing network drives. If inbound,
+  outbound, flagdir or netdir isn't available in an waiting binkley,
+  because fileserver is down, then binkley terminates immediately.
+
+xgv_ce2:
+
+ - fix for "CheckPath" on multiline-systems
+
+xgv_hk1:
+
+- Fixed bug in timezone
+- Fixed bug with mouse block cursor
+
+xgv_mt1:
+
+ new_day msg displayed when .evt file recompiled. fixed.
+
+xgv_mt2:
+
+ Now Binkley made Netmails have LOCAL flag (FE doesn't process Netmails without
+ local flag)
+
+xgv_ns1:
+
+- If no Winfossil (Win95) is loaded -> Get out and Error Messages
+- Bugfix in SetConsoleMode (Win32)
+- Begin adding support for Visual C++ 5.0 (uSoft11)
+
+xgv_mr1:
+
+ - found some technical entries in xe_user.doc that shouldn't be in there;
+   removed note for no longer up to date binkpipe which now is up to date
+ - updated knwnbugs.xr5
+ - updated watcom makefile
+   - it creates bink_pm.dll and binkpipe.exe now when compiling for OS/2
+   - removed browser option (BRW)
+   - new target already introduced in last version: release
+ - updated binkpipe.rc to be able to compile from os2 dir
+ - contents of recent activity window are now written to disk every new day
+ - local logs are now moved to the logs every new day
+ - added 'RING' count down in status field if RingWait is used
+ - added answering count down: seconds left for connect msg
+ - bugfix: if cFos reported Free instead of C:xx binkley takes previous costs
+
+xgv_aw3:
+
+-   Bugfix: The "Fee: " in the "Seconds: " line (after completed call) was not
+    reset to 0 if used with CfosCost and having a value of "Free" in ATI1.
+    So if you made an outgoing call, the fee for this call showed up as fee
+    for all following incoming calls.
+-   A few changes to langload.c: releasing memory in error conditions,
+    better error messages.
+-   langload.c: opening the .exe file in compatibility mode
+    instead of a sharing mode for reading the language strings. You need not
+    set the .exe file to read-only on DOS any more. Tested with Watcom
+    versions. The Watcom Linker manual explains that DOS opens .exe files in
+    compatibility mode for execution and so does the Watcom overlay manager.
+    So the language loader must do it this way also.
+    Please do test with uSoft compiler and with VACC! If that fails, please
+    use the old open call only on OS/2 resp. non-Watcom versions.
+
+xgv_eh1:
+
+- bbs-callers are now sorted with the top-caller first (in the stats)
+- two missing fclose() added in ftsc.c
+
+TJW:
+
+- new keywords "Inbound", "Outbound", "OutboundRescanPeriod", "OutboundCache"
+  (simply aliases for "NetFile", "Hold", "ReadHoldTime", "CacheHold")
+- SCD compile time stored in SCD - you now can change event file while BT is
+  running. Changes will get compiled (and used) after you exit and restart BT.
+- TZ doesn't get kludged to GMT0 internally in BT any more - this means
+  (assumed you have a correct TZ environment variable setting - see tz*.doc):
+  - time() gives UTC (!) seconds since 1.1.1970 00:00 UTC (!).
+  - gmtime() gives UTC
+  - localtime() gives local time
+  In other words: all will function CORRECTLY now !!!
+- EMSI correction/extension:
+  - TRX transmits UTC timestamp as given by time() standard C lib function
+    (you have to set your TZ environment variable correctly - see tz.doc!)
+  - new EMSI field "TZ" which contains TZ variable setting
+  Using these two values a remote system is able to:
+  - compare his (UTC) time to remote's - to sync clocks internationally(!)
+  - calculate remote's local time
+  Attention:
+  Many mailers (including older version of BT-XE) transmit a wrong (non-UTC)
+  timestamp in EMSI because they do wrong or non-standard time processing -
+  so BT-XE will show wrong remote local time and wrong UTC time difference
+  when connecting to such a mailer.
+- moved some stuff from EMSI.C to language.txt
+- hopefully fixed cost calculation bug with known systems (Tariff:0 was not
+  correct). This had to do with the global newnodedes struct - that's a real
+  mess in the source code ...
+- merged history importer utilities into BTUTIL - please adapt your makefiles
+  (maybe someone more experienced with makefiles also could do it better
+  within ibmvacpp.mak ...)
+  History importers are totally untested - please do tests ...
+  They are invoked now by: BTUTIL GETHIST ...
+
+xgv_aw4:
+
+- watcom makefile for DOS changed for less space consumption on overlay-
+  version and faster execution
+  -> changed the following modules:
+     - moved show_alive/no_longer_alive from b_sessio.c to misc.c
+     - removed static prefixes from some functions of b_script.c,
+       statetabl.c, outbound.c, bt.c, ftsc.c, mailovly.c
+       to be able to put them into the overlay.
+  - put b_script.obj, bt.obj, ftsc.obj, outbound.c into the overlay
+  - put common.obj into the root (speed!)
+  The Watcom overlayed executable now needs approx. 500k (non-optimized
+  version) resp. 445k (optimized release-version).
+- corrected definition of DEBUG define in statetabl.c (did ever anybody
+  use the DEBUG define recently? It doesn't work (cause is debug.c/include
+  "includes.h").
+- corrected some (but not all) quirks in debug.c
+
+MR: (without diff)
+
+ - updated makefile for Watcom
+ - updated bug list
+ - added freq announcement, readme, file_id and knwnbugs for xr6
+
+TJW:
+
+- restructured source tree, adapted ibmvacpp.mak
+
+
+
+Beta XGX:
+---------
+
+xgw_ce1:
+
+ - added keyword "AKAMatching"
+   AKAMatching shows an incomming EMSI caller only your AKA's, if the zone
+   is identical. If the zone is differend, the caller will not see your AKA.
+
+xgw_hk1:
+
+- Changes to timezone handling for Win32
+- Timezone can now be set from configfile
+
+xgw_hk2:
+
+- Solved ALT-M problem after NO CARRIER or BUSY in Win32 and OS/2
+  versions.
+- Fixed bug with high CPU usage and 'freezing' helpscreen while waiting
+  for keypress
+
+xgw_ts1:
+
+-   fixed little optical buglet in SCHED.C (on mailer startup when
+    recompiling the event file the changed event was not displayed).
+-   fixed lotsa different calling convention pointer assignments in
+    B_SCRIPT.C; note: this is only relevant for DOS versions using
+    short pointers/calls for forced local functions.
+-   fixed conditional define problem in INCLUDES.H which affected
+    only uSoft versions less or equal than 8.00. (what is that
+    MSC 11.00 anyway? shouldn't MSC 11.00 specific #defines better
+    be handled in a separate compiler dependend #define block instead,
+    since MSC 11.00 has absolutely nothing to do with DOS versions?).
+-   updated gcc/emx makefile to adapt to importers now being integrated
+    in BTUTILx.EXE
+
+ additional note:
+
+-   with emx, there are quite some *new* warnings i have to look at
+    more closely; so expect some further changes in upcoming XRW_TS2
+-   uSoft 700/800 makefile is not updated yet to reflect the changes
+    with the importers and BTUTIL.EXE, so expect some further changes
+    in upcoming XRW_TS2
+-   watch out for XRW_TS2 to fix abovementioned things RSN
+
+xgw_ts2:
+
+-   continued work from XRW+TS1, mostly for uSoft/DOS compiler.
+
+sm040101:
+
+- The exception handler now returns XCPT_CONTINUE_SEARCH for the exception
+  XCPT_ASYNC_PROCESS_TERMINATE also. This should make Binkley killable again.
+
+XGW_MR1 + TJW (w/o diff) + MR (w/o diff):
+
+ - update some docs again...
+ - bugfix to PasswordFile: keyword "Password" wasn't ignored
+ - new keyword: NodeTimeZone <addr> [SHIFT] <TZ_string_without_TZ=>
+   Use this keyword to set the time zone of a node that doesn't transmit this
+   information.
+   Binkley assumes that the remote system reports its time in UTC. If the
+   remote system sends local time, you can add the optional parameter SHIFT
+   before the time zone. Binkley will then translate the received local time
+   of the node to UTC time (note: TZ must be set to the correct time zone).
+   Summary:
+    - for systems that transmit UTC in tranx and TZ (like BT-XE XR6 and later)
+       you should not have to use NodeTimeZone at all
+    - for systems that transmit UTC in tranx but no TZ, only set TZ without
+       SHIFT
+    - for systems that transmit local time in tranx, set SHIFT and TZ
+
+xgw_hk3:
+
+-Restructured .mak-files for Win32 Borland compiler version 5.2
+(bcppb.mak, bcppbwf.mak, bcppbuti.mak)
+-Changed some of the Gethist files to make them compile under Borland
+
+
+
+Beta XGY:
+---------
+
+sm110120:
+
+- made some changes to ComTXBlockTimeout(), com_online() and com_fini()
+  to make sure HydraWrite() does not get stuck trying to write to the com-port.
+
+xgx_mr1:
+
+ - OS/2 version now sets right codepage (437) upon startup
+ - Enhanced [expression] (partial config inclusion / exclusion). You can now
+   use:
+    - [exp1] & [exp2] - means exp1 AND exp2 must evaluate to TRUE.
+    - [exp1] | [exp2] - means exp1 OR  exp2 must evaluate to TRUE.
+   You can connect as many [exp] with & or | as you like. The evaluation is
+   done from left to right.
+   Examples:
+    [%task%==1]                              ;only task 1 (as usual)
+    [%task%==1] & [%OS%==OS2]                ;only task 1 under OS/2
+    [%task%==1] | [%task%==3]                ;only task 1 or 3
+    [%task%==1] | [%task%==3] & [%OS%==OS2]  ;only task 1 or 3 under OS/2
+    [%OS%==OS2] & [%task%==1] | [%task%==3]  ;only task 1 under OS/2 or task 3
+
+xgx_mr2:
+
+ - fixed terminal crash when you enter Alt-D phonenumber
+
+xgx_ts1:
+
+-   minor changes in make/batch-files for emx and uSoft8.0 compilers
+
+xgx_aw1:
+
+-   fixed bug in b_script.c with access of labels array. Since someone made
+    this one dynamic, scripts with labels messed up with the heap. Scripts
+    were completely unusable and lead to instant or later crashes
+    until the latest XGX beta. According to the source, the bug was
+    introduced 26.5.1996.
+-   put binkdlg.c into the root (only DOS version -> empty function, should
+    be called non-overlayed)
+-   made a lot of functions static / LOCALFUNC. Only relevant to DOS versions.
+    Most interesting, the executable for OS/2 also shrinks because of that ;-)
+-   put some local zmodem function prototypes from prototyp.h into zmodem.c
+-   added history importer main function prototypes to btutil.c
+-   changed Watcom makefile to put data elements up to 70 bytes size into the
+    near data segment. Previously the limit was 4 bytes, which put all bigger
+    variables into a far data segment where the access goes through slow
+    far pointers. Affects only Watcom DOS versions.
+-   changed "filesin/filesout" variables in history.h from int to long. An int
+    leads to different callhist.all structure in DOS and 32-bit versions until
+    now. Also changed history.c accordingly (mostly printf: %d).
+    People upgrading from DOS/XR5 will get partly wrong history info because
+    of that, but that's only cosmetic. No chance to "auto-detect" the
+    different history formats.
+
+jh011603:
+
+- updates doc\devlist
+
+xgx_ce1:
+
+ - "NodeInboundDir <AKA> <Directory>" points to a special Inbound directory
+   for a specific Node
+ - changed StartBlkSize from max. 2048 to max 8192 (8k ZModem block at begin)
+
+xgx_aw2:
+
+-   Spurious crash with Version7+ nodelist fixed, if flags field in *.dtp is
+    longer than 63 bytes.
+    (behind this short note is 6 hours of debugging-work :-| )
+-   Dialogs that ask for a sysop name (manual poll, get files, etc. ) showed
+    only the nodes of the last defined domain, if Binkley is configured with
+    domains. This has been enhanced to read all sysopnames from all domain
+    nodelists.
+    May be these changes eliminated the spurious "too many open files" message
+    encountered in the DOS version.
+
+xgx_hk1:
+
+- Removed WinFossil keyword and related unused defenitions.
+- Added Win announcements for XR6 to the docs.
+
+xgx_ce2:
+
+ - change "StartBlkSize" to max. 8192 (8k ZModem block at begin)
+ - added keyword "NoModem". At the time this keyword is for OS/2 only.
+ - added "SyncHydraSessions <AKA>" for outgoing calls
+ - added size calculation of NodeExtraDir for #MOH and freepoll
+
+sm020112:
+
+- Binkley didn't dial the first entry in the 'Pending Outbound Mail' window
+  if there was more than one entry.
+- This fix replaces SM012716
+
+xgx_mr3:
+
+ - v0.20 of the new screen classes. Have a look at ideas.cpp\screen\.
+
+xgx_aw3:
+
+-   fixed: if the remote system transmits TZ info in emsi, the environment was
+    corrupted.
+    Someone disregarded that putenv() stores pointers, not values. Now the
+    the string "TZ=<local timezone>" is stored in global variable TZ, not only
+    the timezone itself, to set it directly from the variable.
+-   fixed TZ behaviour in emsi.c. Should now work also if node is returned
+    in QueryNodeStruct but without TZ info.
+    New logic:
+     1. get remote TZ from own config via QueryNodeStruct
+     2. if no info from QueryNodeStruct, get it from emsi info
+     3. if neither config nor remote info is available, assume own TZ as
+        remote's TZ
+     so it is possible to override remote TZ info in own config file, if the
+     transmitted TZ is somehow invalid.
+
+xgx_hk2:
+
+- NoModem should also work now in Win32 version for WINFOSSIL
+- BT Window should remain active and on top now
+- ESC can be pressed to quit polling in 'idle time', any other
+  keypress makes Bink call again immediately
+
+xgx_hk3:
+
+- Changed parts of the NTCOMM routines in async_nt to make it work
+  under Windows95 too. And it works now!
+- Moved Windows window settings to a better place in the sources.
+
+xgx_aw4:
+
+- fixed 16-bit int overflow in numdisp() (relevant for the DOS version)
+- cosmetical fix in detailed history record info display for non-EMSI
+  sessions. The "Mailer" field was always written with a ":From : " in front.
+- changed the timezone-handling. With EMSI, now not a TZ addon, but a TZUTC
+  addon like with FD 2.12 or FD 2.20c is sent, telling the offset from
+  local time to UTC. The tranx number itself is local time and so are the
+  timestamps in the history file and the timestamps of disk files. All other
+  time values are correct unix timestamp according to the correct TZ= value.
+  advantages: - easier time shifting for local timestamps
+              - less computing of timezone values during the emsi handshake
+              - less code
+              - more use of library-built-in functions than self-made functions
+  logic to compute the time zone of remote systems:
+   - if NodeTimeZone is given for a node, that value is taken as remote time
+     zone.
+   - if EMSI addon TZUTC is present in the remote's packet, and no NodeTimeZone
+     is given, the value of TZUTC is taken. Therefore you can override wrong
+     TZUTC values of remote systems in your local config.
+   - if neither NodeTimeZone nor TZUTC is given, it is assumed that the remote
+     is in the same time zone as the local system.
+  So the SHIFT parameter in NodeTimeZone is not needed anymore.
+  Internally not the time zone of the remote system is taken but the offset in
+  seconds from UTC.
+- The timezone handling may be now slightly compiler dependant! If you get
+  the error that a variable TIMEZONE, timezone or _timezone is unknown, please
+  look out for a global compiler-provided variable that contains the seconds
+  the local time is away from UTC. It should be described in the compiler
+  library doc for the function tzset() - where it is usually set.
+  Watcom uses "timezone", uSoft seems to use "_timezone", VACC/CSet seems to
+  use "timezone". Please check it out and change includes.h accordingly, if
+  necessary. Please also check out if the timestamps of sent and received
+  files are the original timestamps! With Watcom all is ok.
+- the DOS version of XGX+AW1 always sent 01.01.1998 08:48 as timestamp of
+  outgoing files. That has been fixed due to the abovementioned changes to
+  the timezone handling. Must been hidden somewhere in the old
+  unix_stat_noshift routine.
+
+xgx_hk4:
+
+- Changed announcements for different Win32 versions.
+
+xgx_aw5:
+
+! please add "maxprm.c" to your makefiles. I have only added it for the Watcom
+  makefiles. For makefiles of DOS versions it can be made overlayed.
+  You unfortunately cannot incorporate it into btconfig.c, because of the
+  many duplicate typedef symbols in the #included files.
+- fixed the bug that BT-XE sent "file not found" responses to file requests,
+  if the requested file is skipped by the requester.
+- as special add-on to the above fix, I have worked in Maximus 3.0x support
+  in the request processor module. That was not difficult, since I had fully
+  tested and debugged acs interpreting routines already at hand from another
+  project.
+  For further information about configuring Max 3.0 file request support,
+  read xe_user.doc.
+- todo: move some new strings from b_frproc.c into language.txt. I did it not,
+  because other patches also used own strings. I will wait until XGY.
+- fix in freepoll.c: if a point is handled for freepoll the first time and
+  the *.PNT  directory will be created, it was created not as
+  outbound\xxxxyyy.PNT\ but as outboundxxxxyyyy.PNT\. Added the backslash in
+  the middle.
+
+xgx_ts2:
+
+-   minor changes in emx makefile to reflect changes done by other
+    team members
+
+xgx_aw6:
+
+- Added a callhist.all converter for the DOS version of XR5. Look into
+  src\dos\*.*. The makefile is for Watcom.
+
+- fixed a bug in the Proboard request index handling.
+
+xgx_hk5:
+
+- Bink should now better connect to FD systems
+- Changed some locations in the source tree and checked some win32 entries
+- Removed an obsolete word from btconfig.c
+
+xgx_aw7:
+
+- changed the handling of the timezone/_timezone/TIMEZONE handling.
+  In XGX+AW4 I assumed that this variable tells the real time difference
+  in seconds between local time and UTC time. Thomas pointed out to me,
+  that many compilers don't regard the daylight saving time in this
+  variable, so I wrote a new procedure to get the real time diff. It is
+  calculated every hour, so if a transition between normal time and daylight
+  savings time occurres, the value is still correct.
+
+
+
+Beta XGZ:
+---------
+
+xgy_ts1:
+
+-   fixes:  CSS window connection timer (located at upper right corner
+            of CSS window) was not updated when EMSI timeouts occured
+
+xgy_ts2:
+
+-   cont'd from XGY+TS1:    supplies fixes for YooHoo, Janus & Hydra, too.
+
+xgy_ts3:
+
+-   supplies some type conversion corrections
+
+xgy_hk1:
+
+- Added heapcheck for Borland compilers
+- Rewrote priority handling and settings for Windows version
+- Changed F-key-shelling, is now similar to Aftermail handling
+- Included timezone settings for the Borland compiler, please notify!
+
+xgy_aw2:
+
+- changed the Watcom DOS makefile to get a bit more memory for the near heap.
+- if someone has a domain setup but only one nodelist index, every node
+  would appear multiple times in a name lookup dialog box.
+- the DOS version should now run under DesqView again! There was an error
+  in the dv_pause() timeslice function.
+- included generation of xr5toxr6 into Watcom makefile (only needed for DOS,
+  no need to change the other 32-bit makefiles).
+
+xgy_ts4:
+
+-   fixed bug in Hydra receiver concearning long filenames with
+    whitespace in them. thanks alot to Alex Woick for pointing
+    my nose at it.
+    please note that outbound handling of outgoing long filenames
+    with whitespace in them is still broken: while one can input
+    the names, their sizes are not calculated properly in the
+    outbound window and they are not transmitted.
+    probably this is due some bug in the unix_stats()/stats()
+    function; i'll try to fix that, too.
+
+xgy_mr1:
+
+ - updated knwnbugs.xr5 and knwnbugs.xr6
+ - SameRing should work again
+ - exception handler now speaks english only
+
+xgy_ns1:
+
+- More support for Visual C++ 5.0 (uSoft11)
+
+xgy_ts5:
+
+-   updated uSoft/DOS makefile
+
+xgy_ce1:
+
+ - fixed history screen timeout
+ - added flag-file BTTASK.%TASK% to terminate an active session when sending
+   files to the downlink.
+
+xgy_hk2:
+
+- Fixed keyboard bug under Win32, which sometimes caused Bink to hang
+  until a keypress.
+- Already removed extra code for new DLL version of NTCOMM, only
+  waiting for Scott Dudley now to release it.
+
+xgy_hk3:
+
+- Again: keyboard bug under Win32, which sometimes caused Bink to hang
+  until a keypress.
+- Updated a lot of doc and file entries for Win32 version.
+- Continued work for new DLL version of NTCOMM.
+
+xgy_te1:
+
+ - Fixed a stack corruption problem that made Binkley crash if any
+   outbound packet was older than 999 days.  This is probably not a
+   real-world problem, but I experienced it when testing my system
+   for year 2000 readiness and played around with my system date.
+ - Fixed a cosmetical Y2K bug in the NEW_DAY message.
+ - Adapted the OS/2 Borland makefile to reflect latest changes.
+ - Re-implemented the possibility to use an external BINKLEY.LNG file
+   instead of language data that is patched into the executable file.
+   Note:  This feature is NOT inteneded to be used in a release
+   executable.  We once removed it because it lead to problems when
+   users installed a new executable, but forgot to update the LNG
+   file.  Therefore, I have introduced a new compile time switch:
+   An external BINKLEY.LNG file will only be considered if the
+   sourcecode has been compiled with the USELNGFILE symbol defined.
+   Plus, an external BINKLEY.LNG will even then only be considered
+   if no language data at all has been patched into the executable.
+   The reason that I re-implemented this "feature" is that the Borland
+   Turbo Debugger (at least the OS/2 version) does not recognize
+   debug information in the executable if language data has been
+   patched into it, and I was tracing a stack corruption problem
+   (see first point ...) that was almost undebuggable with gdb, so I
+   needed the Turbo Debugger.
+
+xgy_te2:
+
+ - Fixed five cases where a call to dfind (...,0) was made, but the
+   closing dfind (...,2) was forgotten, which lead to DosFindFirst handle
+   ressource exhaustage under OS/2. This hopefully fixes the "Nothing
+   in Outbound" bug.
+
+xgy_ce2:
+
+ change flag-file BTTASK to BTENDSES
+
+xgy_te3:
+
+ - Fix: BTXE crashed when a SRIF request processor did not create a
+   response file for some reason.
+
+xgy_hk4:
+
+- Added support for "WindowTitleFmt" keyword.
+- Added support for "SharePort" keyword in NTCOMM version.
+- Changed some comport handling in NTCOMM version.
+- Updated my address entries.
+
+MR (no diff):
+
+ - changed team display
+ - fixed: jumping outbound bug
+ - fixed: changes in zoomed outbound are sometimes not displayed at once
+          (outbound wasn't rescanned because rescan flag was exactly as old as
+          outbound dumb - now we're checking for ">=")
+
+xgy_ts6:
+
+-   this is no real diff but two updated batch- and makefiles
+    for the uSoft 7.0/8.0 compilers.
+
+xgy_hk5:
+
+- Fixed an overload bug in Win32 ComTxBlockTimeout when sending ZIP files.
+- Changed display of available memory in Win32 version.
+
+xgv_eh2:
+
+- Added a few "fclose" which are ihmo missing (never had a problem
+  without them, but they should be there, I guess). Please verify.
+
+xgy_eh1:
+
+- added "keep" to after_sending in ideas.cpp/binkout/newout.hpp
+- lots of changes to bbs-script compiler
+
+xgy_eh2:
+
+- changed origin from "CFS's PKT report system - on test" to
+  default_system_name
+- accelerated the frequest-processor for files listed in the okfile without
+  wildcards by comparing the name of the frequested file with the filename
+  from the okfile directly, without scanning for the existance of the file.
+- few changes to bbs-system
+
+xgy_aw3:
+
+- fixed a problem on hanging in 100% CPU usage on outgoing calls. 
+- changed a few func() declarations to func(void)
+  In 'C' func() is func(int), but we want func(void).
+- changed many locally used functions to static LOCALFUNC for the DOS
+  version. So less overlay vectors are produced. static LOCALFUNC is also
+  back in b_script.c and the many functions in b_frproc.c. (I have learnt
+  from the compiler manual how to declare pointers to static LOCALFUNC
+  functions correctly ;-)
+- fixed a memory leak in emsi.c. The allocated space for the received emsi
+  packet never got freed. Thanks to Robert Hoerner, who pointed this out to
+  me.
+- made many (silly looking) changes to he source to circumvent crashes of the
+  Watcom DOS compiler in maximum optimisation mode. Unfortunately I was
+  unable to modify all the modules yet, so it isn't still possible to use that
+  mode, so the DOS version is as slow as it used to be.
+- changed vt100.c a bit, so no longer errors with the precompiled headers
+  occurr and also not so many warnings are shown. But no functionality has
+  been added to the terminal module.
+- fixed many logical int/long errors in stats.c for the DOS version.
+  The sorting was not working correct if values over 32767 were sorted, for
+  example the amount of transferred bytes. Unfortunately the author of stats.c
+  isn't no longer active, but if he were, I would tell him something about
+  reasonable use of int and long variables. (Grrrrr!)
+- the following bug in the DOS version cannot be easily fixed and should
+  be documented:
+  If more than 640 distinct nodes were listed in the history file, and a
+  complete stats report of over these 640 nodes is requested, Binkley hangs.
+  Workaround: If a report with less nodes is requested, for example only the
+  last week or the last month, it usually works.
+  That is due to the fact that the history info is read internally into
+  an array of ~100 bytes record size and the author of the stats module
+  didn't realize that it isn't possible to allocate more than 65535 bytes
+  for a single array in the DOS Version. Rewriting the module with
+  linked lists or similar things is like rewriting the whole module.
+
+xgy_kh6:
+
+- Removed useless readdress in poll window
+- Some compiler optimilizations
+
+xgy_hk7:
+
+- Made forcebttaskcheck() behave more nicely, it runned 4 times a second on
+  my PC when Bink was idle, CPU usage is enormously reduced now
+  (Under Windows: from 25% to almost 0% when idle)
+- Removed strange set_prior handling
+- Update to the Win32 documentation and announcements for Windows 98
+
+xgy_ns2:
+
+- Heapcheck also with Visual C++ 5.0 (uSoft11)
+
+xgy_hk8:
+
+- Fixed some small bugs
+- Changed display of MemAvail() again, gives best information now
+
+xgy_eh2:
+
+- transmission error counters are copied to history-errorcounters
+- error counters (?xstats.cur_errors) are updated now
+  they are not very tested: maybe some ++ are missing, maybe some
+  kind of errors are counted twice.
+- last-caller information is no longer cleared on new day (when
+  statistics are written to pkt and reset).
+
+xgy+hk9:
+
+- More bugfixes
+- Variable (language depending) input char in zoomed outbound window
+- Zmodem : last file was counted twice in css, fixed
+- Zmodem : Tried to do something about the 'CARRIER' lost at the end of
+  every session.
+
+HK (no diff):
+
+- Not defined ErrLevelShells were not caught properly
+
+MR (no diff):
+
+- added code snippet from from Harald Pollack, 2:310/14.59 to async.c to
+  initialize com port. Sorry, it's not yet active...
+- watcom makefile now also compiles toss.exe
+- updated some docs (xr6\contents.xr6, xr6\readme.*, xr6\file_id.*)
+
+
+
+Beta XH1:
+---------
+
+xgz_aw1:
+
+- fixed request handling of magic filenames (broken in XGZ)
+- added gnumake.mak makefile for gnu make and gcc for os/2. It is meant
+  to replace emxaout.mak, which uses IBM nmake (and nmake isn't freely
+  available).
+
+xgz_eh1: (NOTE: not applied, bug already fixed with xgz_aw1)
+
+- Magics did no langer work after direct comparison of the frequested file
+  with the ones listed in the okfile in internal frequest-processor. Sorry.
+  This is fixed now.
+
+xgz_hk1:
+
+- Forgot to reflect some changes in the language file.
+
+xgz_hk2: (not hatched)
+
+- NTCOMM headers are finally in the source tree, thanx to Scott Dudley
+- Bugfix for faster AfterCall reports
+
+xgz_hk3: (not hatched)
+
+- Speeded up modem init and responses in Windows
+- After external Fax program, Bink should come back ok now (in Windows)
+
+xgz_hk4: (not hatched)
+
+- fixed speed up modem init and responses in Windows
+
+xgz_mr1: (not hatched)
+
+- fixed error in TAB file expansion (send dialoge)
+- Watcom: MAP files will now be generated for every executable
+- updated some docs
+
+xgz_aw2:
+
+- tried to fix *.$$? bad call counter handling (BT-XE not recognizing
+  *.$$n -> *.$$(n+1) correctly)
+  Note (MR): this removed HoldAfterBadConnect
+
+xgz_hk5: (not hatched)
+
+- For Win95/98 is not a real multitasker, implemented some 'other task'
+friendly routines, which reduces BTs CPU usage under Win95/98 very
+much. Bug with high CPU load (once reported in BINKLEY echo) with hydra
+is solved with this too.
+
+xgz_sms1: (MR: removed expansion of log line length for recent activity win)
+
+- new makefile (emxgnu.mak) for GCC/EMX (OMF) and GNU make
+  ATTENTION: contains TABs! GNU make requires TABs :(
+- support for "ExtrnMail <errlv> RING" (for use with ANSW.exe)
+- "CacheHold <n>" (WITHOUT "STAT") now resets rescanstat
+- added CallerID to EXTMAIL.CMD / SPAWNBBS.CMD
+
+MR:
+
+- renamed make files for emx: emx<m><type>.mak where <m> is make program (Gnu
+  make or ibm Nmake) and <type> is either aout or omf.
+
+xgz_jh1a: (MR: removed RejectIgnoreSize)
+
+- fixed: ConditionalPoll did not work with AltNumbers 
+
+MR:
+
+- rewrote misc.c::change_prompt() as old implementation could trap if existing
+  prompt was too long
+
+
+[EOF]
